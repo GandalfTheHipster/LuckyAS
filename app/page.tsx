@@ -2,7 +2,6 @@ import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { Hero } from "@/components/hero";
 import { ThemeSwitcher } from "@/components/theme-switcher";
-import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 import { Suspense } from "react";
 
@@ -18,13 +17,9 @@ export default function Home() {
             <div className="flex gap-5 items-center font-semibold">
               <Link href={"/"}>NOAHEDGE.COM</Link>
             </div>
-            {!hasEnvVars ? (
-              <EnvVarWarning />
-            ) : (
               <Suspense>
                 <AuthButton />
               </Suspense>
-            )}
           </div>
         </nav>
         <div className="flex-1 flex flex-col items-center gap-20 max-w-5xl p-5">
@@ -45,7 +40,7 @@ export default function Home() {
               description="Capstone Project"
               badge=""
               buttonText="View Project"
-              href="/luckyas/dashboard"
+              href="/luckyas/login"
             />
             <CardImage
               imageSrc="https://i.postimg.cc/cL9WcSc3/bpl-logo.png"

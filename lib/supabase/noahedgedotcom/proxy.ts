@@ -1,6 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasEnvVars } from "../utils";
+import { hasEnvVars } from "../../utils";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
@@ -13,8 +13,8 @@ export async function updateSession(request: NextRequest) {
   }
 
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+    process.env.NEXT_PUBLIC_NOAHEDGEDOTCOM_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_NOAHEDGEDOTCOM_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
         getAll() {
@@ -44,6 +44,7 @@ export async function updateSession(request: NextRequest) {
     "/auth",
     "/login",
     "/bape",
+    "/luckyas",
     "/projects",
   ];
 
@@ -56,7 +57,7 @@ export async function updateSession(request: NextRequest) {
   // ✅ Only protect non-public routes
   if (!user && !isPublicRoute) {
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/login";
+    url.pathname = "/luckyas/login";
     return NextResponse.redirect(url);
   }
 

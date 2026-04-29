@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/site-header"
 import { ThemeSwitcher } from "@/components/theme-switcher"
 import { BackButton } from "@/components/ui/back_button"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { createClient } from "@/lib/supabase/server"
+import { createClient } from "@/lib/supabase/luckyas/server"
 import { hasEnvVars } from "@/lib/utils"
 
 export async function DashboardShell({
