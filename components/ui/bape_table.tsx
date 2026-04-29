@@ -7,7 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import { TableAvatar } from "@/components/TableAvatar.tsx"
+import { TableAvatar } from "@/components/TableAvatar"
 
 type Column<T> = {
   key: keyof T
