@@ -9,6 +9,9 @@ import { hasEnvVars } from "@/lib/utils";
 import Link from "next/link";
 import { Suspense } from "react";
 
+import { CardImage } from "@/components/ui/image_card"
+import { SocialLinks } from "@/components/SocialLinks"
+
 export default function Home() {
   return (
     <main className="min-h-screen flex flex-col items-center">
@@ -16,10 +19,7 @@ export default function Home() {
         <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
           <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
             <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/"}>Next.js Supabase Starter</Link>
-              <div className="flex items-center gap-2">
-                <DeployButton />
-              </div>
+              <Link href={"/"}>NOAHEDGE.COM</Link>
             </div>
             {!hasEnvVars ? (
               <EnvVarWarning />
@@ -30,11 +30,42 @@ export default function Home() {
             )}
           </div>
         </nav>
-        <div className="flex-1 flex flex-col gap-20 max-w-5xl p-5">
+        <div className="flex-1 flex flex-col items-center gap-20 max-w-5xl p-5">
           <Hero />
-          <main className="flex-1 flex flex-col gap-6 px-4">
-            <h2 className="font-medium text-xl mb-4">Next steps</h2>
-            {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
+          <SocialLinks />
+          <main className="grid flex-1 grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3">
+            <CardImage
+              imageSrc="https://i.postimg.cc/wB8jxcqN/IMG-0666.jpg"
+              title="Bape Olympics"
+              description="Inspiring people through the Olympics values of friendship, respect and copious alcohol intake"
+              badge="Featured"
+              buttonText="View Event"
+              href="/bape/olympics"
+            />
+            <CardImage
+              imageSrc="https://i.postimg.cc/XNHN9xC0/Chat-GPT-Image-Apr-29-2026-at-11-11-38-AM.png"
+              title="LuckyAS"
+              description="Capstone Project"
+              badge=""
+              buttonText="View Project"
+              href="/luckyas/dashboard"
+            />
+            <CardImage
+              imageSrc="https://i.postimg.cc/BQf8jm9C/Screenshot-2026-04-29-at-11-29-56-am.png"
+              title="Sunda & Sahul"
+              description="A Video Game Project"
+              badge=""
+              buttonText="View Project"
+              href="/sunda"
+            />
+            <CardImage
+              imageSrc="https://i.postimg.cc/cL9WcSc3/bpl-logo.png"
+              title="Bape Beer Pong League"
+              description="The Bape Beer Pong League"
+              badge=""
+              buttonText="View Project"
+              href="/bape/beerpong"
+            />
           </main>
         </div>
 
