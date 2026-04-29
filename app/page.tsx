@@ -48,14 +48,6 @@ export default function Home() {
               href="/luckyas/dashboard"
             />
             <CardImage
-              imageSrc="https://i.postimg.cc/BQf8jm9C/Screenshot-2026-04-29-at-11-29-56-am.png"
-              title="Sunda & Sahul"
-              description="A Video Game Project"
-              badge=""
-              buttonText="View Project"
-              href="/sunda"
-            />
-            <CardImage
               imageSrc="https://i.postimg.cc/cL9WcSc3/bpl-logo.png"
               title="Bape Beer Pong League"
               description="The Bape Beer Pong League"

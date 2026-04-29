@@ -80,7 +80,7 @@ export default function BapeLeagueTablePage() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-8">
       <h1 className="mb-4 text-center text-lg font-medium">
-        Bape Beer Pong League Table 8 March 2025
+        Bape Beer Pong League Table
       </h1>
 
       <BapeTable columns={columns} athletes={teams} />
