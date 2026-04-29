@@ -22,7 +22,7 @@ export function DashboardCards() {
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <div className="text-muted-foreground">
-            0 ProjectsTEST
+            0 Projects
           </div>
         </CardFooter>
       </Card>
