@@ -110,7 +110,7 @@ export function NavUser({
                 <DropdownMenuGroup>
                   <DropdownMenuItem>
                     <IconUserCircle />
-                    Account
+                    AccountTEST
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <IconNotification />
