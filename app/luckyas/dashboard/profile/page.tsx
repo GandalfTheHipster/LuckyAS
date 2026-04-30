@@ -1,4 +1,4 @@
-import { ProfileCards } from "@/components/profile-cards"
+import { ProfileCards } from "@/components/dashboard/profile/profile-cards"
 
 export default function Page() {
   return (

@@ -1,4 +1,4 @@
-import { DashboardCards } from "@/components/dashboard-cards"
+import { DashboardCards } from "@/components/dashboard/dashboard-cards"
 
 export default function Page() {
   return (

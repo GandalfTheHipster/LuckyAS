@@ -1,4 +1,4 @@
-import { BapeTable } from "@/components/ui/bape_table"
+import { BapeTable } from "@/components/bape/bape_table"
 
 const columns = [
   { key: "name", label: "Name", align: "left" },

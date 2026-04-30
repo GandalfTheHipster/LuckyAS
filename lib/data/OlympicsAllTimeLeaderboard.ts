@@ -1,14 +1,12 @@
-import { BapeTable } from "@/components/ui/bape_table"
+export type OlympicAthlete = {
+  name: string
+  pts: number
+  gold: number
+  silver: number
+  bronze: number
+}
 
-const columns = [
-  { key: "name", label: "Name", align: "left" },
-  { key: "pts", label: "PTS", align: "right" },
-  { key: "gold", label: "Gold 🥇", align: "right" },
-  { key: "silver", label: "Silver 🥈", align: "right" },
-  { key: "bronze", label: "Bronze 🥉", align: "right" },
-] as const
-
-const athletes = [
+export const OLYMPICS_ALL_TIME_LEADERBOARD: OlympicAthlete[] = [
   { name: "Aleksa Kvrgic", pts: 41, gold: 9, silver: 5, bronze: 4 },
   { name: "Jack Coleman", pts: 38, gold: 7, silver: 5, bronze: 7 },
   { name: "Andrew Turnbull", pts: 36, gold: 5, silver: 7, bronze: 7 },
@@ -25,11 +23,3 @@ const athletes = [
   { name: "Noah Edge", pts: 10, gold: 0, silver: 4, bronze: 2 },
   { name: "Todd Williams", pts: 8, gold: 0, silver: 3, bronze: 2 },
 ]
-
-export default function ProtectedPage() {
-  return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <BapeTable columns={columns} athletes={athletes} />
-    </div>
-  );
-}

@@ -1,35 +1,36 @@
-import { BapeTable } from "@/components/ui/bape_table"
-
-const columns = [
-  { key: "name", label: "Name", align: "left" },
-  { key: "pts", label: "PTS", align: "right" },
-  { key: "gold", label: "Gold 🥇", align: "right" },
-  { key: "silver", label: "Silver 🥈", align: "right" },
-  { key: "bronze", label: "Bronze 🥉", align: "right" },
-] as const
-
-const athletes = [
-  { name: "Aleksa Kvrgic", pts: 41, gold: 9, silver: 5, bronze: 4 },
-  { name: "Jack Coleman", pts: 38, gold: 7, silver: 5, bronze: 7 },
-  { name: "Andrew Turnbull", pts: 36, gold: 5, silver: 7, bronze: 7 },
-  { name: "Daniel Morrell", pts: 33, gold: 5, silver: 6, bronze: 6 },
-  { name: "Elvin Lamprecht", pts: 32, gold: 6, silver: 5, bronze: 4 },
-  { name: "Kyle Taplin", pts: 31, gold: 7, silver: 3, bronze: 4 },
-  { name: "Thomas Dempsey", pts: 30, gold: 3, silver: 7, bronze: 7 },
-  { name: "Brady Swift", pts: 30, gold: 6, silver: 5, bronze: 2 },
-  { name: "Joseph Hart", pts: 29, gold: 5, silver: 5, bronze: 4 },
-  { name: "Lucas Cinquina", pts: 25, gold: 5, silver: 2, bronze: 6 },
-  { name: "Cian Bye", pts: 24, gold: 4, silver: 3, bronze: 6 },
-  { name: "Sam Collings", pts: 15, gold: 1, silver: 4, bronze: 4 },
-  { name: "Priyen Moodley", pts: 14, gold: 3, silver: 2, bronze: 1 },
-  { name: "Noah Edge", pts: 10, gold: 0, silver: 4, bronze: 2 },
-  { name: "Todd Williams", pts: 8, gold: 0, silver: 3, bronze: 2 },
-]
+import Link from "next/link"
 
 export default function Hello() {
   return (
-    <div className="flex-1 w-full flex flex-col gap-12">
-      <BapeTable columns={columns} athletes={athletes} />
+    <div className="flex-1 w-full flex flex-col gap-6">
+      <h1 className="text-2xl font-semibold">Olympics Stats</h1>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Link
+          href="/bape/olympics/all-time"
+          className="rounded-xl border p-5 transition hover:bg-muted"
+        >
+          <h2 className="text-lg font-medium">All-Time Stats</h2>
+          <p className="text-sm text-muted-foreground">
+            View the full all-time leaderboard.
+          </p>
+        </Link>
+
+        <div className="cursor-not-allowed rounded-xl border p-5 opacity-50">
+          <h2 className="text-lg font-medium">Olympics 2026 Stats</h2>
+          <p className="text-sm text-muted-foreground">Coming soon.</p>
+        </div>
+
+        <div className="cursor-not-allowed rounded-xl border p-5 opacity-50">
+          <h2 className="text-lg font-medium">Olympics 2023 Perth CBD Stats</h2>
+          <p className="text-sm text-muted-foreground">Coming soon.</p>
+        </div>
+
+        <div className="cursor-not-allowed rounded-xl border p-5 opacity-50">
+          <h2 className="text-lg font-medium">Olympics 2021 Rockingham Stats</h2>
+          <p className="text-sm text-muted-foreground">Coming soon.</p>
+        </div>
+      </div>
     </div>
-  );
+  )
 }

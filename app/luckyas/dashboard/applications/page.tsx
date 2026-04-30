@@ -1,4 +1,4 @@
-import { ApplicationCards } from "@/components/application-cards"
+import { ApplicationCards } from "@/components/dashboard/applications/application-cards"
 
 export default function Page() {
   return (

@@ -1,17 +1,24 @@
-import { BapeTable } from "@/components/ui/bape_table"
-
-type LeagueTeam = {
-  name: string
-  logo: string
-  mp: number
-  pts: number
-  w: number
-  l: number
-  netCups: number
-}
+import { BapeTable } from "@/components/bape/bape_table"
+import { BEERPONG_TEAMS } from "@/lib/data/beerpong"
+import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
 
 const columns = [
-  { key: "logo", label: "Team", align: "center", type: "avatar" },
+  {
+    key: "logo",
+    label: "Team",
+    align: "center",
+    type: "avatar",
+    rounded: false,
+    size: 44,
+  },
+  {
+    key: "players",
+    label: "Player",
+    align: "center",
+    type: "avatars",
+    rounded: true,
+    size: 32,
+  },
   { key: "mp", label: "MP", align: "center" },
   { key: "pts", label: "PTS", align: "center" },
   { key: "w", label: "W", align: "center" },
@@ -19,71 +26,42 @@ const columns = [
   { key: "netCups", label: "Net Cups", align: "center" },
 ] as const
 
-const teams: LeagueTeam[] = [
-  {
-    name: "Taplin BPC",
-    logo: "https://i.postimg.cc/0jS7qSxq/taplin-bpc.png",
-    mp: 7,
-    pts: 18,
-    w: 6,
-    l: 1,
-    netCups: 12,
-  },
-  {
-    name: "Dempsey BPC",
-    logo: "https://i.postimg.cc/7bvb1tpF/dempsey-bpc.png",
-    mp: 7,
-    pts: 15,
-    w: 5,
-    l: 2,
-    netCups: 9,
-  },
-  {
-    name: "Hart Beer Pong Club",
-    logo: "https://i.postimg.cc/4386vZwj/hart-bpc.png",
-    mp: 8,
-    pts: 12,
-    w: 4,
-    l: 4,
-    netCups: 5,
-  },
-  {
-    name: "Kobe Beer Pong",
-    logo: "https://i.postimg.cc/rmKSQbPs/kobe-bpc.png",
-    mp: 7,
-    pts: 9,
-    w: 3,
-    l: 4,
-    netCups: -5,
-  },
-  {
-    name: "Turnbull City",
-    logo: "https://i.postimg.cc/rwMxvzPv/turnbull-city-bpc.png",
-    mp: 7,
-    pts: 9,
-    w: 3,
-    l: 4,
-    netCups: -7,
-  },
-  {
-    name: "FCK",
-    logo: "https://i.postimg.cc/Vv0dCPH9/fck-bpc.png",
-    mp: 5,
-    pts: 0,
-    w: 0,
-    l: 5,
-    netCups: -7,
-  },
-]
+const teams = BEERPONG_TEAMS.map((team) => ({
+  ...team,
+  players: team.players
+    .map((bapeID) => {
+      const profile = Object.values(BAPE_PROFILES).find(
+        (profile) => profile.bapeID === bapeID
+      )
+
+      if (!profile) return null
+
+      return {
+        src: profile.avatarUrl,
+        alt: `${profile.firstName} ${profile.lastName}`,
+      }
+    })
+    .filter(Boolean),
+}))
 
 export default function BapeLeagueTablePage() {
   return (
-    <main className="mx-auto max-w-5xl px-4 py-8">
-      <h1 className="mb-4 text-center text-lg font-medium">
-        Bape Beer Pong League Table
-      </h1>
+    <main className="flex-1 w-full flex flex-col items-center">
+      <div className="w-full max-w-5xl flex flex-col gap-8 px-4 py-8">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Bape Beer Pong League Table
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Current standings for the Bape Beer Pong League, including teams,
+            players, matches played, points, wins, losses, and net cups.
+          </p>
+        </div>
 
-      <BapeTable columns={columns} athletes={teams} />
+        <div className="rounded-xl border bg-background p-4 shadow-sm">
+          <BapeTable columns={columns} athletes={teams} />
+        </div>
+      </div>
     </main>
   )
 }

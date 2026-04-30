@@ -1,4 +1,4 @@
-import { LuckyASLoginForm } from "@/components/luckyas-login-form";
+import { LuckyASLoginForm } from "@/components/login/luckyas-login-form";
 
 export default function Page() {
   return (

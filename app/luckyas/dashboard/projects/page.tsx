@@ -1,4 +1,4 @@
-import { ProjectCards } from "@/components/project-cards"
+import { ProjectCards } from "@/components/dashboard/projects/project-cards"
 
 export default function Page() {
   return (

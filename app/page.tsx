@@ -1,12 +1,10 @@
-import { EnvVarWarning } from "@/components/env-var-warning";
 import { AuthButton } from "@/components/auth-button";
 import { Hero } from "@/components/hero";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import Link from "next/link";
 import { Suspense } from "react";
-
 import { CardImage } from "@/components/ui/image_card"
-import { SocialLinks } from "@/components/SocialLinks"
+import { SocialLinks } from "@/components/landing/SocialLinks"
 
 export default function Home() {
   return (
