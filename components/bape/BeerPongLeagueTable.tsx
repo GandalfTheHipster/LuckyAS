@@ -156,8 +156,8 @@ function TeamMobileCard({
 
               {player?.id && (
                 <PersonName
-                  bapeID={player.id}
-                  className="max-w-32 truncate text-left text-xs text-muted-foreground transition hover:text-red-600 hover:underline"
+                    bapeID={String(player.id)}
+                    className="max-w-32 truncate text-left text-xs text-muted-foreground transition hover:text-red-600 hover:underline"
                 />
               )}
             </div>
