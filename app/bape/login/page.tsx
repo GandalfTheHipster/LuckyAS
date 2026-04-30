@@ -1,4 +1,4 @@
-import { BapeLoginForm } from "@/components/bape-login-form";
+import { BapeLoginForm } from "@/components/login/bape-login-form";
 
 export default function Page() {
   return (
