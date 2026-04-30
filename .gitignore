@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# OS-specific / platform artifacts (important for cross-platform dev)
+node_modules/
+package-lock.json
