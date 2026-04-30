@@ -1,0 +1,146 @@
+import type { OlympicPageData } from "@/lib/data/olympics/olympics-template"
+
+export const OLYMPICS_2023_DATA: OlympicPageData = {
+  title: "Bape Olympics 2023",
+  date: "2023",
+  location: "Perth CBD",
+  imageOfTheDay: "https://i.postimg.cc/XqCM53zH/IMG-0994.jpg",
+  description:
+    "The 2023 Bape Olympics featured events across FIFA, basketball, futsal, pool, darts, sprinting, cricket, beer pong, cooking, drinking, and more.",
+
+  host: "Comfort Inn & Suites Goodearth Perth",
+  mvp: "Brady Swift",
+  winner: "Kazakstan",
+
+  standings: [
+    {
+      name: "Kazakhstan",
+      gold: 7,
+      silver: 5,
+      bronze: 3,
+      pts: 34,
+    },
+    {
+      name: "Norway",
+      gold: 4,
+      silver: 6,
+      bronze: 6,
+      pts: 30,
+    },
+    {
+      name: "South Korea",
+      gold: 4,
+      silver: 4,
+      bronze: 6,
+      pts: 26,
+    },
+  ],
+
+  events: [
+    {
+      id: "trivia",
+      name: "Trivia",
+      emoji: "🙋‍♂️",
+      status: "completed",
+      winner: "Norway",
+    },
+    {
+      id: "fifa-singles",
+      name: "FIFA Singles",
+      emoji: "🏟️",
+      status: "completed",
+      winner: "Andrew Turnbull",
+    },
+    {
+      id: "fifa-doubles",
+      name: "FIFA Doubles",
+      emoji: "🏟️",
+      status: "completed",
+      winner: "South Korea",
+    },
+    {
+      id: "basketball",
+      name: "Basketball",
+      emoji: "🏀",
+      status: "completed",
+      winner: "Kazakhstan",
+    },
+    {
+      id: "futsal",
+      name: "Futsal",
+      emoji: "⚽️",
+      status: "completed",
+      winner: "South Korea",
+    },
+    {
+      id: "pool",
+      name: "Pool",
+      emoji: "🎱",
+      status: "completed",
+      winner: "Kazakhstan",
+    },
+    {
+      id: "darts",
+      name: "Darts",
+      emoji: "🎯",
+      status: "completed",
+      winner: "Kazakhstan",
+    },
+    {
+      id: "sprint",
+      name: "Sprint",
+      emoji: "🏃‍♂️",
+      status: "completed",
+      winner: "Jack Coleman",
+    },
+    {
+      id: "two-square",
+      name: "Two Square",
+      emoji: "🎾",
+      status: "completed",
+      winner: "Jack Coleman",
+    },
+    {
+      id: "cricket",
+      name: "Cricket",
+      emoji: "🏏",
+      status: "completed",
+      winner: "South Korea",
+    },
+    {
+      id: "beer-pong",
+      name: "Beer Pong",
+      emoji: "🏓",
+      status: "completed",
+      winner: "Brady Swift",
+    },
+    {
+      id: "team-drinking",
+      name: "Team Drinking",
+      emoji: "🍻",
+      status: "completed",
+      winner: "Kazakhstan",
+    },
+    {
+      id: "drinking",
+      name: "Drinking",
+      emoji: "🍺",
+      status: "completed",
+      winner: "Aleksa Kvrgic",
+    },
+    {
+      id: "cooking",
+      name: "Cooking",
+      emoji: "👨‍🍳",
+      status: "completed",
+      winner: "South Korea",
+    },
+    {
+      id: "pvp-eggs",
+      name: "PVP Eggs",
+      emoji: "🪺",
+      status: "completed",
+      winner: "Kazakhstan",
+    },
+  ],
+}
