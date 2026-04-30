@@ -1,6 +1,7 @@
 import Image from "next/image"
 
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong"
+import { TeamName } from "@/components/entity/TeamName"
 
 type SeededTeam = (typeof BEERPONG_TEAMS)[number] & {
   seed: number
@@ -36,9 +37,14 @@ function BracketTeamSlot({
   if (!team) {
     return (
       <div className="flex min-h-16 items-center justify-between rounded-xl border border-dashed bg-muted/30 px-3 py-2">
-        <div>
-          <p className="text-sm font-medium text-muted-foreground">{label}</p>
-          {note && <p className="text-xs text-muted-foreground">{note}</p>}
+        <div className="min-w-0">
+          <p className="truncate text-sm font-medium text-muted-foreground">
+            {label}
+          </p>
+
+          {note && (
+            <p className="truncate text-xs text-muted-foreground">{note}</p>
+          )}
         </div>
       </div>
     )
@@ -48,8 +54,8 @@ function BracketTeamSlot({
     <div
       className={
         isBye
-          ? "flex min-h-16 items-center justify-between rounded-xl border bg-red-500/5 px-3 py-2 shadow-sm"
-          : "flex min-h-16 items-center justify-between rounded-xl border bg-background px-3 py-2 shadow-sm"
+          ? "flex min-h-16 items-center justify-between gap-3 rounded-xl border bg-red-500/5 px-3 py-2 shadow-sm"
+          : "flex min-h-16 items-center justify-between gap-3 rounded-xl border bg-background px-3 py-2 shadow-sm"
       }
     >
       <div className="flex min-w-0 items-center gap-3">
@@ -72,16 +78,19 @@ function BracketTeamSlot({
         />
 
         <div className="min-w-0">
-          <p className="truncate text-sm font-semibold">{team.name}</p>
-          <p className="text-xs text-muted-foreground">
-            {team.pts} pts · {team.w}W/{team.l}L ·{" "}
-            {team.netCups > 0 ? `+${team.netCups}` : team.netCups} net
+          <TeamName
+            code={team.code}
+            className="truncate text-sm font-semibold transition hover:text-red-600 hover:underline"
+          />
+
+          <p className="truncate text-xs text-muted-foreground">
+            {team.code} · {team.pts} pts
           </p>
         </div>
       </div>
 
       {isBye && (
-        <span className="rounded-full bg-red-500/10 px-2 py-1 text-[10px] font-semibold uppercase text-red-600 dark:text-red-400">
+        <span className="shrink-0 rounded-full bg-red-500/10 px-2 py-1 text-[10px] font-semibold uppercase text-red-600 dark:text-red-400">
           Bye
         </span>
       )}
@@ -102,6 +111,7 @@ function BracketMatch({
     <div className="rounded-2xl border bg-background p-3 shadow-sm">
       <div className="mb-3">
         <p className="text-sm font-semibold">{title}</p>
+
         {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
       </div>
 
@@ -126,6 +136,7 @@ export function BeerPongPlayoffBracket() {
         <h2 className="text-xl font-semibold tracking-tight">
           Current Playoff Bracket
         </h2>
+
         <p className="text-sm text-muted-foreground">
           Single-elimination bracket generated from the current league table.
           Seeds are ranked by points, then wins, then net cups.
@@ -191,28 +202,33 @@ export function BeerPongPlayoffBracket() {
               <BracketTeamSlot label="Winner of SF2" />
             </BracketMatch>
 
-            <div className="rounded-2xl border bg-red-600 p-4 text-white shadow-sm">
-              <p className="text-xs font-semibold uppercase tracking-wide text-white/70">
-                Current Top Seed
-              </p>
+            {seed1 && (
+              <div className="rounded-2xl border bg-red-600 p-4 text-white shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-wide text-white/70">
+                  Current Top Seed
+                </p>
 
-              <div className="mt-3 flex items-center gap-3">
-                <Image
-                  src={seed1.logo}
-                  alt={seed1.name}
-                  width={44}
-                  height={44}
-                  className="h-11 w-11 object-contain"
-                />
+                <div className="mt-3 flex items-center gap-3">
+                  <Image
+                    src={seed1.logo}
+                    alt={seed1.name}
+                    width={44}
+                    height={44}
+                    className="h-11 w-11 shrink-0 object-contain"
+                  />
 
-                <div>
-                  <p className="font-semibold">{seed1.name}</p>
-                  <p className="text-sm text-white/75">
-                    Seed 1 · {seed1.pts} points
-                  </p>
+                  <div className="min-w-0">
+                    <TeamName
+                      code={seed1.code}
+                      className="truncate font-semibold text-white hover:underline"
+                    />
+                    <p className="text-sm text-white/75">
+                      {seed1.code} · Seed 1
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

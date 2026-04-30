@@ -1,17 +1,21 @@
 export type LeagueTeam = {
-  name: string
+  name: string // full name
+  shortName: string
+  code: string // use this in fixtures data
   logo: string
   mp: number
   pts: number
   w: number
   l: number
   netCups: number
-  players: number[] // 👈 new
+  players: number[]
 }
 
 export const BEERPONG_TEAMS: LeagueTeam[] = [
   {
     name: "Taplin BPC",
+    shortName: "Taplin",
+    code: "TAP",
     logo: "https://i.postimg.cc/0jS7qSxq/taplin-bpc.png",
     mp: 7,
     pts: 18,
@@ -22,6 +26,8 @@ export const BEERPONG_TEAMS: LeagueTeam[] = [
   },
   {
     name: "Dempsey BPC",
+    shortName: "Dempsey",
+    code: "DEM",
     logo: "https://i.postimg.cc/7bvb1tpF/dempsey-bpc.png",
     mp: 7,
     pts: 15,
@@ -32,6 +38,8 @@ export const BEERPONG_TEAMS: LeagueTeam[] = [
   },
   {
     name: "Hart Beer Pong Club",
+    shortName: "Hart",
+    code: "HAR",
     logo: "https://i.postimg.cc/4386vZwj/hart-bpc.png",
     mp: 8,
     pts: 12,
@@ -42,6 +50,8 @@ export const BEERPONG_TEAMS: LeagueTeam[] = [
   },
   {
     name: "Kobe Beer Pong",
+    shortName: "Kobe",
+    code: "KOB",
     logo: "https://i.postimg.cc/rmKSQbPs/kobe-bpc.png",
     mp: 7,
     pts: 9,
@@ -52,6 +62,8 @@ export const BEERPONG_TEAMS: LeagueTeam[] = [
   },
   {
     name: "Turnbull City",
+    shortName: "Turnbull",
+    code: "TUR",
     logo: "https://i.postimg.cc/rwMxvzPv/turnbull-city-bpc.png",
     mp: 7,
     pts: 9,
@@ -62,6 +74,8 @@ export const BEERPONG_TEAMS: LeagueTeam[] = [
   },
   {
     name: "Pong Club Kvrgic",
+    shortName: "Kvrgic",
+    code: "PCK",
     logo: "https://i.postimg.cc/VvrPxx4h/PCK.png",
     mp: 5,
     pts: 0,
