@@ -7,6 +7,16 @@ import { TeamName } from "@/components/entity/TeamName"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong"
 import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
 
+type TeamPlayer = {
+  id: number
+  src: string
+  alt: string
+}
+
+function isTeamPlayer(player: TeamPlayer | null): player is TeamPlayer {
+  return player !== null
+}
+
 const sortedTeams = [...BEERPONG_TEAMS].sort((a, b) => {
   if (b.pts !== a.pts) return b.pts - a.pts
   if (b.w !== a.w) return b.w - a.w
@@ -16,7 +26,7 @@ const sortedTeams = [...BEERPONG_TEAMS].sort((a, b) => {
 const teams = sortedTeams.map((team) => ({
   ...team,
   players: team.players
-    .map((bapeID) => {
+    .map((bapeID): TeamPlayer | null => {
       const profile = Object.values(BAPE_PROFILES).find(
         (profile) => profile.bapeID === bapeID,
       )
@@ -29,7 +39,7 @@ const teams = sortedTeams.map((team) => ({
         alt: `${profile.firstName} ${profile.lastName}`,
       }
     })
-    .filter(Boolean),
+    .filter(isTeamPlayer),
 }))
 
 function getNetCupsLabel(value: number) {
@@ -141,25 +151,21 @@ function TeamMobileCard({
         <div className="mt-4 flex flex-wrap gap-2">
           {team.players.map((player) => (
             <div
-              key={player?.alt}
+              key={player.id}
               className="flex min-w-0 items-center gap-2 rounded-full border bg-background px-2 py-1"
             >
-              {player?.src && (
-                <Image
-                  src={player.src}
-                  alt={player.alt}
-                  width={24}
-                  height={24}
-                  className="h-6 w-6 rounded-full object-cover"
-                />
-              )}
+              <Image
+                src={player.src}
+                alt={player.alt}
+                width={24}
+                height={24}
+                className="h-6 w-6 rounded-full object-cover"
+              />
 
-              {player?.id && (
-                <PersonName
-                    bapeID={String(player.id)}
-                    className="max-w-32 truncate text-left text-xs text-muted-foreground transition hover:text-red-600 hover:underline"
-                />
-              )}
+              <PersonName
+                bapeID={String(player.id)}
+                className="max-w-32 truncate text-left text-xs text-muted-foreground transition hover:text-red-600 hover:underline"
+              />
             </div>
           ))}
         </div>
@@ -250,25 +256,21 @@ export function BeerPongLeagueTable() {
                 <div className="flex items-center gap-2 max-lg:hidden">
                   {team.players.map((player) => (
                     <div
-                      key={player?.alt}
+                      key={player.id}
                       className="flex min-w-0 items-center gap-2"
                     >
-                      {player?.src && (
-                        <Image
-                          src={player.src}
-                          alt={player.alt}
-                          width={32}
-                          height={32}
-                          className="h-8 w-8 rounded-full object-cover"
-                        />
-                      )}
+                      <Image
+                        src={player.src}
+                        alt={player.alt}
+                        width={32}
+                        height={32}
+                        className="h-8 w-8 rounded-full object-cover"
+                      />
 
-                      {player?.id && (
-                        <PersonName
-                          bapeID={player.id}
-                          className="truncate text-left text-sm text-muted-foreground transition hover:text-red-600 hover:underline"
-                        />
-                      )}
+                      <PersonName
+                        bapeID={String(player.id)}
+                        className="truncate text-left text-sm text-muted-foreground transition hover:text-red-600 hover:underline"
+                      />
                     </div>
                   ))}
                 </div>
