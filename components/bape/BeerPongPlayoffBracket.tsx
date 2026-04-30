@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-import { BEERPONG_TEAMS } from "@/lib/data/beerpong"
+import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 import { TeamName } from "@/components/entity/TeamName"
 
 type SeededTeam = (typeof BEERPONG_TEAMS)[number] & {

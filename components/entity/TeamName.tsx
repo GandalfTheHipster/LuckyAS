@@ -1,7 +1,7 @@
 "use client"
 
 import { EntityTrigger } from "@/components/entity/EntityTrigger"
-import { BEERPONG_TEAMS } from "@/lib/data/beerpong"
+import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 
 type TeamNameProps = {
   code: string

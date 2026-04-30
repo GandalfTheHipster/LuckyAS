@@ -3,7 +3,7 @@
 import Image from "next/image"
 import { X } from "lucide-react"
 
-import { BEERPONG_TEAMS } from "@/lib/data/beerpong"
+import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
 import { BEERPONG_FIXTURES } from "@/lib/data/beerpong/BeerPongFixture"
 

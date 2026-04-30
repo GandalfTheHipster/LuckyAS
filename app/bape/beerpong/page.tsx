@@ -3,7 +3,7 @@ import Image from "next/image"
 import { BeerPongLeagueTable } from "@/components/bape/BeerPongLeagueTable"
 import { BeerPongPlayoffBracket } from "@/components/bape/BeerPongPlayoffBracket"
 import { TeamName } from "@/components/entity/TeamName"
-import { BEERPONG_TEAMS } from "@/lib/data/beerpong"
+import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 import { BEERPONG_FIXTURES } from "@/lib/data/beerpong/BeerPongFixture"
 
 const BEERPONG_LEAGUE_LOGO =

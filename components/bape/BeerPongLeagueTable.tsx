@@ -4,7 +4,7 @@ import Image from "next/image"
 
 import { PersonName } from "@/components/entity/PersonName"
 import { TeamName } from "@/components/entity/TeamName"
-import { BEERPONG_TEAMS } from "@/lib/data/beerpong"
+import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
 
 type TeamPlayer = {
