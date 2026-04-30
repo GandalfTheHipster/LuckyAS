@@ -45,35 +45,44 @@ export function TeamModalContent({ teamCode }: TeamModalContentProps) {
     )
   }
 
+  // 🔥 Standings (for ranking)
   const standings = [...BEERPONG_TEAMS].sort((a, b) => {
     if (b.pts !== a.pts) return b.pts - a.pts
     if (b.w !== a.w) return b.w - a.w
     return b.netCups - a.netCups
   })
 
-  const ranking = standings.findIndex((standingTeam) => standingTeam.code === team.code) + 1
+  const ranking =
+    standings.findIndex((t) => t.code === team.code) + 1
 
+  // 🔥 Last 5 games (type-safe)
   const lastFiveGames = BEERPONG_FIXTURES
     .filter(
       (fixture) =>
         fixture.status === "completed" &&
-        fixture.scoreA !== null &&
-        fixture.scoreB !== null &&
         (fixture.teamA === team.code || fixture.teamB === team.code),
     )
     .sort((a, b) => {
       if (b.round !== a.round) return b.round - a.round
       return b.game - a.game
     })
-    .slice(0, 5)
     .map((fixture) => {
       const isTeamA = fixture.teamA === team.code
       const opponentCode = isTeamA ? fixture.teamB : fixture.teamA
       const teamScore = isTeamA ? fixture.scoreA : fixture.scoreB
       const opponentScore = isTeamA ? fixture.scoreB : fixture.scoreA
 
+      // ✅ Type guard
+      if (teamScore === null || opponentScore === null) {
+        return null
+      }
+
       const result: Result =
-        teamScore > opponentScore ? "W" : teamScore < opponentScore ? "L" : "D"
+        teamScore > opponentScore
+          ? "W"
+          : teamScore < opponentScore
+          ? "L"
+          : "D"
 
       return {
         round: fixture.round,
@@ -84,21 +93,34 @@ export function TeamModalContent({ teamCode }: TeamModalContentProps) {
         result,
       }
     })
+    .filter((g): g is NonNullable<typeof g> => g !== null)
+    .slice(0, 5)
 
+  // 🔥 Streak calculation
   const streakResult = lastFiveGames[0]?.result
-  const streakCount = streakResult
-    ? lastFiveGames.findIndex((game) => game.result !== streakResult) === -1
-      ? lastFiveGames.length
-      : lastFiveGames.findIndex((game) => game.result !== streakResult)
-    : 0
+  let streakCount = 0
+
+  if (streakResult) {
+    for (const game of lastFiveGames) {
+      if (game.result === streakResult) streakCount++
+      else break
+    }
+  }
 
   const streakLabel =
     streakResult && streakCount > 0
-      ? `${streakCount} game ${streakResult === "W" ? "winning" : streakResult === "L" ? "losing" : "draw"} streak`
+      ? `${streakCount} game ${
+          streakResult === "W"
+            ? "winning"
+            : streakResult === "L"
+            ? "losing"
+            : "draw"
+        } streak`
       : "No current streak"
 
   return (
     <div className="pr-8">
+      {/* Header */}
       <div className="flex items-center gap-4">
         <Image
           src={team.logo}
@@ -116,6 +138,7 @@ export function TeamModalContent({ teamCode }: TeamModalContentProps) {
         </div>
       </div>
 
+      {/* Stats */}
       <div className="mt-6 grid grid-cols-4 gap-2 text-center">
         <div className="rounded-xl border bg-muted/40 p-3">
           <p className="text-xs text-muted-foreground">Rank</p>
@@ -138,6 +161,7 @@ export function TeamModalContent({ teamCode }: TeamModalContentProps) {
         </div>
       </div>
 
+      {/* Players */}
       <div className="mt-6 rounded-xl border bg-muted/40 p-4">
         <h3 className="text-sm font-semibold uppercase text-muted-foreground">
           Players
@@ -154,6 +178,7 @@ export function TeamModalContent({ teamCode }: TeamModalContentProps) {
         </div>
       </div>
 
+      {/* Streak */}
       <div className="mt-6 rounded-xl border bg-muted/40 p-4">
         <h3 className="text-sm font-semibold uppercase text-muted-foreground">
           Current Form
@@ -162,6 +187,7 @@ export function TeamModalContent({ teamCode }: TeamModalContentProps) {
         <p className="mt-2 text-sm font-medium">{streakLabel}</p>
       </div>
 
+      {/* Last 5 Games */}
       <div className="mt-6 rounded-xl border bg-muted/40 p-4">
         <h3 className="text-sm font-semibold uppercase text-muted-foreground">
           Last 5 Games
