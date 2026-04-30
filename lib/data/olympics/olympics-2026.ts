@@ -6,7 +6,7 @@ export const OLYMPICS_2026_DATA: OlympicPageData = {
   location: "TBD",
   imageOfTheDay: "https://i.postimg.cc/DySHpqn9/IMG-3906.jpg",
   description:
-    "The 2026 Bape Olympics is an uncoming event. Register now!",
+    "The 2026 Bape Olympics is an upcoming event. Register now!",
 
   host: "-",
   mvp: "-",
@@ -19,7 +19,7 @@ export const OLYMPICS_2026_DATA: OlympicPageData = {
       silver: 0,
       bronze: 0,
       pts: 0,
-    }
+    },
   ],
 
   events: [
@@ -29,6 +29,9 @@ export const OLYMPICS_2026_DATA: OlympicPageData = {
       emoji: "🔮",
       status: "upcoming",
       winner: "-",
-    }
+      gold: [],
+      silver: [],
+      bronze: [],
+    },
   ],
 }

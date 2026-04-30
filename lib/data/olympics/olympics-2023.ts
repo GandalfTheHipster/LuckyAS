@@ -10,7 +10,7 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
 
   host: "Comfort Inn & Suites Goodearth Perth",
   mvp: "Brady Swift",
-  winner: "Kazakstan",
+  winner: "Kazakhstan",
 
   standings: [
     {
@@ -43,6 +43,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🙋‍♂️",
       status: "completed",
       winner: "Norway",
+      gold: ["Thomas Dempsey", "Jack Coleman", "Andrew Turnbull", "Sam Collings"],
+      silver: ["Aleksa Kvrgic", "Elvin Lamprecht", "Kyle Taplin", "Brady Swift"],
+      bronze: ["Cian Bye", "Daniel Morrell", "Joseph Hart", "Lucas Cinquina"],
     },
     {
       id: "fifa-singles",
@@ -50,6 +53,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🏟️",
       status: "completed",
       winner: "Andrew Turnbull",
+      gold: ["Andrew Turnbull"],
+      silver: ["Brady Swift"],
+      bronze: ["Cian Bye"],
     },
     {
       id: "fifa-doubles",
@@ -57,6 +63,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🏟️",
       status: "completed",
       winner: "South Korea",
+      gold: ["Cian Bye", "Daniel Morrell"],
+      silver: ["Andrew Turnbull", "Thomas Dempsey"],
+      bronze: ["Brady Swift", "Aleksa Kvrgic"],
     },
     {
       id: "basketball",
@@ -64,6 +73,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🏀",
       status: "completed",
       winner: "Kazakhstan",
+      gold: ["Elvin Lamprecht", "Aleksa Kvrgic", "Brady Swift", "Kyle Taplin"],
+      silver: ["Jack Coleman", "Andrew Turnbull", "Sam Collings", "Thomas Dempsey"],
+      bronze: ["Cian Bye", "Daniel Morrell", "Joseph Hart", "Lucas Cinquina"],
     },
     {
       id: "futsal",
@@ -71,6 +83,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "⚽️",
       status: "completed",
       winner: "South Korea",
+      gold: ["Daniel Morrell", "Joseph Hart", "Cian Bye", "Lucas Cinquina"],
+      silver: ["Aleksa Kvrgic", "Brady Swift", "Kyle Taplin", "Elvin Lamprecht"],
+      bronze: ["Thomas Dempsey", "Sam Collings", "Andrew Turnbull", "Jack Coleman"],
     },
     {
       id: "pool",
@@ -78,6 +93,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🎱",
       status: "completed",
       winner: "Kazakhstan",
+      gold: ["Aleksa Kvrgic", "Brady Swift", "Kyle Taplin", "Elvin Lamprecht"],
+      silver: ["Joseph Hart", "Daniel Morrell", "Lucas Cinquina", "Cian Bye"],
+      bronze: ["Andrew Turnbull", "Thomas Dempsey", "Jack Coleman", "Sam Collings"],
     },
     {
       id: "darts",
@@ -85,6 +103,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🎯",
       status: "completed",
       winner: "Kazakhstan",
+      gold: ["Kyle Taplin", "Aleksa Kvrgic", "Brady Swift", "Elvin Lamprecht"],
+      silver: ["Andrew Turnbull", "Jack Coleman", "Thomas Dempsey", "Sam Collings"],
+      bronze: ["Joseph Hart", "Daniel Morrell", "Cian Bye", "Lucas Cinquina"],
     },
     {
       id: "sprint",
@@ -92,6 +113,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🏃‍♂️",
       status: "completed",
       winner: "Jack Coleman",
+      gold: ["Jack Coleman"],
+      silver: ["Joseph Hart"],
+      bronze: ["Elvin Lamprecht"],
     },
     {
       id: "two-square",
@@ -99,6 +123,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🎾",
       status: "completed",
       winner: "Jack Coleman",
+      gold: ["Jack Coleman"],
+      silver: ["Andrew Turnbull"],
+      bronze: ["Cian Bye"],
     },
     {
       id: "cricket",
@@ -106,6 +133,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🏏",
       status: "completed",
       winner: "South Korea",
+      gold: ["Daniel Morrell", "Joseph Hart", "Lucas Cinquina", "Cian Bye"],
+      silver: ["Thomas Dempsey", "Jack Coleman", "Andrew Turnbull", "Sam Collings"],
+      bronze: ["Aleksa Kvrgic", "Kyle Taplin", "Elvin Lamprecht", "Brady Swift"],
     },
     {
       id: "beer-pong",
@@ -113,6 +143,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🏓",
       status: "completed",
       winner: "Brady Swift",
+      gold: ["Brady Swift"],
+      silver: ["Cian Bye"],
+      bronze: ["Thomas Dempsey"],
     },
     {
       id: "team-drinking",
@@ -120,6 +153,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🍻",
       status: "completed",
       winner: "Kazakhstan",
+      gold: ["Aleksa Kvrgic", "Brady Swift", "Elvin Lamprecht", "Kyle Taplin"],
+      silver: ["Thomas Dempsey", "Jack Coleman", "Sam Collings", "Andrew Turnbull"],
+      bronze: ["Daniel Morrell", "Joseph Hart", "Lucas Cinquina", "Cian Bye"],
     },
     {
       id: "drinking",
@@ -127,6 +163,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🍺",
       status: "completed",
       winner: "Aleksa Kvrgic",
+      gold: ["Aleksa Kvrgic"],
+      silver: ["Brady Swift"],
+      bronze: ["Thomas Dempsey"],
     },
     {
       id: "cooking",
@@ -134,6 +173,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "👨‍🍳",
       status: "completed",
       winner: "South Korea",
+      gold: ["Lucas Cinquina", "Joseph Hart", "Daniel Morrell", "Cian Bye"],
+      silver: ["Aleksa Kvrgic", "Brady Swift", "Elvin Lamprecht", "Kyle Taplin"],
+      bronze: ["Andrew Turnbull", "Thomas Dempsey", "Jack Coleman", "Sam Collings"],
     },
     {
       id: "pvp-eggs",
@@ -141,6 +183,9 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
       emoji: "🪺",
       status: "completed",
       winner: "Kazakhstan",
+      gold: ["Aleksa Kvrgic", "Brady Swift", "Kyle Taplin", "Elvin Lamprecht"],
+      silver: ["Cian Bye", "Daniel Morrell", "Joseph Hart", "Lucas Cinquina"],
+      bronze: ["Andrew Turnbull", "Jack Coleman", "Sam Collings", "Thomas Dempsey"],
     },
   ],
 }

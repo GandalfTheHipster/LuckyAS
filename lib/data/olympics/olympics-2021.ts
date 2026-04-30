@@ -43,6 +43,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🏟️",
       status: "completed",
       winner: "Priyen Moodley",
+      gold: ["Priyen Moodley"],
+      silver: ["Andrew Turnbull"],
+      bronze: ["Jack Coleman"],
     },
     {
       id: "fifa-doubles",
@@ -50,6 +53,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🏟️",
       status: "completed",
       winner: "Cote d'Ivoire",
+      gold: ["Jack Coleman", "Andrew Turnbull"],
+      silver: ["Noah Edge", "Daniel Morrell"],
+      bronze: ["Priyen Moodley", "Aleksa Kvrgic"],
     },
     {
       id: "pool",
@@ -57,6 +63,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🎱",
       status: "completed",
       winner: "Elvin Lamprecht",
+      gold: ["Elvin Lamprecht"],
+      silver: ["Daniel Morrell"],
+      bronze: ["Kyle Taplin"],
     },
     {
       id: "drinking",
@@ -64,6 +73,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🍻",
       status: "completed",
       winner: "Yugoslavia",
+      gold: ["Aleksa Kvrgic", "Thomas Dempsey", "Priyen Moodley", "Joseph Hart"],
+      silver: ["Noah Edge", "Daniel Morrell", "Todd Williams", "Elvin Lamprecht"],
+      bronze: ["Jack Coleman", "Kyle Taplin", "Andrew Turnbull", "Lucas Cinquina"],
     },
     {
       id: "basketball",
@@ -71,6 +83,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🏀",
       status: "completed",
       winner: "Yugoslavia",
+      gold: ["Aleksa Kvrgic", "Thomas Dempsey", "Priyen Moodley", "Joseph Hart"],
+      silver: ["Noah Edge", "Daniel Morrell", "Todd Williams", "Elvin Lamprecht"],
+      bronze: ["Jack Coleman", "Kyle Taplin", "Andrew Turnbull", "Lucas Cinquina"],
     },
     {
       id: "indoor-soccer",
@@ -78,6 +93,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "⚽️",
       status: "completed",
       winner: "Cote d'Ivoire",
+      gold: ["Jack Coleman", "Kyle Taplin", "Andrew Turnbull", "Lucas Cinquina"],
+      silver: ["Aleksa Kvrgic", "Thomas Dempsey", "Priyen Moodley", "Joseph Hart"],
+      bronze: ["Noah Edge", "Daniel Morrell", "Todd Williams", "Elvin Lamprecht"],
     },
     {
       id: "handball",
@@ -85,6 +103,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🎾",
       status: "completed",
       winner: "Daniel Morrell",
+      gold: ["Daniel Morrell"],
+      silver: ["Jack Coleman"],
+      bronze: ["Andrew Turnbull"],
     },
     {
       id: "table-tennis",
@@ -92,6 +113,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🏓",
       status: "completed",
       winner: "Cote d'Ivoire",
+      gold: [],
+      silver: [],
+      bronze: [],
     },
     {
       id: "chess",
@@ -99,6 +123,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "♟️",
       status: "completed",
       winner: "Jack Coleman",
+      gold: ["Jack Coleman"],
+      silver: ["Todd Williams"],
+      bronze: ["Aleksa Kvrgic"],
     },
     {
       id: "individual-drinker",
@@ -106,6 +133,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🍺",
       status: "completed",
       winner: "Aleksa Kvrgic",
+      gold: ["Aleksa Kvrgic"],
+      silver: ["Noah Edge"],
+      bronze: ["Thomas Dempsey"],
     },
     {
       id: "trivia",
@@ -113,6 +143,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🙋‍♂️",
       status: "completed",
       winner: "Cote d'Ivoire",
+      gold: ["Andrew Turnbull", "Jack Coleman", "Kyle Taplin", "Lucas Cinquina"],
+      silver: ["Aleksa Kvrgic", "Thomas Dempsey", "Priyen Moodley", "Joseph Hart"],
+      bronze: ["Noah Edge", "Daniel Morrell", "Todd Williams", "Elvin Lamprecht"],
     },
   ],
 }

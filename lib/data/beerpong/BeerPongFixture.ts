@@ -1,0 +1,301 @@
+export type BeerPongFixtureStatus = "completed" | "upcoming"
+
+export type BeerPongFixture = {
+  round: number
+  game: number
+  teamA: string
+  teamB: string
+  scoreA: number | null
+  scoreB: number | null
+  status: BeerPongFixtureStatus
+}
+
+export const BEERPONG_FIXTURES: BeerPongFixture[] = [
+  {
+    round: 1,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "Hart Beer Pong Club",
+    scoreA: 0,
+    scoreB: 3,
+    status: "completed",
+  },
+  {
+    round: 1,
+    game: 2,
+    teamA: "Dempsey BPC",
+    teamB: "Kobe Beer Pong",
+    scoreA: 3,
+    scoreB: 0,
+    status: "completed",
+  },
+  {
+    round: 1,
+    game: 3,
+    teamA: "FCK",
+    teamB: "Taplin BPC",
+    scoreA: 0,
+    scoreB: 3,
+    status: "completed",
+  },
+
+  {
+    round: 2,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "Kobe Beer Pong",
+    scoreA: 1,
+    scoreB: 0,
+    status: "completed",
+  },
+  {
+    round: 2,
+    game: 2,
+    teamA: "FCK",
+    teamB: "Hart Beer Pong Club",
+    scoreA: 0,
+    scoreB: 2,
+    status: "completed",
+  },
+  {
+    round: 2,
+    game: 3,
+    teamA: "Taplin BPC",
+    teamB: "Dempsey BPC",
+    scoreA: 0,
+    scoreB: 1,
+    status: "completed",
+  },
+
+  {
+    round: 3,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "FCK",
+    scoreA: 1,
+    scoreB: 0,
+    status: "completed",
+  },
+  {
+    round: 3,
+    game: 2,
+    teamA: "Taplin BPC",
+    teamB: "Kobe Beer Pong",
+    scoreA: 4,
+    scoreB: 0,
+    status: "completed",
+  },
+  {
+    round: 3,
+    game: 3,
+    teamA: "Dempsey BPC",
+    teamB: "Hart Beer Pong Club",
+    scoreA: 0,
+    scoreB: 3,
+    status: "completed",
+  },
+
+  {
+    round: 4,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "Taplin BPC",
+    scoreA: 0,
+    scoreB: 2,
+    status: "completed",
+  },
+  {
+    round: 4,
+    game: 2,
+    teamA: "Dempsey BPC",
+    teamB: "FCK",
+    scoreA: 1,
+    scoreB: 0,
+    status: "completed",
+  },
+  {
+    round: 4,
+    game: 3,
+    teamA: "Hart Beer Pong Club",
+    teamB: "Kobe Beer Pong",
+    scoreA: 5,
+    scoreB: 0,
+    status: "completed",
+  },
+
+  {
+    round: 5,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "Dempsey BPC",
+    scoreA: 0,
+    scoreB: 6,
+    status: "completed",
+  },
+  {
+    round: 5,
+    game: 2,
+    teamA: "Hart Beer Pong Club",
+    teamB: "Taplin BPC",
+    scoreA: 0,
+    scoreB: 1,
+    status: "completed",
+  },
+  {
+    round: 5,
+    game: 3,
+    teamA: "Kobe Beer Pong",
+    teamB: "FCK",
+    scoreA: 1,
+    scoreB: 0,
+    status: "completed",
+  },
+
+  {
+    round: 6,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "Dempsey BPC",
+    scoreA: 0,
+    scoreB: 3,
+    status: "completed",
+  },
+  {
+    round: 6,
+    game: 2,
+    teamA: "Hart Beer Pong Club",
+    teamB: "Taplin BPC",
+    scoreA: 0,
+    scoreB: 1,
+    status: "completed",
+  },
+  {
+    round: 6,
+    game: 3,
+    teamA: "Kobe Beer Pong",
+    teamB: "FCK",
+    scoreA: null,
+    scoreB: null,
+    status: "upcoming",
+  },
+
+  {
+    round: 7,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "Taplin BPC",
+    scoreA: 0,
+    scoreB: 2,
+    status: "completed",
+  },
+  {
+    round: 7,
+    game: 2,
+    teamA: "Dempsey BPC",
+    teamB: "FCK",
+    scoreA: null,
+    scoreB: null,
+    status: "upcoming",
+  },
+  {
+    round: 7,
+    game: 3,
+    teamA: "Hart Beer Pong Club",
+    teamB: "Kobe Beer Pong",
+    scoreA: 0,
+    scoreB: 5,
+    status: "completed",
+  },
+
+  {
+    round: 8,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "FCK",
+    scoreA: null,
+    scoreB: null,
+    status: "upcoming",
+  },
+  {
+    round: 8,
+    game: 2,
+    teamA: "Taplin BPC",
+    teamB: "Kobe Beer Pong",
+    scoreA: null,
+    scoreB: null,
+    status: "upcoming",
+  },
+  {
+    round: 8,
+    game: 3,
+    teamA: "Dempsey BPC",
+    teamB: "Hart Beer Pong Club",
+    scoreA: null,
+    scoreB: null,
+    status: "upcoming",
+  },
+
+  {
+    round: 9,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "Kobe Beer Pong",
+    scoreA: null,
+    scoreB: null,
+    status: "upcoming",
+  },
+  {
+    round: 9,
+    game: 2,
+    teamA: "FCK",
+    teamB: "Hart Beer Pong Club",
+    scoreA: null,
+    scoreB: null,
+    status: "upcoming",
+  },
+  {
+    round: 9,
+    game: 3,
+    teamA: "Taplin BPC",
+    teamB: "Dempsey BPC",
+    scoreA: null,
+    scoreB: null,
+    status: "upcoming",
+  },
+
+  {
+    round: 10,
+    game: 1,
+    teamA: "Turnbull City",
+    teamB: "Hart Beer Pong Club",
+    scoreA: 2,
+    scoreB: 0,
+    status: "completed",
+  },
+  {
+    round: 10,
+    game: 2,
+    teamA: "Dempsey BPC",
+    teamB: "Kobe Beer Pong",
+    scoreA: 0,
+    scoreB: 2,
+    status: "completed",
+  },
+  {
+    round: 10,
+    game: 3,
+    teamA: "FCK",
+    teamB: "Taplin BPC",
+    scoreA: null,
+    scoreB: null,
+    status: "upcoming",
+  },
+]
+
+export const BEERPONG_COMPLETED_FIXTURES = BEERPONG_FIXTURES.filter(
+  (fixture) => fixture.status === "completed",
+)
+
+export const BEERPONG_UPCOMING_FIXTURES = BEERPONG_FIXTURES.filter(
+  (fixture) => fixture.status === "upcoming",
+)

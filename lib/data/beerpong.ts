@@ -61,8 +61,8 @@ export const BEERPONG_TEAMS: LeagueTeam[] = [
     players: [3], // Andrew
   },
   {
-    name: "FCK",
-    logo: "https://i.postimg.cc/Vv0dCPH9/fck-bpc.png",
+    name: "Pong Club Kvrgic",
+    logo: "https://i.postimg.cc/VvrPxx4h/PCK.png",
     mp: 5,
     pts: 0,
     w: 0,
