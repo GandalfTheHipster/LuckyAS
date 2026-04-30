@@ -8,12 +8,14 @@ type PersonModalContentProps = {
 }
 
 export function PersonModalContent({ personId }: PersonModalContentProps) {
+  const numericPersonId = Number(personId)
+
   const profile = Object.values(BAPE_PROFILES).find(
-    (profile) => profile.bapeID === personId,
+    (profile) => profile.bapeID === numericPersonId,
   )
 
   const beerPongTeams = BEERPONG_TEAMS.filter((team) =>
-    team.players.includes(personId),
+    team.players.includes(numericPersonId),
   )
 
   if (!profile) {

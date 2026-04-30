@@ -9,13 +9,11 @@ type PersonNameProps = {
   fallback?: string
 }
 
-export function PersonName({
-  bapeID,
-  className,
-  fallback,
-}: PersonNameProps) {
+export function PersonName({ bapeID, className, fallback }: PersonNameProps) {
+  const numericBapeID = Number(bapeID)
+
   const profile = Object.values(BAPE_PROFILES).find(
-    (profile) => profile.bapeID === bapeID,
+    (profile) => profile.bapeID === numericBapeID,
   )
 
   const displayName = profile
@@ -27,8 +25,7 @@ export function PersonName({
       type="person"
       id={bapeID}
       className={
-        className ??
-        "transition hover:text-red-600 hover:underline"
+        className ?? "transition hover:text-red-600 hover:underline"
       }
     >
       {displayName}
