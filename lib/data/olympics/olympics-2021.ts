@@ -10,7 +10,7 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
 
   host: "12 Seagate St, Safety Bay",
   mvp: "Jack Coleman",
-  winner: "Yugoslavia",
+  winner: "Cote d'Ivoire",
 
   standings: [
     {

@@ -1,71 +1,103 @@
-import { AuthButton } from "@/components/auth-button";
-import { Hero } from "@/components/hero";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import Link from "next/link";
-import { Suspense } from "react";
+import { AuthButton } from "@/components/auth-button"
+import { Hero } from "@/components/hero"
+import { ThemeSwitcher } from "@/components/theme-switcher"
+import Link from "next/link"
+import { Suspense } from "react"
 import { CardImage } from "@/components/ui/image_card"
 import { SocialLinks } from "@/components/landing/SocialLinks"
 
+const projects = [
+  {
+    imageSrc: "https://i.postimg.cc/wB8jxcqN/IMG-0666.jpg",
+    title: "Bape Olympics",
+    description:
+      "Inspiring people through the Olympic values of friendship, respect, and copious alcohol intake.",
+    badge: "Featured",
+    buttonText: "View Event",
+    href: "/bape/olympics",
+  },
+  {
+    imageSrc:
+      "https://i.postimg.cc/XNHN9xC0/Chat-GPT-Image-Apr-29-2026-at-11-11-38-AM.png",
+    title: "LuckyAS",
+    description:
+      "A capstone project for managing student allocations, projects, and access.",
+    badge: "Capstone",
+    buttonText: "View Project",
+    href: "/luckyas/login",
+  },
+  {
+    imageSrc: "https://i.postimg.cc/cL9WcSc3/bpl-logo.png",
+    title: "Bape Beer Pong League",
+    description:
+      "The official hub for fixtures, standings, teams, playoffs, and league chaos.",
+    badge: "League",
+    buttonText: "View League",
+    href: "/bape/beerpong",
+  },
+]
+
 export default function Home() {
   return (
-    <main className="min-h-screen flex flex-col items-center">
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
-        <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-          <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-            <div className="flex gap-5 items-center font-semibold">
-              <Link href={"/"}>NOAHEDGE.COM</Link>
-            </div>
-              <Suspense>
-                <AuthButton />
-              </Suspense>
+    <main className="relative min-h-screen overflow-hidden bg-background text-foreground">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute bottom-24 right-0 h-80 w-80 rounded-full bg-secondary/20 blur-3xl" />
+        <div className="absolute left-0 top-1/3 h-72 w-72 rounded-full bg-muted blur-3xl" />
+      </div>
+
+      <div className="flex min-h-screen w-full flex-col items-center">
+        <nav className="sticky top-0 z-50 flex h-16 w-full justify-center border-b border-border/60 bg-background/80 backdrop-blur-xl">
+          <div className="flex w-full max-w-6xl items-center justify-between px-5 text-sm">
+            <Link
+              href="/"
+              className="group flex items-center gap-3 font-semibold tracking-[0.2em]"
+            >
+              <span className="h-2.5 w-2.5 rounded-full bg-primary transition group-hover:scale-125" />
+              <span>noahedgedotcom</span>
+            </Link>
+
+            <Suspense>
+              <AuthButton />
+            </Suspense>
           </div>
         </nav>
-        <div className="flex-1 flex flex-col items-center gap-20 max-w-5xl p-5">
-          <Hero />
-          <SocialLinks />
-          <main className="grid flex-1 grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3">
-            <CardImage
-              imageSrc="https://i.postimg.cc/wB8jxcqN/IMG-0666.jpg"
-              title="Bape Olympics"
-              description="Inspiring people through the Olympics values of friendship, respect and copious alcohol intake"
-              badge="Featured"
-              buttonText="View Event"
-              href="/bape/olympics"
-            />
-            <CardImage
-              imageSrc="https://i.postimg.cc/XNHN9xC0/Chat-GPT-Image-Apr-29-2026-at-11-11-38-AM.png"
-              title="LuckyAS"
-              description="Capstone Project"
-              badge=""
-              buttonText="View Project"
-              href="/luckyas/login"
-            />
-            <CardImage
-              imageSrc="https://i.postimg.cc/cL9WcSc3/bpl-logo.png"
-              title="Bape Beer Pong League"
-              description="The Bape Beer Pong League"
-              badge=""
-              buttonText="View Project"
-              href="/bape/beerpong"
-            />
-          </main>
+
+        <div className="flex w-full max-w-6xl flex-1 flex-col items-center px-5 py-12 sm:py-16">
+          <section className="flex w-full flex-col items-center gap-8 rounded-[2rem] border border-border/60 bg-card/50 px-6 py-12 text-center shadow-sm backdrop-blur sm:px-10">
+            <Hero />
+            <SocialLinks />
+          </section>
+
+          <section className="w-full py-16">
+            <div className="mb-8">
+              <p className="text-sm font-medium uppercase tracking-[0.25em] text-muted-foreground">
+                Projects
+              </p>
+              <h2 className="mt-2 text-3xl font-semibold tracking-tight">
+                What&apos;s going on?
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {projects.map((project) => (
+                <div
+                  key={project.href}
+                  className="group rounded-2xl transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                >
+                  <CardImage {...project} />
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
 
-        <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-          <p>
-            Powered by{" "}
-            <a
-              href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-              target="_blank"
-              className="font-bold hover:underline"
-              rel="noreferrer"
-            >
-              Supabase
-            </a>
-          </p>
-          <ThemeSwitcher />
+        <footer className="w-full border-t border-border/60 bg-background/80">
+          <div className="mx-auto flex w-full max-w-6xl items-center justify-center px-5 py-8">
+            <ThemeSwitcher />
+          </div>
         </footer>
       </div>
     </main>
-  );
+  )
 }
