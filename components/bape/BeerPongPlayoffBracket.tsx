@@ -2,6 +2,7 @@ import Image from "next/image"
 
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 import { TeamName } from "@/components/entity/TeamName"
+import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
 
 type SeededTeam = (typeof BEERPONG_TEAMS)[number] & {
   seed: number
@@ -69,24 +70,12 @@ function BracketTeamSlot({
           {team.seed}
         </div>
 
-        <Image
-          src={team.logo}
-          alt={team.name}
-          width={36}
-          height={36}
-          className="h-9 w-9 shrink-0 object-contain"
+        <TeamProfileButton
+          code={team.code}
+          compact
+          meta={`${team.code} · ${team.pts} pts`}
+          className="min-w-0"
         />
-
-        <div className="min-w-0">
-          <TeamName
-            code={team.code}
-            className="truncate text-sm font-semibold transition hover:text-foreground hover:underline"
-          />
-
-          <p className="truncate text-xs text-muted-foreground">
-            {team.code} · {team.pts} pts
-          </p>
-        </div>
       </div>
 
       {isBye && (

@@ -1,15 +1,8 @@
-import Image from "next/image"
-
 import { BapePanel } from "@/components/bape/BapePageChrome"
-import { TeamName } from "@/components/entity/TeamName"
+import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { BEERPONG_FIXTURES } from "@/lib/data/beerpong/BeerPongFixture"
-import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
-
-function getTeam(code: string) {
-  return BEERPONG_TEAMS.find((team) => team.code === code)
-}
 
 function TeamBadge({
   code,
@@ -18,36 +11,13 @@ function TeamBadge({
   code: string
   align?: "left" | "right"
 }) {
-  const team = getTeam(code)
-  const displayName = team?.shortName ?? code
-  const altName = team?.name ?? code
-
   return (
-    <div
-      className={
-        align === "right"
-          ? "flex min-w-0 flex-row-reverse items-center gap-2 text-right"
-          : "flex min-w-0 items-center gap-2"
-      }
-    >
-      {team?.logo ? (
-        <Image
-          src={team.logo}
-          alt={altName}
-          width={40}
-          height={40}
-          className="h-9 w-9 shrink-0 object-contain"
-        />
-      ) : (
-        <div className="h-9 w-9 shrink-0 rounded-full border bg-muted" />
-      )}
-
-      <TeamName
-        code={code}
-        fallback={displayName}
-        className="min-w-0 truncate text-sm font-medium"
-      />
-    </div>
+    <TeamProfileButton
+      code={code}
+      compact
+      align={align}
+      className="w-full"
+    />
   )
 }
 

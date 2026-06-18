@@ -1,8 +1,8 @@
 import Image from "next/image"
 
-import { PersonName } from "@/components/entity/PersonName"
-import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
+import { PersonProfileButton } from "@/components/entity/PersonProfileButton"
 import { BEERPONG_FIXTURES } from "@/lib/data/beerpong/BeerPongFixture"
+import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 
 type TeamModalContentProps = {
   teamCode: string
@@ -10,10 +10,9 @@ type TeamModalContentProps = {
 
 type Result = "W" | "L" | "D"
 
-function getResultClass(result: Result) {
-  if (result === "W") return "bg-green-500/10 text-green-600 dark:text-green-400"
-  if (result === "L") return "bg-red-500/10 text-red-600 dark:text-red-400"
-  return "bg-muted text-muted-foreground"
+function getNetCupsLabel(value: number) {
+  if (value > 0) return `+${value}`
+  return value.toString()
 }
 
 function getOrdinal(value: number) {
@@ -31,12 +30,59 @@ function getOrdinal(value: number) {
   }
 }
 
+function getResultClass(result: Result) {
+  if (result === "W") return "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+  if (result === "L") return "bg-red-500/10 text-red-700 dark:text-red-300"
+  return "bg-muted text-muted-foreground"
+}
+
+function getFixtureNumber(round: number, game: number, teamA: string, teamB: string) {
+  return (
+    BEERPONG_FIXTURES.findIndex(
+      (fixture) =>
+        fixture.round === round &&
+        fixture.game === game &&
+        fixture.teamA === teamA &&
+        fixture.teamB === teamB,
+    ) + 1
+  )
+}
+
+function StatTile({
+  label,
+  value,
+  tone = "default",
+}: {
+  label: string
+  value: string | number
+  tone?: "default" | "good" | "muted"
+}) {
+  return (
+    <div className="rounded-xl border bg-muted/35 p-3">
+      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+        {label}
+      </p>
+      <p
+        className={
+          tone === "good"
+            ? "mt-1 text-xl font-bold tabular-nums text-emerald-700 dark:text-emerald-300"
+            : tone === "muted"
+              ? "mt-1 text-xl font-bold tabular-nums text-muted-foreground"
+              : "mt-1 text-xl font-bold tabular-nums"
+        }
+      >
+        {value}
+      </p>
+    </div>
+  )
+}
+
 export function TeamModalContent({ teamCode }: TeamModalContentProps) {
   const team = BEERPONG_TEAMS.find((team) => team.code === teamCode)
 
   if (!team) {
     return (
-      <div className="pr-8">
+      <div className="pr-10">
         <h2 className="text-xl font-semibold">Team not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           No team exists for code: {teamCode}
@@ -45,18 +91,15 @@ export function TeamModalContent({ teamCode }: TeamModalContentProps) {
     )
   }
 
-  // 🔥 Standings (for ranking)
   const standings = [...BEERPONG_TEAMS].sort((a, b) => {
     if (b.pts !== a.pts) return b.pts - a.pts
     if (b.w !== a.w) return b.w - a.w
     return b.netCups - a.netCups
   })
 
-  const ranking =
-    standings.findIndex((t) => t.code === team.code) + 1
+  const ranking = standings.findIndex((standing) => standing.code === team.code) + 1
 
-  // 🔥 Last 5 games (type-safe)
-  const lastFiveGames = BEERPONG_FIXTURES
+  const completedGames = BEERPONG_FIXTURES
     .filter(
       (fixture) =>
         fixture.status === "completed" &&
@@ -72,149 +115,158 @@ export function TeamModalContent({ teamCode }: TeamModalContentProps) {
       const teamScore = isTeamA ? fixture.scoreA : fixture.scoreB
       const opponentScore = isTeamA ? fixture.scoreB : fixture.scoreA
 
-      // ✅ Type guard
-      if (teamScore === null || opponentScore === null) {
-        return null
-      }
+      if (teamScore === null || opponentScore === null) return null
 
       const result: Result =
-        teamScore > opponentScore
-          ? "W"
-          : teamScore < opponentScore
-          ? "L"
-          : "D"
+        teamScore > opponentScore ? "W" : teamScore < opponentScore ? "L" : "D"
 
       return {
-        round: fixture.round,
-        game: fixture.game,
+        fixtureNumber: getFixtureNumber(
+          fixture.round,
+          fixture.game,
+          fixture.teamA,
+          fixture.teamB,
+        ),
         opponentCode,
-        teamScore,
+        opponentName:
+          BEERPONG_TEAMS.find((opponent) => opponent.code === opponentCode)
+            ?.shortName ?? opponentCode,
         opponentScore,
         result,
+        teamScore,
       }
     })
-    .filter((g): g is NonNullable<typeof g> => g !== null)
-    .slice(0, 5)
+    .filter((game): game is NonNullable<typeof game> => game !== null)
 
-  // 🔥 Streak calculation
+  const cupsFor = completedGames.reduce((total, game) => total + game.teamScore, 0)
+  const cupsAgainst = completedGames.reduce(
+    (total, game) => total + game.opponentScore,
+    0,
+  )
+  const winRate = team.mp > 0 ? Math.round((team.w / team.mp) * 100) : 0
+  const lastFiveGames = completedGames.slice(0, 5)
+
   const streakResult = lastFiveGames[0]?.result
   let streakCount = 0
 
   if (streakResult) {
     for (const game of lastFiveGames) {
-      if (game.result === streakResult) streakCount++
+      if (game.result === streakResult) streakCount += 1
       else break
     }
   }
 
   const streakLabel =
     streakResult && streakCount > 0
-      ? `${streakCount} game ${
-          streakResult === "W"
-            ? "winning"
-            : streakResult === "L"
-            ? "losing"
-            : "draw"
-        } streak`
-      : "No current streak"
+      ? `${streakResult}${streakCount}`
+      : "None"
+
+  const biggestWin = completedGames
+    .filter((game) => game.result === "W")
+    .sort(
+      (a, b) =>
+        b.teamScore - b.opponentScore - (a.teamScore - a.opponentScore),
+    )[0]
 
   return (
-    <div className="pr-8">
-      {/* Header */}
-      <div className="flex items-center gap-4">
-        <Image
-          src={team.logo}
-          alt={team.name}
-          width={72}
-          height={72}
-          className="h-16 w-16 object-contain"
-        />
+    <div className="space-y-6">
+      <div className="flex items-start gap-4 pr-10">
+        <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl border bg-muted/35 p-3">
+          <Image
+            src={team.logo}
+            alt={team.name}
+            width={80}
+            height={80}
+            className="h-full w-full object-contain"
+          />
+        </div>
 
-        <div>
-          <h2 className="text-2xl font-bold">{team.name}</h2>
-          <p className="text-sm text-muted-foreground">
-            {team.shortName} · {team.code}
+        <div className="min-w-0 pt-1">
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+            Beer Pong Club
+          </p>
+          <h2 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">
+            {team.name}
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {team.shortName} · {team.code} · {getOrdinal(ranking)} seed
           </p>
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="mt-6 grid grid-cols-4 gap-2 text-center">
-        <div className="rounded-xl border bg-muted/40 p-3">
-          <p className="text-xs text-muted-foreground">Rank</p>
-          <p className="text-lg font-bold">{getOrdinal(ranking)}</p>
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <StatTile label="Points" value={team.pts} tone="good" />
+        <StatTile label="Record" value={`${team.w}-${team.l}`} />
+        <StatTile label="Net Cups" value={getNetCupsLabel(team.netCups)} />
+        <StatTile label="Win Rate" value={`${winRate}%`} />
+        <StatTile label="Matches" value={team.mp} />
+        <StatTile label="Cups For" value={cupsFor} />
+        <StatTile label="Cups Against" value={cupsAgainst} tone="muted" />
+        <StatTile label="Current Form" value={streakLabel} />
+      </div>
+
+      <div className="grid gap-3 md:grid-cols-[1fr_1.2fr]">
+        <div className="rounded-2xl border bg-muted/30 p-4">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Player
+          </h3>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {team.players.map((playerId) => (
+              <PersonProfileButton
+                key={playerId}
+                bapeID={String(playerId)}
+                meta={`${team.code} player`}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="rounded-xl border bg-muted/40 p-3">
-          <p className="text-xs text-muted-foreground">MP</p>
-          <p className="text-lg font-bold">{team.mp}</p>
-        </div>
-
-        <div className="rounded-xl border bg-muted/40 p-3">
-          <p className="text-xs text-muted-foreground">W</p>
-          <p className="text-lg font-bold">{team.w}</p>
-        </div>
-
-        <div className="rounded-xl border bg-muted/40 p-3">
-          <p className="text-xs text-muted-foreground">PTS</p>
-          <p className="text-lg font-bold">{team.pts}</p>
+        <div className="rounded-2xl border bg-muted/30 p-4">
+          <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            Best Result
+          </h3>
+          {biggestWin ? (
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              Beat{" "}
+              <span className="font-semibold text-foreground">
+                {biggestWin.opponentName}
+              </span>{" "}
+              {biggestWin.teamScore}-{biggestWin.opponentScore}.
+            </p>
+          ) : (
+            <p className="mt-3 text-sm text-muted-foreground">
+              No wins recorded yet.
+            </p>
+          )}
         </div>
       </div>
 
-      {/* Players */}
-      <div className="mt-6 rounded-xl border bg-muted/40 p-4">
-        <h3 className="text-sm font-semibold uppercase text-muted-foreground">
-          Players
-        </h3>
-
-        <div className="mt-3 flex flex-wrap gap-2">
-          {team.players.map((playerId) => (
-            <PersonName
-              key={playerId}
-              bapeID={String(playerId)}
-              className="rounded-full border bg-background px-3 py-1 text-sm font-medium transition hover:text-red-600 hover:underline"
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Streak */}
-      <div className="mt-6 rounded-xl border bg-muted/40 p-4">
-        <h3 className="text-sm font-semibold uppercase text-muted-foreground">
-          Current Form
-        </h3>
-
-        <p className="mt-2 text-sm font-medium">{streakLabel}</p>
-      </div>
-
-      {/* Last 5 Games */}
-      <div className="mt-6 rounded-xl border bg-muted/40 p-4">
-        <h3 className="text-sm font-semibold uppercase text-muted-foreground">
-          Last 5 Games
+      <div className="rounded-2xl border bg-muted/30 p-4">
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Recent Results
         </h3>
 
         {lastFiveGames.length > 0 ? (
-          <div className="mt-3 flex flex-col gap-2">
+          <div className="mt-3 grid gap-2">
             {lastFiveGames.map((game) => (
               <div
-                key={`${game.round}-${game.game}`}
-                className="flex items-center justify-between rounded-lg border bg-background px-3 py-2"
+                key={`${game.fixtureNumber}-${game.opponentCode}`}
+                className="flex items-center justify-between gap-3 rounded-xl border bg-background px-3 py-2"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-3">
                   <span
-                    className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${getResultClass(
+                    className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${getResultClass(
                       game.result,
                     )}`}
                   >
                     {game.result}
                   </span>
-
-                  <div>
-                    <p className="text-sm font-medium">
-                      vs {game.opponentCode}
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium">
+                      vs {game.opponentName}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Round {game.round}, Game {game.game}
+                      Match {game.fixtureNumber}
                     </p>
                   </div>
                 </div>
@@ -226,7 +278,7 @@ export function TeamModalContent({ teamCode }: TeamModalContentProps) {
             ))}
           </div>
         ) : (
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="mt-3 text-sm text-muted-foreground">
             No completed games yet.
           </p>
         )}

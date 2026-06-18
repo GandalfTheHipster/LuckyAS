@@ -1,16 +1,12 @@
 "use client"
 
-import Image from "next/image"
-
-import { PersonName } from "@/components/entity/PersonName"
-import { TeamName } from "@/components/entity/TeamName"
+import { PersonProfileButton } from "@/components/entity/PersonProfileButton"
+import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
 
 type TeamPlayer = {
   id: number
-  src: string
-  alt: string
 }
 
 function isTeamPlayer(player: TeamPlayer | null): player is TeamPlayer {
@@ -35,8 +31,6 @@ const teams = sortedTeams.map((team) => ({
 
       return {
         id: profile.bapeID,
-        src: profile.avatarUrl,
-        alt: `${profile.firstName} ${profile.lastName}`,
       }
     })
     .filter(isTeamPlayer),
@@ -80,52 +74,23 @@ function TeamMobileCard({
           {rank}
         </div>
 
-        <Image
-          src={team.logo}
-          alt={team.name}
-          width={52}
-          height={52}
-          className="h-12 w-12 shrink-0 object-contain"
-        />
-
         <div className="min-w-0 flex-1">
-          <div className="flex min-w-0 items-center gap-2">
-            <TeamName
-              code={team.code}
-              className="truncate text-left font-semibold transition hover:text-foreground hover:underline"
-            />
-
-            {isLeader && (
-              <span className="shrink-0 rounded-full border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase text-foreground">
-                Leader
-              </span>
-            )}
-          </div>
-
-          <p className="text-xs text-muted-foreground">
-            {team.shortName} · {team.code}
-          </p>
+          <TeamProfileButton
+            code={team.code}
+            compact
+            badge={isLeader ? "Leader" : undefined}
+          />
 
           {team.players.length > 0 && (
             <div className="mt-2 flex flex-wrap gap-2">
               {team.players.map((player) => (
-                <div
+                <PersonProfileButton
                   key={player.id}
-                  className="flex min-w-0 items-center gap-2 rounded-full border bg-background px-2 py-1"
-                >
-                  <Image
-                    src={player.src}
-                    alt={player.alt}
-                    width={24}
-                    height={24}
-                    className="h-6 w-6 rounded-full object-cover"
-                  />
-
-                  <PersonName
-                    bapeID={String(player.id)}
-                    className="max-w-32 truncate text-left text-xs font-medium text-foreground"
-                  />
-                </div>
+                  bapeID={String(player.id)}
+                  compact
+                  className="max-w-full"
+                  meta={`${team.code} player`}
+                />
               ))}
             </div>
           )}
@@ -222,54 +187,20 @@ export function BeerPongLeagueTable() {
                   </div>
                 </div>
 
-                <div className="flex min-w-0 items-center gap-3">
-                  <Image
-                    src={team.logo}
-                    alt={team.name}
-                    width={52}
-                    height={52}
-                    className="h-12 w-12 shrink-0 object-contain"
-                  />
-
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <TeamName
-                        code={team.code}
-                        className="truncate text-left font-semibold transition hover:text-foreground hover:underline"
-                      />
-
-                      {isLeader && (
-                        <span className="rounded-full border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase text-foreground">
-                          Leader
-                        </span>
-                      )}
-                    </div>
-
-                    <p className="text-xs text-muted-foreground">
-                      {team.code} · {team.w}W / {team.l}L
-                    </p>
-                  </div>
-                </div>
+                <TeamProfileButton
+                  code={team.code}
+                  badge={isLeader ? "Leader" : undefined}
+                  className="min-w-0"
+                />
 
                 <div className="flex items-center gap-2 max-lg:hidden">
                   {team.players.map((player) => (
-                    <div
+                    <PersonProfileButton
                       key={player.id}
-                      className="flex min-w-0 items-center gap-2"
-                    >
-                      <Image
-                        src={player.src}
-                        alt={player.alt}
-                        width={32}
-                        height={32}
-                        className="h-8 w-8 rounded-full object-cover"
-                      />
-
-                      <PersonName
-                        bapeID={String(player.id)}
-                        className="truncate text-left text-sm text-muted-foreground transition hover:text-foreground hover:underline"
-                      />
-                    </div>
+                      bapeID={String(player.id)}
+                      className="max-w-full"
+                      meta={`${team.code} player`}
+                    />
                   ))}
                 </div>
 
