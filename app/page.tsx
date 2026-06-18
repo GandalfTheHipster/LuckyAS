@@ -17,16 +17,6 @@ const projects = [
     href: "/bape/olympics",
   },
   {
-    imageSrc:
-      "https://i.postimg.cc/XNHN9xC0/Chat-GPT-Image-Apr-29-2026-at-11-11-38-AM.png",
-    title: "LuckyAS",
-    description:
-      "A capstone project for managing student allocations, projects, and access.",
-    badge: "Capstone",
-    buttonText: "View Project",
-    href: "/luckyas/login",
-  },
-  {
     imageSrc: "https://i.postimg.cc/cL9WcSc3/bpl-logo.png",
     title: "Bape Beer Pong League",
     description:
