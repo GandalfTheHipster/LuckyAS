@@ -1,10 +1,22 @@
 import Image from "next/image"
 
+import {
+  BapeHero,
+  BapeMetricCard,
+  BapePageShell,
+  BapePanel,
+  BapeSectionHeader,
+} from "@/components/bape/BapePageChrome"
 import { BeerPongLeagueTable } from "@/components/bape/BeerPongLeagueTable"
 import { BeerPongPlayoffBracket } from "@/components/bape/BeerPongPlayoffBracket"
 import { TeamName } from "@/components/entity/TeamName"
+import { Badge } from "@/components/ui/badge"
+import {
+  BEERPONG_COMPLETED_FIXTURES,
+  BEERPONG_FIXTURES,
+  BEERPONG_UPCOMING_FIXTURES,
+} from "@/lib/data/beerpong/BeerPongFixture"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
-import { BEERPONG_FIXTURES } from "@/lib/data/beerpong/BeerPongFixture"
 
 const BEERPONG_LEAGUE_LOGO =
   "https://i.postimg.cc/ZR6kb86T/beerponglogo.png"
@@ -15,12 +27,10 @@ const sortedTeams = [...BEERPONG_TEAMS].sort((a, b) => {
   return b.netCups - a.netCups
 })
 
-const completedFixtures = BEERPONG_FIXTURES.filter(
-  (fixture) => fixture.status === "completed",
-)
-
-const upcomingFixtures = BEERPONG_FIXTURES.filter(
-  (fixture) => fixture.status === "upcoming",
+const completedFixtures = BEERPONG_COMPLETED_FIXTURES
+const upcomingFixtures = BEERPONG_UPCOMING_FIXTURES
+const seasonProgress = Math.round(
+  (completedFixtures.length / BEERPONG_FIXTURES.length) * 100,
 )
 
 function getTeam(code: string) {
@@ -79,45 +89,36 @@ function getLongestWinStreak() {
   return streaks.sort((a, b) => b.longestStreak - a.longestStreak)[0]
 }
 
-function TeamBadge({ code }: { code: string }) {
+function TeamBadge({ code, align = "left" }: { code: string; align?: "left" | "right" }) {
   const team = getTeam(code)
   const displayName = team?.shortName ?? code
   const altName = team?.name ?? code
 
   return (
-    <div className="flex min-w-0 items-center gap-2">
+    <div
+      className={
+        align === "right"
+          ? "flex min-w-0 flex-row-reverse items-center gap-2 text-right"
+          : "flex min-w-0 items-center gap-2"
+      }
+    >
       {team?.logo ? (
         <Image
           src={team.logo}
           alt={altName}
-          width={34}
-          height={34}
-          className="h-8 w-8 shrink-0 object-contain sm:h-9 sm:w-9"
+          width={40}
+          height={40}
+          className="h-9 w-9 shrink-0 object-contain"
         />
       ) : (
-        <div className="h-8 w-8 shrink-0 rounded-full border bg-muted sm:h-9 sm:w-9" />
+        <div className="h-9 w-9 shrink-0 rounded-full border bg-muted" />
       )}
 
       <TeamName
         code={code}
         fallback={displayName}
-        className="min-w-0 truncate text-left text-xs font-medium transition hover:text-red-600 hover:underline sm:text-sm"
+        className="min-w-0 truncate text-sm font-medium transition hover:underline"
       />
-    </div>
-  )
-}
-
-function StatPill({
-  label,
-  value,
-}: {
-  label: string
-  value: string | number
-}) {
-  return (
-    <div className="rounded-xl border bg-background/80 px-3 py-2 shadow-sm sm:px-4 sm:py-3">
-      <p className="text-[11px] text-muted-foreground sm:text-xs">{label}</p>
-      <p className="truncate text-sm font-semibold sm:text-base">{value}</p>
     </div>
   )
 }
@@ -128,209 +129,160 @@ function FixtureCard({
   fixture: (typeof BEERPONG_FIXTURES)[number]
 }) {
   const isCompleted = fixture.status === "completed"
+  const teamAWon =
+    isCompleted && fixture.scoreA !== null && fixture.scoreB !== null
+      ? fixture.scoreA > fixture.scoreB
+      : false
+  const teamBWon =
+    isCompleted && fixture.scoreA !== null && fixture.scoreB !== null
+      ? fixture.scoreB > fixture.scoreA
+      : false
+  const winner = teamAWon ? fixture.teamA : teamBWon ? fixture.teamB : null
 
   return (
-    <div className="rounded-xl border bg-background p-3 shadow-sm transition hover:bg-muted/40 sm:p-4">
-      <div className="mb-3 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-[11px] text-muted-foreground sm:text-xs">
+    <BapePanel className="p-4 transition hover:-translate-y-0.5 hover:shadow-md">
+      <div className="mb-4 flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <span>Round {fixture.round}</span>
-          <span>•</span>
+          <span>/</span>
           <span>Game {fixture.game}</span>
         </div>
 
-        <span
-          className={
-            isCompleted
-              ? "rounded-full bg-green-500/10 px-2 py-1 text-[11px] font-medium text-green-700 dark:text-green-400 sm:text-xs"
-              : "rounded-full bg-red-500/10 px-2 py-1 text-[11px] font-medium text-red-700 dark:text-red-400 sm:text-xs"
-          }
-        >
-          {isCompleted ? "Completed" : "Upcoming"}
-        </span>
+        <Badge variant={isCompleted ? "secondary" : "outline"}>
+          {isCompleted ? "Final" : "Upcoming"}
+        </Badge>
       </div>
 
-      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 sm:gap-3">
-        <TeamBadge code={fixture.teamA} />
-
-        <div className="flex justify-center">
-          {isCompleted ? (
-            <div className="rounded-lg border bg-muted px-2.5 py-1 text-sm font-semibold tabular-nums sm:px-3 sm:text-lg">
-              {fixture.scoreA} - {fixture.scoreB}
-            </div>
-          ) : (
-            <div className="rounded-lg border bg-muted px-2.5 py-1 text-xs font-medium text-muted-foreground sm:px-3 sm:text-sm">
-              VS
-            </div>
-          )}
+      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+        <div className={teamAWon ? "font-semibold" : ""}>
+          <TeamBadge code={fixture.teamA} />
         </div>
 
-        <div className="flex min-w-0 justify-end">
-          <TeamBadge code={fixture.teamB} />
+        <div className="rounded-xl border bg-muted px-3 py-2 text-center text-sm font-semibold tabular-nums">
+          {isCompleted ? `${fixture.scoreA} - ${fixture.scoreB}` : "VS"}
+        </div>
+
+        <div className={teamBWon ? "font-semibold" : ""}>
+          <TeamBadge code={fixture.teamB} align="right" />
         </div>
       </div>
-    </div>
+
+      {winner ? (
+        <p className="mt-4 text-xs text-muted-foreground">
+          Winner:{" "}
+          <TeamName
+            code={winner}
+            className="font-medium text-foreground hover:underline"
+          />
+        </p>
+      ) : null}
+    </BapePanel>
   )
 }
 
 export default function BapeLeagueTablePage() {
   const leader = sortedTeams[0]
   const longestWinStreak = getLongestWinStreak()
-
   const bestNetCups = [...BEERPONG_TEAMS].sort(
     (a, b) => b.netCups - a.netCups,
   )[0]
+  const recentResults = [...completedFixtures]
+    .sort((a, b) => {
+      if (b.round !== a.round) return b.round - a.round
+      return b.game - a.game
+    })
+    .slice(0, 6)
 
   return (
-    <main className="flex w-full flex-1 flex-col items-center">
-      <div className="flex w-full max-w-6xl flex-col gap-6 px-3 py-4 sm:px-4 sm:py-6 md:gap-8 md:py-8">
-        <section className="relative overflow-hidden rounded-2xl border bg-gradient-to-br from-background via-background to-red-500/10 p-4 shadow-sm sm:rounded-3xl sm:p-6 md:p-8">
-          <div className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-red-500/10 blur-3xl sm:h-48 sm:w-48" />
-          <div className="absolute -bottom-20 -left-20 h-48 w-48 rounded-full bg-red-500/10 blur-3xl sm:h-56 sm:w-56" />
-
-          <div className="relative grid items-center gap-5 md:grid-cols-[1.1fr_320px] lg:grid-cols-[1.1fr_360px]">
-            <div className="flex flex-col gap-4">
-              <div className="flex flex-col gap-2 sm:gap-3">
-                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                  League Table & Fixtures
-                </h1>
-
-                <p className="max-w-2xl text-sm leading-6 text-muted-foreground md:text-base">
-                  Current standings, completed results, and upcoming games for
-                  the BAPE Beer Pong League.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-3 gap-2 pt-1 sm:flex sm:flex-wrap sm:gap-3 sm:pt-2">
-                <StatPill label="Leader" value={leader.name} />
-                <StatPill label="Played" value={completedFixtures.length} />
-                <StatPill label="Upcoming" value={upcomingFixtures.length} />
-              </div>
-            </div>
-
-            <div className="flex justify-center md:justify-end">
-              <div className="relative">
-                <div className="absolute inset-4 rounded-full bg-red-500/20 blur-3xl" />
-
-                <Image
-                  src={BEERPONG_LEAGUE_LOGO}
-                  alt="BAPE Beer Pong League logo"
-                  width={360}
-                  height={360}
-                  priority
-                  className="relative h-44 w-44 object-contain drop-shadow-2xl sm:h-56 sm:w-56 md:h-72 md:w-72 lg:h-80 lg:w-80"
-                />
-              </div>
+    <BapePageShell>
+      <div className="flex flex-col gap-10">
+        <BapeHero
+          eyebrow="BAPE Beer Pong League"
+          title="The league table, fixture list, and playoff picture in one place."
+          description="Track every club, result, point swing, and bracket seed from the current BAPE Beer Pong League season."
+        >
+          <div className="flex justify-center lg:justify-end">
+            <div className="relative">
+              <div className="absolute inset-5 rounded-full bg-foreground/10 blur-3xl" />
+              <Image
+                src={BEERPONG_LEAGUE_LOGO}
+                alt="BAPE Beer Pong League logo"
+                width={320}
+                height={320}
+                priority
+                className="relative h-52 w-52 object-contain drop-shadow-2xl sm:h-64 sm:w-64 lg:h-72 lg:w-72"
+              />
             </div>
           </div>
+        </BapeHero>
+
+        <section className="grid gap-4 md:grid-cols-4">
+          <BapeMetricCard
+            label="Leader"
+            value={leader.name}
+            detail={`${leader.pts} points`}
+          />
+          <BapeMetricCard
+            label="Progress"
+            value={`${seasonProgress}%`}
+            detail={`${completedFixtures.length} of ${BEERPONG_FIXTURES.length} fixtures`}
+          />
+          <BapeMetricCard
+            label="Win Streak"
+            value={longestWinStreak.shortName}
+            detail={`${longestWinStreak.longestStreak} straight wins`}
+          />
+          <BapeMetricCard
+            label="Best Net Cups"
+            value={bestNetCups.shortName}
+            detail={`${getNetCupsLabel(bestNetCups.netCups)} net cups`}
+          />
         </section>
 
-        <section className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 md:gap-4">
-          <div className="rounded-xl border bg-background p-4 shadow-sm">
-            <p className="text-xs font-medium uppercase text-muted-foreground">
-              League Leader
-            </p>
-
-            <div className="mt-3 flex items-center gap-3">
-              <Image
-                src={leader.logo}
-                alt={leader.name}
-                width={44}
-                height={44}
-                className="h-11 w-11 shrink-0 object-contain"
-              />
-
-              <div className="min-w-0">
-                <TeamName
-                  code={leader.code}
-                  className="truncate text-left font-semibold transition hover:text-red-600 hover:underline"
-                />
-                <p className="text-sm text-muted-foreground">
-                  {leader.pts} points
-                </p>
-              </div>
-            </div>
+        <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="flex flex-col gap-5">
+            <BapeSectionHeader
+              eyebrow="Standings"
+              title="League Table"
+              description="Ranked by points, then wins, then net cups. The table also drives the current playoff seeding."
+            />
+            <BeerPongLeagueTable />
           </div>
 
-          <div className="rounded-xl border bg-background p-4 shadow-sm">
-            <p className="text-xs font-medium uppercase text-muted-foreground">
-              Longest Win Streak
+          <BapePanel className="p-6">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              Season Notes
             </p>
-
-            <div className="mt-3 flex items-center gap-3">
-              <Image
-                src={longestWinStreak.logo}
-                alt={longestWinStreak.name}
-                width={44}
-                height={44}
-                className="h-11 w-11 shrink-0 object-contain"
-              />
-
-              <div className="min-w-0">
-                <TeamName
-                  code={longestWinStreak.code}
-                  className="truncate text-left font-semibold transition hover:text-red-600 hover:underline"
-                />
-                <p className="text-sm text-muted-foreground">
-                  {longestWinStreak.longestStreak} straight wins
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-xl border bg-background p-4 shadow-sm sm:col-span-2 md:col-span-1">
-            <p className="text-xs font-medium uppercase text-muted-foreground">
-              Best Net Cups
-            </p>
-
-            <div className="mt-3 flex items-center gap-3">
-              <Image
-                src={bestNetCups.logo}
-                alt={bestNetCups.name}
-                width={44}
-                height={44}
-                className="h-11 w-11 shrink-0 object-contain"
-              />
-
-              <div className="min-w-0">
-                <TeamName
-                  code={bestNetCups.code}
-                  className="truncate text-left font-semibold transition hover:text-red-600 hover:underline"
-                />
-                <p className="text-sm text-muted-foreground">
-                  {getNetCupsLabel(bestNetCups.netCups)} net cups
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="flex flex-col gap-4">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight">
-              League Table
-            </h2>
-
-            <p className="text-sm text-muted-foreground">
-              Ranked by points, then wins, then net cups.
-            </p>
-          </div>
-
-          <BeerPongLeagueTable />
-
-          <BeerPongPlayoffBracket />
-        </section>
-
-        <section className="grid gap-6 lg:grid-cols-2">
-          <div className="flex flex-col gap-4">
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight">
-                Upcoming Games
-              </h2>
-
-              <p className="text-sm text-muted-foreground">
-                Remaining fixtures still to be played.
+            <div className="mt-5 space-y-5 text-sm leading-6 text-muted-foreground">
+              <p>
+                The league is currently led by {leader.name}, with{" "}
+                {leader.pts} points from {leader.mp} matches.
               </p>
+              <p>
+                Playoff seeds are generated directly from the table, so points,
+                wins, and net cups all matter.
+              </p>
+              <div className="rounded-2xl border bg-background p-4">
+                <p className="text-xs font-medium uppercase tracking-[0.2em]">
+                  Remaining Fixtures
+                </p>
+                <p className="mt-2 text-3xl font-semibold">
+                  {upcomingFixtures.length}
+                </p>
+              </div>
             </div>
+          </BapePanel>
+        </section>
+
+        <BeerPongPlayoffBracket />
+
+        <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="flex flex-col gap-5">
+            <BapeSectionHeader
+              eyebrow="Next"
+              title="Upcoming Games"
+              description="The next fixtures on the board."
+            />
 
             <div className="flex flex-col gap-3">
               {upcomingFixtures.length > 0 ? (
@@ -341,26 +293,22 @@ export default function BapeLeagueTablePage() {
                   />
                 ))
               ) : (
-                <div className="rounded-xl border bg-background p-4 text-sm text-muted-foreground">
-                  No upcoming games.
-                </div>
+                <BapePanel className="p-5 text-sm text-muted-foreground">
+                  No upcoming games are currently listed.
+                </BapePanel>
               )}
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <div>
-              <h2 className="text-xl font-semibold tracking-tight">
-                Completed Results
-              </h2>
+          <div className="flex flex-col gap-5">
+            <BapeSectionHeader
+              eyebrow="Recent"
+              title="Latest Results"
+              description="The most recent completed fixtures from the season."
+            />
 
-              <p className="text-sm text-muted-foreground">
-                Games already played in the current season.
-              </p>
-            </div>
-
-            <div className="flex max-h-[720px] flex-col gap-3 overflow-y-auto pr-1">
-              {completedFixtures.map((fixture) => (
+            <div className="grid gap-3">
+              {recentResults.map((fixture) => (
                 <FixtureCard
                   key={`${fixture.round}-${fixture.game}-${fixture.teamA}-${fixture.teamB}`}
                   fixture={fixture}
@@ -370,6 +318,6 @@ export default function BapeLeagueTablePage() {
           </div>
         </section>
       </div>
-    </main>
+    </BapePageShell>
   )
 }

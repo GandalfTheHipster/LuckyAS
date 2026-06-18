@@ -103,8 +103,8 @@ export function BeerPongTeamModal({
         className="absolute inset-0 cursor-default"
       />
 
-      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border bg-background shadow-2xl">
-        <div className="relative border-b bg-gradient-to-br from-background via-background to-red-500/10 p-5">
+      <div className="relative w-full max-w-lg overflow-hidden rounded-[1.5rem] border bg-card shadow-2xl">
+        <div className="relative border-b bg-muted/35 p-5">
           <button
             type="button"
             onClick={onClose}
@@ -169,7 +169,7 @@ export function BeerPongTeamModal({
                 team.netCups > 0
                   ? "text-lg font-bold tabular-nums text-green-600 dark:text-green-400"
                   : team.netCups < 0
-                    ? "text-lg font-bold tabular-nums text-red-600 dark:text-red-400"
+                    ? "text-lg font-bold tabular-nums text-muted-foreground"
                     : "text-lg font-bold tabular-nums text-muted-foreground"
               }
             >
@@ -228,7 +228,7 @@ export function BeerPongTeamModal({
                         className={
                           result === "W"
                             ? "mb-2 flex h-7 w-7 items-center justify-center rounded-full bg-green-500/10 text-xs font-bold text-green-700 dark:text-green-400"
-                            : "mb-2 flex h-7 w-7 items-center justify-center rounded-full bg-red-500/10 text-xs font-bold text-red-700 dark:text-red-400"
+                            : "mb-2 flex h-7 w-7 items-center justify-center rounded-full border bg-muted text-xs font-bold text-muted-foreground"
                         }
                       >
                         {result}

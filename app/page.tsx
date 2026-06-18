@@ -57,7 +57,7 @@ export default function Home() {
                 </h1>
                 <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
                   I&apos;m a West Australian software engineering student at
-                  Curtin University with a passion for history, politics, video
+                  Curtin University with a passion for history, politics and video
                   games.
                 </p>
               </div>

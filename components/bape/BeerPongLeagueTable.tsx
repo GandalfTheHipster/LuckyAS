@@ -65,15 +65,15 @@ function TeamMobileCard({
     <div
       className={
         isLeader
-          ? "rounded-2xl border bg-red-500/5 p-4 shadow-sm"
-          : "rounded-2xl border bg-background p-4 shadow-sm"
+          ? "rounded-2xl border bg-foreground/[0.03] p-4 shadow-sm"
+          : "rounded-2xl border bg-card p-4 shadow-sm"
       }
     >
       <div className="flex items-start gap-3">
         <div
           className={
             isLeader
-              ? "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white"
+              ? "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground text-sm font-bold text-background"
               : "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border bg-background text-sm font-semibold"
           }
         >
@@ -92,11 +92,11 @@ function TeamMobileCard({
           <div className="flex min-w-0 items-center gap-2">
             <TeamName
               code={team.code}
-              className="truncate text-left font-semibold transition hover:text-red-600 hover:underline"
+              className="truncate text-left font-semibold transition hover:text-foreground hover:underline"
             />
 
             {isLeader && (
-              <span className="shrink-0 rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase text-red-600 dark:text-red-400">
+              <span className="shrink-0 rounded-full border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase text-foreground">
                 Leader
               </span>
             )}
@@ -138,7 +138,7 @@ function TeamMobileCard({
               team.netCups > 0
                 ? "text-sm font-semibold tabular-nums text-green-600 dark:text-green-400"
                 : team.netCups < 0
-                  ? "text-sm font-semibold tabular-nums text-red-600 dark:text-red-400"
+                  ? "text-sm font-semibold tabular-nums text-muted-foreground"
                   : "text-sm font-semibold tabular-nums text-muted-foreground"
             }
           >
@@ -164,7 +164,7 @@ function TeamMobileCard({
 
               <PersonName
                 bapeID={String(player.id)}
-                className="max-w-32 truncate text-left text-xs text-muted-foreground transition hover:text-red-600 hover:underline"
+                className="max-w-32 truncate text-left text-xs text-muted-foreground transition hover:text-foreground hover:underline"
               />
             </div>
           ))}
@@ -183,7 +183,7 @@ export function BeerPongLeagueTable() {
         ))}
       </div>
 
-      <div className="hidden overflow-hidden rounded-2xl border bg-background shadow-sm md:block">
+      <div className="hidden overflow-hidden rounded-[1.5rem] border bg-card shadow-sm md:block">
         <div className="border-b bg-muted/40 px-4 py-3">
           <div className="grid grid-cols-[48px_1.8fr_1fr_64px_64px_64px_64px_90px_90px] items-center gap-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground max-lg:grid-cols-[42px_1.8fr_64px_64px_64px_80px]">
             <div>#</div>
@@ -208,7 +208,7 @@ export function BeerPongLeagueTable() {
                 key={team.code}
                 className={
                   isLeader
-                    ? "grid grid-cols-[48px_1.8fr_1fr_64px_64px_64px_64px_90px_90px] items-center gap-3 bg-red-500/5 px-4 py-4 transition hover:bg-red-500/10 max-lg:grid-cols-[42px_1.8fr_64px_64px_64px_80px]"
+                    ? "grid grid-cols-[48px_1.8fr_1fr_64px_64px_64px_64px_90px_90px] items-center gap-3 bg-foreground/[0.03] px-4 py-4 transition hover:bg-foreground/[0.06] max-lg:grid-cols-[42px_1.8fr_64px_64px_64px_80px]"
                     : "grid grid-cols-[48px_1.8fr_1fr_64px_64px_64px_64px_90px_90px] items-center gap-3 px-4 py-4 transition hover:bg-muted/40 max-lg:grid-cols-[42px_1.8fr_64px_64px_64px_80px]"
                 }
               >
@@ -216,7 +216,7 @@ export function BeerPongLeagueTable() {
                   <div
                     className={
                       isLeader
-                        ? "flex h-8 w-8 items-center justify-center rounded-full bg-red-600 text-sm font-bold text-white"
+                        ? "flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-sm font-bold text-background"
                         : "flex h-8 w-8 items-center justify-center rounded-full border bg-background text-sm font-semibold"
                     }
                   >
@@ -237,13 +237,13 @@ export function BeerPongLeagueTable() {
                     <div className="flex items-center gap-2">
                       <TeamName
                         code={team.code}
-                        className="truncate text-left font-semibold transition hover:text-red-600 hover:underline"
+                        className="truncate text-left font-semibold transition hover:text-foreground hover:underline"
                       />
 
                       {isLeader && (
-                        <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase text-red-600 dark:text-red-400">
-                          Leader
-                        </span>
+                          <span className="rounded-full border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase text-foreground">
+                            Leader
+                          </span>
                       )}
                     </div>
 
@@ -269,7 +269,7 @@ export function BeerPongLeagueTable() {
 
                       <PersonName
                         bapeID={String(player.id)}
-                        className="truncate text-left text-sm text-muted-foreground transition hover:text-red-600 hover:underline"
+                        className="truncate text-left text-sm text-muted-foreground transition hover:text-foreground hover:underline"
                       />
                     </div>
                   ))}
@@ -292,7 +292,7 @@ export function BeerPongLeagueTable() {
                     team.netCups > 0
                       ? "text-center text-sm font-semibold tabular-nums text-green-600 dark:text-green-400 max-lg:hidden"
                       : team.netCups < 0
-                        ? "text-center text-sm font-semibold tabular-nums text-red-600 dark:text-red-400 max-lg:hidden"
+                        ? "text-center text-sm font-semibold tabular-nums text-muted-foreground max-lg:hidden"
                         : "text-center text-sm font-semibold tabular-nums text-muted-foreground max-lg:hidden"
                   }
                 >

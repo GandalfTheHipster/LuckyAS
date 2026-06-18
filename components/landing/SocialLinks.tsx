@@ -9,7 +9,7 @@ export function SocialLinks() {
     github: "https://github.com/GandalfTheHipster",
     linkedin: "https://www.linkedin.com/in/noahkedge/",
     instagram: "https://www.instagram.com/_noahedge/",
-    youtube: "https://www.youtube.com/@gandalfthehipster",
+    youtube: "https://www.youtube.com/@noahkobeedge",
   }
 
   return (

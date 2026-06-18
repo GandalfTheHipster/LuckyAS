@@ -83,12 +83,12 @@ export function BapeTable<T extends { name: string }>({
 
   return (
     <Table>
-      <TableHeader>
-        <TableRow>
+      <TableHeader className="bg-muted/50">
+        <TableRow className="hover:bg-transparent">
           {columns.map((col) => (
             <TableHead
               key={String(col.key)}
-              className={getAlignClass(col.align)}
+              className={`${getAlignClass(col.align)} h-12 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground`}
             >
               {col.label}
             </TableHead>
@@ -97,12 +97,19 @@ export function BapeTable<T extends { name: string }>({
       </TableHeader>
 
       <TableBody>
-        {athletes.map((row) => (
-          <TableRow key={row.name}>
+        {athletes.map((row, index) => (
+          <TableRow
+            key={row.name}
+            className={
+              index === 0
+                ? "bg-foreground/[0.03] hover:bg-foreground/[0.06]"
+                : "hover:bg-muted/40"
+            }
+          >
             {columns.map((col) => (
               <TableCell
                 key={String(col.key)}
-                className={getAlignClass(col.align)}
+                className={`${getAlignClass(col.align)} py-4 text-sm`}
               >
                 {renderCell(col, row)}
               </TableCell>

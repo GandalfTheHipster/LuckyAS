@@ -54,7 +54,7 @@ function BracketTeamSlot({
     <div
       className={
         isBye
-          ? "flex min-h-16 items-center justify-between gap-3 rounded-xl border bg-red-500/5 px-3 py-2 shadow-sm"
+          ? "flex min-h-16 items-center justify-between gap-3 rounded-xl border bg-foreground/[0.03] px-3 py-2 shadow-sm"
           : "flex min-h-16 items-center justify-between gap-3 rounded-xl border bg-background px-3 py-2 shadow-sm"
       }
     >
@@ -62,7 +62,7 @@ function BracketTeamSlot({
         <div
           className={
             isBye
-              ? "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
+              ? "flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground text-xs font-bold text-background"
               : "flex h-8 w-8 shrink-0 items-center justify-center rounded-full border bg-muted text-xs font-bold"
           }
         >
@@ -80,7 +80,7 @@ function BracketTeamSlot({
         <div className="min-w-0">
           <TeamName
             code={team.code}
-            className="truncate text-sm font-semibold transition hover:text-red-600 hover:underline"
+            className="truncate text-sm font-semibold transition hover:text-foreground hover:underline"
           />
 
           <p className="truncate text-xs text-muted-foreground">
@@ -90,7 +90,7 @@ function BracketTeamSlot({
       </div>
 
       {isBye && (
-        <span className="shrink-0 rounded-full bg-red-500/10 px-2 py-1 text-[10px] font-semibold uppercase text-red-600 dark:text-red-400">
+        <span className="shrink-0 rounded-full border bg-background px-2 py-1 text-[10px] font-semibold uppercase text-foreground">
           Bye
         </span>
       )}
@@ -108,7 +108,7 @@ function BracketMatch({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-2xl border bg-background p-3 shadow-sm">
+    <div className="rounded-2xl border bg-card p-3 shadow-sm">
       <div className="mb-3">
         <p className="text-sm font-semibold">{title}</p>
 
@@ -143,7 +143,7 @@ export function BeerPongPlayoffBracket() {
         </p>
       </div>
 
-      <div className="rounded-3xl border bg-gradient-to-br from-background via-background to-red-500/5 p-4 shadow-sm md:p-6">
+      <div className="rounded-[1.5rem] border bg-card p-4 shadow-sm md:p-6">
         <div className="grid gap-6 xl:grid-cols-[1fr_1fr_1fr]">
           <div className="flex flex-col gap-4">
             <div>
@@ -164,7 +164,7 @@ export function BeerPongPlayoffBracket() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-dashed bg-muted/20 p-3">
+              <div className="rounded-2xl border border-dashed bg-muted/30 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 Byes
               </p>
@@ -203,8 +203,8 @@ export function BeerPongPlayoffBracket() {
             </BracketMatch>
 
             {seed1 && (
-              <div className="rounded-2xl border bg-red-600 p-4 text-white shadow-sm">
-                <p className="text-xs font-semibold uppercase tracking-wide text-white/70">
+              <div className="rounded-2xl border bg-foreground p-4 text-background shadow-sm">
+                <p className="text-xs font-semibold uppercase tracking-wide text-background/70">
                   Current Top Seed
                 </p>
 
@@ -220,9 +220,9 @@ export function BeerPongPlayoffBracket() {
                   <div className="min-w-0">
                     <TeamName
                       code={seed1.code}
-                      className="truncate font-semibold text-white hover:underline"
+                      className="truncate font-semibold text-background hover:underline"
                     />
-                    <p className="text-sm text-white/75">
+                    <p className="text-sm text-background/75">
                       {seed1.code} · Seed 1
                     </p>
                   </div>
