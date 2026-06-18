@@ -1,6 +1,5 @@
 import {
   BapeHero,
-  BapeMetricCard,
   BapePageShell,
   BapePanel,
   BapeSectionHeader,
@@ -32,13 +31,6 @@ const athletes = BAPE_PROFILES.map((profile) => ({
   return b.silver - a.silver
 })
 
-const leader = athletes[0]
-const mostGold = [...athletes].sort((a, b) => b.gold - a.gold)[0]
-const totalMedals = athletes.reduce(
-  (total, athlete) => total + athlete.gold + athlete.silver + athlete.bronze,
-  0,
-)
-
 export default function OlympicsAllTimePage() {
   return (
     <BapePageShell>
@@ -47,25 +39,7 @@ export default function OlympicsAllTimePage() {
           eyebrow="BAPE Olympics"
           title="All-Time Leaderboard"
           description="The long-running record book for BAPE Olympics athletes, combining points and medal counts across every tracked edition."
-        >
-          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-            <BapeMetricCard
-              label="Leader"
-              value={leader?.name ?? "TBA"}
-              detail={leader ? `${leader.pts} points` : undefined}
-            />
-            <BapeMetricCard
-              label="Most Golds"
-              value={mostGold?.name ?? "TBA"}
-              detail={mostGold ? `${mostGold.gold} gold medals` : undefined}
-            />
-            <BapeMetricCard
-              label="Total Medals"
-              value={totalMedals}
-              detail="Across all athletes"
-            />
-          </div>
-        </BapeHero>
+        />
 
         <section className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
           <BapePanel className="p-6">

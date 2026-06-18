@@ -2,7 +2,6 @@ import Image from "next/image"
 
 import {
   BapeHero,
-  BapeMetricCard,
   BapePageShell,
   BapePanel,
   BapeSectionHeader,
@@ -31,10 +30,6 @@ export function OlympicsPageTemplate({ data }: OlympicsPageTemplateProps) {
     (event) => event.status === "completed",
   ).length
   const champion = data.standings[0]
-  const totalMedals = data.standings.reduce(
-    (total, team) => total + team.gold + team.silver + team.bronze,
-    0,
-  )
 
   return (
     <BapePageShell>
@@ -43,15 +38,9 @@ export function OlympicsPageTemplate({ data }: OlympicsPageTemplateProps) {
           eyebrow={data.date}
           title={data.title}
           description={data.description}
-        >
-          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-            <BapeMetricCard label="Location" value={data.location} />
-            <BapeMetricCard label="Champion" value={data.winner ?? "TBA"} />
-            <BapeMetricCard label="MVP" value={data.mvp ?? "TBA"} />
-          </div>
-        </BapeHero>
+        />
 
-        <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+        <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <BapePanel className="overflow-hidden">
             <div className="relative aspect-[16/10] min-h-80">
               <Image
@@ -75,25 +64,19 @@ export function OlympicsPageTemplate({ data }: OlympicsPageTemplateProps) {
             </div>
           </BapePanel>
 
-          <div className="grid gap-4">
-            <BapeMetricCard
-              label="Events"
-              value={data.events.length}
-              detail={`${completedEvents} completed`}
-            />
-            <BapeMetricCard
-              label="Medals"
-              value={totalMedals}
-              detail="Across the final table"
-            />
-            <BapeMetricCard
-              label="Leader"
-              value={champion?.name ?? "TBA"}
-              detail={
-                champion ? `${champion.pts} points in the standings` : undefined
-              }
-            />
-          </div>
+          <BapePanel className="p-6">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              Snapshot
+            </p>
+            <div className="mt-5 space-y-4 text-sm leading-6 text-muted-foreground">
+              <p>Champion: {data.winner ?? "TBA"}</p>
+              <p>MVP: {data.mvp ?? "TBA"}</p>
+              <p>
+                {completedEvents} of {data.events.length} events completed.
+              </p>
+              {champion ? <p>{champion.name} topped the standings.</p> : null}
+            </div>
+          </BapePanel>
         </section>
 
         <section className="grid gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">

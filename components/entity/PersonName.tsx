@@ -25,7 +25,7 @@ export function PersonName({ bapeID, className, fallback }: PersonNameProps) {
       type="person"
       id={bapeID}
       className={
-        className ?? "transition hover:text-red-600 hover:underline"
+        className ?? "font-medium"
       }
     >
       {displayName}

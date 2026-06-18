@@ -1,6 +1,26 @@
-import { OlympicsPageTemplate } from "@/components/bape/OlympicsPageTemplate"
-import { OLYMPICS_2026_DATA } from "@/lib/data/olympics/olympics-2026"
+import {
+  BapeHero,
+  BapePageShell,
+  BapePanel,
+} from "@/components/bape/BapePageChrome"
 
 export default function Olympics2026Page() {
-  return <OlympicsPageTemplate data={OLYMPICS_2026_DATA} />
+  return (
+    <BapePageShell>
+      <div className="flex flex-col gap-6">
+        <BapeHero
+          eyebrow="Olympics"
+          title="2026 Coming Soon"
+          description="The next BAPE Olympics is not ready for the archive yet."
+        />
+
+        <BapePanel className="p-6">
+          <p className="text-sm leading-6 text-muted-foreground">
+            Event list, teams, host details, and results will be added once the
+            format is locked in.
+          </p>
+        </BapePanel>
+      </div>
+    </BapePageShell>
+  )
 }

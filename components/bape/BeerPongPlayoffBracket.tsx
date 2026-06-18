@@ -132,15 +132,19 @@ export function BeerPongPlayoffBracket() {
 
   return (
     <section className="flex flex-col gap-4">
-      <div>
-        <h2 className="text-xl font-semibold tracking-tight">
-          Current Playoff Bracket
-        </h2>
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
+            Playoffs
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+            Bracket Ready
+          </h2>
+        </div>
 
-        <p className="text-sm text-muted-foreground">
-          Single-elimination bracket generated from the current league table.
-          Seeds are ranked by points, then wins, then net cups.
-        </p>
+        <div className="rounded-full border bg-card px-4 py-2 text-sm font-medium">
+          6 teams / single elimination
+        </div>
       </div>
 
       <div className="rounded-[1.5rem] border bg-card p-4 shadow-sm md:p-6">
@@ -164,9 +168,9 @@ export function BeerPongPlayoffBracket() {
               </div>
             </div>
 
-              <div className="rounded-2xl border border-dashed bg-muted/30 p-3">
+            <div className="rounded-2xl border border-dashed bg-muted/30 p-3">
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Byes
+                Semi-Final Byes
               </p>
 
               <div className="mt-3 flex flex-col gap-2">
@@ -205,7 +209,7 @@ export function BeerPongPlayoffBracket() {
             {seed1 && (
               <div className="rounded-2xl border bg-foreground p-4 text-background shadow-sm">
                 <p className="text-xs font-semibold uppercase tracking-wide text-background/70">
-                  Current Top Seed
+                  Top Seed
                 </p>
 
                 <div className="mt-3 flex items-center gap-3">
@@ -232,9 +236,8 @@ export function BeerPongPlayoffBracket() {
           </div>
         </div>
 
-        <div className="mt-6 rounded-2xl border bg-background/80 p-3 text-xs text-muted-foreground">
-          Format: 6-team single elimination. Seeds 1 and 2 receive semi-final
-          byes. Seed 3 plays Seed 6, and Seed 4 plays Seed 5.
+        <div className="mt-6 rounded-2xl border bg-background/80 p-4 text-sm text-muted-foreground">
+          Bracket is based on the final league table.
         </div>
       </div>
     </section>

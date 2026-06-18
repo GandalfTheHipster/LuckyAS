@@ -26,6 +26,8 @@ export function BapeHero({
   children?: ReactNode
   className?: string
 }) {
+  const hasAside = Boolean(children)
+
   return (
     <section
       className={cn(
@@ -34,7 +36,12 @@ export function BapeHero({
       )}
     >
       <div className="absolute inset-x-0 top-0 h-1 bg-foreground" />
-      <div className="relative grid gap-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
+      <div
+        className={cn(
+          "relative grid gap-8 lg:items-end",
+          hasAside && "lg:grid-cols-[minmax(0,1fr)_360px]",
+        )}
+      >
         <div className="max-w-3xl">
           <Badge variant="outline" className="mb-5 rounded-full bg-background">
             {eyebrow}
@@ -49,30 +56,6 @@ export function BapeHero({
         {children}
       </div>
     </section>
-  )
-}
-
-export function BapeMetricCard({
-  label,
-  value,
-  detail,
-  className,
-}: {
-  label: string
-  value: string | number
-  detail?: string
-  className?: string
-}) {
-  return (
-    <div className={cn("rounded-2xl border bg-card p-5 shadow-sm", className)}>
-      <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-        {label}
-      </p>
-      <p className="mt-2 text-2xl font-semibold tracking-tight">{value}</p>
-      {detail ? (
-        <p className="mt-1 text-sm text-muted-foreground">{detail}</p>
-      ) : null}
-    </div>
   )
 }
 

@@ -24,7 +24,7 @@ export function TeamName({
       id={code}
       className={
         className ??
-        "font-semibold transition hover:text-red-600 hover:underline"
+        "font-semibold"
       }
     >
       {displayName}

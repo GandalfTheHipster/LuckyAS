@@ -3,6 +3,7 @@
 import { useState } from "react"
 
 import { EntityModal } from "@/components/entity/EntityModal"
+import { cn } from "@/lib/utils"
 
 export type EntityType = "team" | "person"
 
@@ -26,10 +27,10 @@ export function EntityTrigger({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className={
-          className ??
-          "text-left font-medium transition hover:text-red-600 hover:underline"
-        }
+        className={cn(
+          "cursor-pointer text-left underline-offset-4 transition hover:underline focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          className ?? "font-medium",
+        )}
       >
         {children}
       </button>
