@@ -65,9 +65,6 @@ export default function Home() {
                 <Button asChild>
                   <Link href="#projects">View Projects</Link>
                 </Button>
-                <Button asChild variant="outline">
-                  <Link href="/bape/olympics">Featured Work</Link>
-                </Button>
               </div>
               <SocialLinks />
             </div>
