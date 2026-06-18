@@ -51,9 +51,6 @@ export default function Home() {
         <div className="flex w-full max-w-6xl flex-1 flex-col items-center px-5 py-12 sm:py-16">
           <section className="grid w-full items-center gap-10 py-8 md:grid-cols-[1.1fr_0.9fr] md:py-14">
             <div className="flex flex-col items-start gap-7">
-              <Badge variant="secondary" className="rounded-full px-3 py-1">
-                Software Engineering Student
-              </Badge>
               <div className="space-y-5">
                 <h1 className="max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
                   Noah Edge
@@ -61,7 +58,7 @@ export default function Home() {
                 <p className="max-w-2xl text-lg leading-8 text-muted-foreground sm:text-xl">
                   I&apos;m a West Australian software engineering student at
                   Curtin University with a passion for history, politics, video
-                  games, and building useful software with a bit of personality.
+                  games.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
@@ -71,16 +68,6 @@ export default function Home() {
                 <Button asChild variant="outline">
                   <Link href="/bape/olympics">Featured Work</Link>
                 </Button>
-              </div>
-              <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
-                <span className="rounded-full border px-3 py-1">History</span>
-                <span className="rounded-full border px-3 py-1">Politics</span>
-                <span className="rounded-full border px-3 py-1">
-                  Video Games
-                </span>
-                <span className="rounded-full border px-3 py-1">
-                  Web Apps
-                </span>
               </div>
               <SocialLinks />
             </div>
