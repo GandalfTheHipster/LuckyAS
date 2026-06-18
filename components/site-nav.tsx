@@ -3,7 +3,6 @@ import { Suspense } from "react";
 
 import { AuthButton } from "@/components/auth-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
-import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/lib/utils";
 
 const navItems = [
@@ -39,7 +38,6 @@ export function SiteNav() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <ThemeSwitcher />
           {!hasEnvVars ? (
             <EnvVarWarning />
           ) : (

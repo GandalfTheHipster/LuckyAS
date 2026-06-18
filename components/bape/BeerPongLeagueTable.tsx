@@ -187,7 +187,7 @@ export function BeerPongLeagueTable() {
 
                 <TeamProfileButton
                   code={team.code}
-                  className="min-w-0"
+                  className="w-full min-w-0"
                 />
 
                 <div className="flex items-center gap-2 max-lg:hidden">
@@ -195,7 +195,7 @@ export function BeerPongLeagueTable() {
                     <PersonProfileButton
                       key={player.id}
                       bapeID={String(player.id)}
-                      className="max-w-full"
+                      className="w-full max-w-full"
                     />
                   ))}
                 </div>

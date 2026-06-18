@@ -10,6 +10,7 @@ import { BapeTable } from "@/components/bape/bape_table"
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 import { PersonProfileButtonByName } from "@/components/entity/PersonProfileButton"
 import { Badge } from "@/components/ui/badge"
+import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
 import { getOlympicCountry } from "@/lib/data/olympics/countries"
 import type {
   OlympicEvent,
@@ -143,7 +144,7 @@ export function OlympicsPageTemplate({ data }: OlympicsPageTemplateProps) {
 
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {data.events.map((event) => (
-              <EventCard key={event.id} event={event} />
+              <EventCard key={event.id} event={event} year={data.date} />
             ))}
           </div>
         </section>
@@ -152,7 +153,7 @@ export function OlympicsPageTemplate({ data }: OlympicsPageTemplateProps) {
   )
 }
 
-function EventCard({ event }: { event: OlympicEvent }) {
+function EventCard({ event, year }: { event: OlympicEvent; year: string }) {
   return (
     <BapePanel className="flex h-full flex-col p-5 transition duration-300 hover:-translate-y-1 hover:shadow-xl">
       <div className="flex items-start justify-between gap-4">
@@ -167,9 +168,6 @@ function EventCard({ event }: { event: OlympicEvent }) {
             </p>
           </div>
         </div>
-        <Badge variant={event.status === "completed" ? "secondary" : "outline"}>
-          {event.status ?? "upcoming"}
-        </Badge>
       </div>
 
       <div className="mt-5 rounded-2xl border bg-background p-4">
@@ -177,20 +175,32 @@ function EventCard({ event }: { event: OlympicEvent }) {
           Winner
         </p>
         <div className="mt-2">
-          {event.winner ? <OlympicEntityBadge value={event.winner} /> : "TBA"}
+          {event.winner ? (
+            <OlympicWinnerBadge value={event.winner} year={year} />
+          ) : (
+            "TBA"
+          )}
         </div>
       </div>
 
       <div className="mt-4 grid gap-2 text-sm">
-        <MedalLine label="Gold" value={event.gold} />
-        <MedalLine label="Silver" value={event.silver} />
-        <MedalLine label="Bronze" value={event.bronze} />
+        <MedalLine label="Gold" value={event.gold} year={year} />
+        <MedalLine label="Silver" value={event.silver} year={year} />
+        <MedalLine label="Bronze" value={event.bronze} year={year} />
       </div>
     </BapePanel>
   )
 }
 
-function MedalLine({ label, value }: { label: string; value?: string[] }) {
+function MedalLine({
+  label,
+  value,
+  year,
+}: {
+  label: string
+  value?: string[]
+  year: string
+}) {
   return (
     <div className="flex min-w-0 items-start justify-between gap-3 rounded-xl bg-muted/40 px-3 py-2">
       <span className="shrink-0 text-xs font-medium uppercase tracking-wide text-muted-foreground">
@@ -199,7 +209,11 @@ function MedalLine({ label, value }: { label: string; value?: string[] }) {
       <div className="flex min-w-0 flex-wrap justify-end gap-2">
         {value && value.length > 0
           ? value.map((name) => (
-              <PersonProfileButtonByName key={name} name={name} />
+              <PersonProfileButtonByName
+                key={name}
+                name={name}
+                teamFlag={getOlympicFlagForName(name, year)}
+              />
             ))
           : "-"}
       </div>
@@ -215,6 +229,38 @@ function OlympicEntityBadge({ value }: { value: string }) {
   }
 
   return <PersonProfileButtonByName name={value} compact />
+}
+
+function OlympicWinnerBadge({ value, year }: { value: string; year: string }) {
+  const country = getOlympicCountry(value)
+
+  if (country) {
+    return <CountryProfileButton country={value} compact />
+  }
+
+  const flag = getOlympicFlagForName(value, year)
+  const team = flag ? getOlympicCountry(flag) : undefined
+
+  return (
+    <div className="flex flex-col items-start gap-2">
+      {team ? <CountryProfileButton country={team.name} compact /> : null}
+      <PersonProfileButtonByName name={value} compact teamFlag={flag} />
+    </div>
+  )
+}
+
+function getOlympicFlagForName(name: string, year: string) {
+  const profile = BAPE_PROFILES.find(
+    (profile) => `${profile.firstName} ${profile.lastName}` === name,
+  )
+
+  if (!profile) return undefined
+  if (year === "2021") return profile.country[0]
+  if (year === "2023") {
+    return profile.country.length > 1 ? profile.country[1] : profile.country[0]
+  }
+
+  return profile.country[0]
 }
 
 function formatStatus(status?: string) {

@@ -12,6 +12,7 @@ type PersonProfileButtonProps = {
   className?: string
   compact?: boolean
   meta?: string
+  teamFlag?: string
 }
 
 type PersonLabelMode = "full" | "first" | "icon"
@@ -21,6 +22,7 @@ export function PersonProfileButton({
   className,
   compact = false,
   meta,
+  teamFlag,
 }: PersonProfileButtonProps) {
   const numericBapeID = Number(bapeID)
   const buttonRef = useRef<HTMLButtonElement | null>(null)
@@ -79,20 +81,27 @@ export function PersonProfileButton({
       className={cn(
         "group flex min-w-0 items-center gap-2 rounded-full border bg-background px-2.5 py-1.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-muted/40 hover:no-underline hover:shadow-md",
         compact && "px-2 py-1",
-        labelMode === "icon" && "w-fit px-1.5",
+        labelMode === "icon" && "px-1.5",
         className,
       )}
     >
-      <Image
-        src={profile.avatarUrl}
-        alt={fullName}
-        width={compact ? 28 : 34}
-        height={compact ? 28 : 34}
-        className={cn(
-          "shrink-0 rounded-full object-cover",
-          compact ? "h-7 w-7" : "h-8 w-8",
-        )}
-      />
+      <span className="relative shrink-0">
+        <Image
+          src={profile.avatarUrl}
+          alt={fullName}
+          width={compact ? 28 : 34}
+          height={compact ? 28 : 34}
+          className={cn(
+            "rounded-full object-cover",
+            compact ? "h-7 w-7" : "h-8 w-8",
+          )}
+        />
+        {teamFlag ? (
+          <span className="absolute -bottom-1 -right-1 grid size-4 place-items-center rounded-full border bg-background text-[10px] leading-none">
+            {teamFlag}
+          </span>
+        ) : null}
+      </span>
 
       {visibleName ? (
         <span className="min-w-0">
@@ -115,11 +124,13 @@ export function PersonProfileButtonByName({
   className,
   compact = true,
   meta,
+  teamFlag,
 }: {
   name: string
   className?: string
   compact?: boolean
   meta?: string
+  teamFlag?: string
 }) {
   const profile = BAPE_PROFILES.find(
     (profile) => `${profile.firstName} ${profile.lastName}` === name,
@@ -139,6 +150,7 @@ export function PersonProfileButtonByName({
       className={className}
       compact={compact}
       meta={meta}
+      teamFlag={teamFlag}
     />
   )
 }

@@ -83,7 +83,6 @@ export function TeamProfileButton({
         "group flex min-w-0 items-center gap-3 rounded-xl border bg-background px-3 py-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-muted/40 hover:no-underline hover:shadow-md",
         compact && "gap-2 rounded-lg border-0 bg-transparent p-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none",
         align === "right" && "flex-row-reverse text-right",
-        labelMode === "icon" && "w-fit",
         className,
       )}
     >
