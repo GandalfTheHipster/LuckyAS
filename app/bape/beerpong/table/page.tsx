@@ -60,7 +60,7 @@ export default function BeerPongLeagueTablePage() {
               Tie-breakers
             </p>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              Ranking order is points, wins, then net cups.
+              Ranking order is points, wins, then net cups. If still undecided, head-to-head matchups.
             </p>
           </BapePanel>
 

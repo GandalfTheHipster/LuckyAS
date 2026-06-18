@@ -241,12 +241,7 @@ function OlympicWinnerBadge({ value, year }: { value: string; year: string }) {
   const flag = getOlympicFlagForName(value, year)
   const team = flag ? getOlympicCountry(flag) : undefined
 
-  return (
-    <div className="flex flex-col items-start gap-2">
-      {team ? <CountryProfileButton country={team.name} compact /> : null}
-      <PersonProfileButtonByName name={value} compact teamFlag={flag} />
-    </div>
-  )
+  return team ? <CountryProfileButton country={team.name} compact /> : "TBA"
 }
 
 function getOlympicFlagForName(name: string, year: string) {

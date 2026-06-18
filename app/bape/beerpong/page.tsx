@@ -45,6 +45,8 @@ export default function BeerPongPlayoffsPage() {
 
         <BeerPongSectionNav />
 
+        <BeerPongPlayoffBracket />
+
         <section className="grid gap-4 lg:grid-cols-3">
           <BapePanel className="p-5">
             <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
@@ -76,8 +78,6 @@ export default function BeerPongPlayoffsPage() {
             </p>
           </BapePanel>
         </section>
-
-        <BeerPongPlayoffBracket />
       </div>
     </BapePageShell>
   )

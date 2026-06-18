@@ -39,20 +39,27 @@ export function PersonProfileButton({
     const fullWidth = 62 + fullName.length * 8
     const firstWidth = 58 + profile.firstName.length * 8
 
+    function getAvailableWidth(element: HTMLButtonElement) {
+      const parentWidth =
+        element.parentElement?.getBoundingClientRect().width ?? 0
+      return Math.max(element.getBoundingClientRect().width, parentWidth)
+    }
+
     function updateLabelMode(width: number) {
       if (width >= fullWidth) setLabelMode("full")
       else if (width >= firstWidth) setLabelMode("first")
       else setLabelMode("icon")
     }
 
-    updateLabelMode(button.getBoundingClientRect().width)
+    updateLabelMode(getAvailableWidth(button))
 
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0]
-      if (entry) updateLabelMode(entry.contentRect.width)
+      if (entry) updateLabelMode(getAvailableWidth(button))
     })
 
     observer.observe(button)
+    if (button.parentElement) observer.observe(button.parentElement)
 
     return () => observer.disconnect()
   }, [profile])
@@ -81,7 +88,7 @@ export function PersonProfileButton({
       className={cn(
         "group flex min-w-0 items-center gap-2 rounded-full border bg-background px-2.5 py-1.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-muted/40 hover:no-underline hover:shadow-md",
         compact && "px-2 py-1",
-        labelMode === "icon" && "px-1.5",
+        labelMode === "icon" && "justify-center px-1.5",
         className,
       )}
     >

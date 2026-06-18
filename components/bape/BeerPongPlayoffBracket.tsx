@@ -59,7 +59,7 @@ function BracketTeamSlot({
           : "flex min-h-16 items-center justify-between gap-3 rounded-xl border bg-background px-3 py-2 shadow-sm"
       }
     >
-      <div className="flex min-w-0 items-center gap-3">
+      <div className="flex min-w-0 flex-1 items-center gap-3">
         <div
           className={
             isBye
@@ -73,8 +73,8 @@ function BracketTeamSlot({
         <TeamProfileButton
           code={team.code}
           compact
-          meta={`${team.code} · ${team.pts} pts`}
-          className="min-w-0"
+          showMeta={false}
+          className="w-full min-w-0"
         />
       </div>
 
@@ -89,19 +89,15 @@ function BracketTeamSlot({
 
 function BracketMatch({
   title,
-  subtitle,
   children,
 }: {
   title: string
-  subtitle?: string
   children: React.ReactNode
 }) {
   return (
     <div className="rounded-2xl border bg-card p-3 shadow-sm">
       <div className="mb-3">
         <p className="text-sm font-semibold">{title}</p>
-
-        {subtitle && <p className="text-xs text-muted-foreground">{subtitle}</p>}
       </div>
 
       <div className="flex flex-col gap-2">{children}</div>
@@ -124,7 +120,7 @@ export function BeerPongPlayoffBracket() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Playoffs
+            2025/2026 Playoff Bracket
           </h2>
         </div>
 
@@ -134,60 +130,47 @@ export function BeerPongPlayoffBracket() {
       </div>
 
       <div className="rounded-[1.5rem] border bg-card p-4 shadow-sm md:p-6">
-        <div className="grid gap-6 xl:grid-cols-[1fr_1fr_1fr]">
+        <div className="grid gap-6 xl:grid-cols-[1fr_1fr_1fr] xl:items-start">
           <div className="flex flex-col gap-4">
-            <div>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Quarter Finals
-              </p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Quarter Finals
+            </p>
 
-              <div className="flex flex-col gap-4">
-                <BracketMatch title="Quarter Final 1" subtitle="Seed 3 vs Seed 6">
-                  <BracketTeamSlot team={seed3} />
-                  <BracketTeamSlot team={seed6} />
-                </BracketMatch>
+            <BracketMatch title="Quarter Final 1">
+                <BracketTeamSlot team={seed3} />
+                <BracketTeamSlot team={seed6} />
+              </BracketMatch>
 
-                <BracketMatch title="Quarter Final 2" subtitle="Seed 4 vs Seed 5">
-                  <BracketTeamSlot team={seed4} />
-                  <BracketTeamSlot team={seed5} />
-                </BracketMatch>
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-dashed bg-muted/30 p-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Semi-Final Byes
-              </p>
-
-              <div className="mt-3 flex flex-col gap-2">
-                <BracketTeamSlot team={seed1} isBye />
-                <BracketTeamSlot team={seed2} isBye />
-              </div>
+            <div className="flex flex-col gap-4">
+              <BracketMatch title="Quarter Final 2">
+                <BracketTeamSlot team={seed4} />
+                <BracketTeamSlot team={seed5} />
+              </BracketMatch>
             </div>
           </div>
 
-          <div className="flex flex-col justify-center gap-4">
+          <div className="flex flex-col gap-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Semi Finals
             </p>
 
-            <BracketMatch title="Semi Final 1" subtitle="Seed 1 vs QF2 winner">
-              <BracketTeamSlot team={seed1} isBye />
-              <BracketTeamSlot label="Winner of QF2" note="Seed 4 vs Seed 5" />
+            <BracketMatch title="Semi Final 2">
+              <BracketTeamSlot team={seed2} isBye />
+              <BracketTeamSlot label="Winner of QF1" />
             </BracketMatch>
 
-            <BracketMatch title="Semi Final 2" subtitle="Seed 2 vs QF1 winner">
-              <BracketTeamSlot team={seed2} isBye />
-              <BracketTeamSlot label="Winner of QF1" note="Seed 3 vs Seed 6" />
+            <BracketMatch title="Semi Final 1">
+              <BracketTeamSlot team={seed1} isBye />
+              <BracketTeamSlot label="Winner of QF2" />
             </BracketMatch>
           </div>
 
-          <div className="flex flex-col justify-center gap-4">
+          <div className="flex flex-col gap-4 xl:pt-[5.2rem]">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
               Grand Final
             </p>
 
-            <BracketMatch title="Grand Final" subtitle="Winner takes the league">
+            <BracketMatch title="Grand Final">
               <BracketTeamSlot label="Winner of SF1" />
               <BracketTeamSlot label="Winner of SF2" />
             </BracketMatch>

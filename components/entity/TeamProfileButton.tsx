@@ -14,6 +14,7 @@ type TeamProfileButtonProps = {
   meta?: string
   badge?: string
   align?: "left" | "right"
+  showMeta?: boolean
 }
 
 type TeamLabelMode = "full" | "short" | "code" | "icon"
@@ -25,6 +26,7 @@ export function TeamProfileButton({
   meta,
   badge,
   align = "left",
+  showMeta = true,
 }: TeamProfileButtonProps) {
   const buttonRef = useRef<HTMLButtonElement | null>(null)
   const [labelMode, setLabelMode] = useState<TeamLabelMode>("full")
@@ -38,6 +40,12 @@ export function TeamProfileButton({
     const shortWidth = 62 + team.shortName.length * 8
     const codeWidth = 58 + team.code.length * 9
 
+    function getAvailableWidth(element: HTMLButtonElement) {
+      const parentWidth =
+        element.parentElement?.getBoundingClientRect().width ?? 0
+      return Math.max(element.getBoundingClientRect().width, parentWidth)
+    }
+
     function updateLabelMode(width: number) {
       if (width >= fullWidth) setLabelMode("full")
       else if (width >= shortWidth) setLabelMode("short")
@@ -45,14 +53,15 @@ export function TeamProfileButton({
       else setLabelMode("icon")
     }
 
-    updateLabelMode(button.getBoundingClientRect().width)
+    updateLabelMode(getAvailableWidth(button))
 
     const observer = new ResizeObserver((entries) => {
       const entry = entries[0]
-      if (entry) updateLabelMode(entry.contentRect.width)
+      if (entry) updateLabelMode(getAvailableWidth(button))
     })
 
     observer.observe(button)
+    if (button.parentElement) observer.observe(button.parentElement)
 
     return () => observer.disconnect()
   }, [team])
@@ -83,6 +92,7 @@ export function TeamProfileButton({
         "group flex min-w-0 items-center gap-3 rounded-xl border bg-background px-3 py-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-muted/40 hover:no-underline hover:shadow-md",
         compact && "gap-2 rounded-lg border-0 bg-transparent p-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none",
         align === "right" && "flex-row-reverse text-right",
+        labelMode === "icon" && "justify-center",
         className,
       )}
     >
@@ -114,7 +124,7 @@ export function TeamProfileButton({
               </span>
             ) : null}
           </span>
-          {labelMode === "full" ? (
+          {showMeta && labelMode !== "icon" ? (
             <span className="mt-0.5 block whitespace-nowrap text-xs text-muted-foreground">
               {meta ?? `${team.shortName} · ${team.code}`}
             </span>
