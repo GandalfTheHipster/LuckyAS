@@ -4,7 +4,6 @@ import {
   BapeHero,
   BapePageShell,
   BapePanel,
-  BapeSectionHeader,
 } from "@/components/bape/BapePageChrome"
 import { BeerPongPlayoffBracket } from "@/components/bape/BeerPongPlayoffBracket"
 import { BeerPongSectionNav } from "@/components/bape/BeerPongSectionNav"
@@ -46,25 +45,39 @@ export default function BeerPongPlayoffsPage() {
 
         <BeerPongSectionNav />
 
-        <section className="grid gap-5 lg:grid-cols-[1fr_320px]">
-          <BeerPongPlayoffBracket />
-
-          <BapePanel className="p-6">
-            <BapeSectionHeader eyebrow="Seeds" title="Top two wait" />
-            <div className="mt-5 space-y-4 text-sm leading-6 text-muted-foreground">
-              <p>
-                <TeamName code={seed1.code} className="font-semibold text-foreground" />{" "}
-                and{" "}
-                <TeamName code={seed2.code} className="font-semibold text-foreground" />{" "}
-                go straight to the semi finals.
-              </p>
-              <p>
-                The quarter finals are 3rd vs 6th and 4th vs 5th. Winners meet
-                the top seeds.
-              </p>
+        <section className="grid gap-4 lg:grid-cols-3">
+          <BapePanel className="p-5">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              Top Seeds
+            </p>
+            <div className="mt-3 text-sm leading-6 text-muted-foreground">
+              <TeamName code={seed1.code} className="font-semibold text-foreground" />{" "}
+              and{" "}
+              <TeamName code={seed2.code} className="font-semibold text-foreground" />{" "}
+              start in the semi finals.
             </div>
           </BapePanel>
+
+          <BapePanel className="p-5">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              Quarter Finals
+            </p>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              3rd plays 6th. 4th plays 5th.
+            </p>
+          </BapePanel>
+
+          <BapePanel className="p-5">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              Grand Final
+            </p>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              Semi-final winners meet for the league title.
+            </p>
+          </BapePanel>
         </section>
+
+        <BeerPongPlayoffBracket />
       </div>
     </BapePageShell>
   )

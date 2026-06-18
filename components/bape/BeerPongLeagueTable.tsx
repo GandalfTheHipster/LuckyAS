@@ -103,8 +103,32 @@ function TeamMobileCard({
           </div>
 
           <p className="text-xs text-muted-foreground">
-            {team.shortName} · {team.code} · {team.w}W / {team.l}L
+            {team.shortName} · {team.code}
           </p>
+
+          {team.players.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-2">
+              {team.players.map((player) => (
+                <div
+                  key={player.id}
+                  className="flex min-w-0 items-center gap-2 rounded-full border bg-background px-2 py-1"
+                >
+                  <Image
+                    src={player.src}
+                    alt={player.alt}
+                    width={24}
+                    height={24}
+                    className="h-6 w-6 rounded-full object-cover"
+                  />
+
+                  <PersonName
+                    bapeID={String(player.id)}
+                    className="max-w-32 truncate text-left text-xs font-medium text-foreground"
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="text-right">
@@ -125,10 +149,8 @@ function TeamMobileCard({
         </div>
 
         <div className="rounded-lg border bg-muted/40 px-2 py-2">
-          <p className="text-[10px] uppercase text-muted-foreground">Win %</p>
-          <p className="text-sm font-semibold tabular-nums">
-            {getWinRate(team.w, team.mp)}
-          </p>
+          <p className="text-[10px] uppercase text-muted-foreground">L</p>
+          <p className="text-sm font-semibold tabular-nums">{team.l}</p>
         </div>
 
         <div className="rounded-lg border bg-muted/40 px-2 py-2">
@@ -146,30 +168,6 @@ function TeamMobileCard({
           </p>
         </div>
       </div>
-
-      {team.players.length > 0 && (
-        <div className="mt-4 flex flex-wrap gap-2">
-          {team.players.map((player) => (
-            <div
-              key={player.id}
-              className="flex min-w-0 items-center gap-2 rounded-full border bg-background px-2 py-1"
-            >
-              <Image
-                src={player.src}
-                alt={player.alt}
-                width={24}
-                height={24}
-                className="h-6 w-6 rounded-full object-cover"
-              />
-
-              <PersonName
-                bapeID={String(player.id)}
-                className="max-w-32 truncate text-left text-xs text-muted-foreground transition hover:text-foreground hover:underline"
-              />
-            </div>
-          ))}
-        </div>
-      )}
     </div>
   )
 }
@@ -241,9 +239,9 @@ export function BeerPongLeagueTable() {
                       />
 
                       {isLeader && (
-                          <span className="rounded-full border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase text-foreground">
-                            Leader
-                          </span>
+                        <span className="rounded-full border bg-background px-2 py-0.5 text-[10px] font-semibold uppercase text-foreground">
+                          Leader
+                        </span>
                       )}
                     </div>
 

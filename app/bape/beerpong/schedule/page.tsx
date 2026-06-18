@@ -1,23 +1,25 @@
 import {
   BapeHero,
   BapePageShell,
-  BapePanel,
   BapeSectionHeader,
 } from "@/components/bape/BapePageChrome"
 import { BeerPongFixtureCard } from "@/components/bape/BeerPongFixtureCard"
 import { BeerPongSectionNav } from "@/components/bape/BeerPongSectionNav"
 import {
   BEERPONG_COMPLETED_FIXTURES,
-  BEERPONG_FIXTURES,
   BEERPONG_UPCOMING_FIXTURES,
 } from "@/lib/data/beerpong/BeerPongFixture"
 
-const rounds = [...new Set(BEERPONG_FIXTURES.map((fixture) => fixture.round))]
-  .sort((a, b) => a - b)
-  .map((round) => ({
-    round,
-    fixtures: BEERPONG_FIXTURES.filter((fixture) => fixture.round === round),
-  }))
+const completedFixtures = [...BEERPONG_COMPLETED_FIXTURES].sort((a, b) => {
+  if (b.round !== a.round) return b.round - a.round
+  return b.game - a.game
+})
+
+const upcomingFixtures = [...BEERPONG_UPCOMING_FIXTURES]
+  .sort((a, b) => {
+    if (a.round !== b.round) return a.round - b.round
+    return a.game - b.game
+  })
 
 export default function BeerPongSchedulePage() {
   return (
@@ -26,51 +28,41 @@ export default function BeerPongSchedulePage() {
         <BapeHero
           eyebrow="Beer Pong"
           title="Schedule"
-          description="Every regular-season fixture and result."
+          description="Regular-season results, newest first."
         />
 
         <BeerPongSectionNav />
 
-        <section className="grid gap-5 md:grid-cols-2">
-          <BapePanel className="p-5">
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-              Completed
-            </p>
-            <p className="mt-2 text-3xl font-semibold">
-              {BEERPONG_COMPLETED_FIXTURES.length}
-            </p>
-          </BapePanel>
-          <BapePanel className="p-5">
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-              Upcoming
-            </p>
-            <p className="mt-2 text-3xl font-semibold">
-              {BEERPONG_UPCOMING_FIXTURES.length}
-            </p>
-          </BapePanel>
-        </section>
-
         <section className="flex flex-col gap-6">
-          <BapeSectionHeader title="Rounds" />
+          <BapeSectionHeader
+            title="Results"
+            description="Winners are highlighted in green."
+          />
 
-          <div className="grid gap-6">
-            {rounds.map(({ round, fixtures }) => (
-              <BapePanel key={round} className="p-5">
-                <h2 className="text-xl font-semibold tracking-tight">
-                  Round {round}
-                </h2>
-                <div className="mt-4 grid gap-3 lg:grid-cols-3">
-                  {fixtures.map((fixture) => (
-                    <BeerPongFixtureCard
-                      key={`${fixture.round}-${fixture.game}-${fixture.teamA}-${fixture.teamB}`}
-                      fixture={fixture}
-                    />
-                  ))}
-                </div>
-              </BapePanel>
+          <div className="grid gap-3 lg:grid-cols-3">
+            {completedFixtures.map((fixture) => (
+              <BeerPongFixtureCard
+                key={`${fixture.round}-${fixture.game}-${fixture.teamA}-${fixture.teamB}`}
+                fixture={fixture}
+              />
             ))}
           </div>
         </section>
+
+        {upcomingFixtures.length > 0 ? (
+          <section className="flex flex-col gap-6">
+            <BapeSectionHeader title="Upcoming" />
+
+            <div className="grid gap-3 lg:grid-cols-3">
+              {upcomingFixtures.map((fixture) => (
+                <BeerPongFixtureCard
+                  key={`${fixture.round}-${fixture.game}-${fixture.teamA}-${fixture.teamB}`}
+                  fixture={fixture}
+                />
+              ))}
+            </div>
+          </section>
+        ) : null}
       </div>
     </BapePageShell>
   )

@@ -29,23 +29,39 @@ export default function BeerPongLeagueTablePage() {
 
         <BeerPongSectionNav />
 
-        <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="flex flex-col gap-5">
-            <BapeSectionHeader title="Standings" />
-            <BeerPongLeagueTable />
-          </div>
-
-          <BapePanel className="p-6">
-            <BapeSectionHeader eyebrow="Table Notes" title="Seeds are locked" />
-            <div className="mt-5 space-y-4 text-sm leading-6 text-muted-foreground">
-              <p>
-                <TeamName code={leader.code} className="font-semibold text-foreground" />{" "}
-                finished first and takes seed 1.
-              </p>
-              <p>Ranking order is points, wins, then net cups.</p>
-              <p>Click a team or player name to open their profile card.</p>
+        <section className="grid gap-4 lg:grid-cols-3">
+          <BapePanel className="p-5">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              Top Seed
+            </p>
+            <div className="mt-3 text-sm leading-6 text-muted-foreground">
+              <TeamName code={leader.code} className="font-semibold text-foreground" />{" "}
+              finished first and takes seed 1.
             </div>
           </BapePanel>
+
+          <BapePanel className="p-5">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              Tie-breakers
+            </p>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              Ranking order is points, wins, then net cups.
+            </p>
+          </BapePanel>
+
+          <BapePanel className="p-5">
+            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
+              Profiles
+            </p>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground">
+              Click a team or player name to open their profile card.
+            </p>
+          </BapePanel>
+        </section>
+
+        <section className="flex flex-col gap-5">
+          <BapeSectionHeader title="Standings" />
+          <BeerPongLeagueTable />
         </section>
       </div>
     </BapePageShell>

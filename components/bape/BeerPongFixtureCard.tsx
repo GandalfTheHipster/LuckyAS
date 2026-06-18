@@ -3,6 +3,7 @@ import Image from "next/image"
 import { BapePanel } from "@/components/bape/BapePageChrome"
 import { TeamName } from "@/components/entity/TeamName"
 import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 import { BEERPONG_FIXTURES } from "@/lib/data/beerpong/BeerPongFixture"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 
@@ -50,6 +51,18 @@ function TeamBadge({
   )
 }
 
+function getFixtureNumber(fixture: (typeof BEERPONG_FIXTURES)[number]) {
+  return (
+    BEERPONG_FIXTURES.findIndex(
+      (item) =>
+        item.round === fixture.round &&
+        item.game === fixture.game &&
+        item.teamA === fixture.teamA &&
+        item.teamB === fixture.teamB,
+    ) + 1
+  )
+}
+
 export function BeerPongFixtureCard({
   fixture,
 }: {
@@ -64,15 +77,19 @@ export function BeerPongFixtureCard({
     isCompleted && fixture.scoreA !== null && fixture.scoreB !== null
       ? fixture.scoreB > fixture.scoreA
       : false
-  const winner = teamAWon ? fixture.teamA : teamBWon ? fixture.teamB : null
+  const fixtureNumber = getFixtureNumber(fixture)
 
   return (
     <BapePanel className="p-4 transition hover:-translate-y-0.5 hover:shadow-md">
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>Round {fixture.round}</span>
-          <span>/</span>
-          <span>Game {fixture.game}</span>
+          <span>Regular season</span>
+          {fixtureNumber > 0 ? (
+            <>
+              <span>/</span>
+              <span>Match {fixtureNumber}</span>
+            </>
+          ) : null}
         </div>
 
         <Badge variant={isCompleted ? "secondary" : "outline"}>
@@ -81,7 +98,13 @@ export function BeerPongFixtureCard({
       </div>
 
       <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
-        <div className={teamAWon ? "font-semibold" : ""}>
+        <div
+          className={cn(
+            "rounded-xl border bg-background px-3 py-2",
+            teamAWon &&
+              "border-emerald-300 bg-emerald-50 text-emerald-950 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-100",
+          )}
+        >
           <TeamBadge code={fixture.teamA} />
         </div>
 
@@ -89,20 +112,16 @@ export function BeerPongFixtureCard({
           {isCompleted ? `${fixture.scoreA} - ${fixture.scoreB}` : "VS"}
         </div>
 
-        <div className={teamBWon ? "font-semibold" : ""}>
+        <div
+          className={cn(
+            "rounded-xl border bg-background px-3 py-2",
+            teamBWon &&
+              "border-emerald-300 bg-emerald-50 text-emerald-950 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-100",
+          )}
+        >
           <TeamBadge code={fixture.teamB} align="right" />
         </div>
       </div>
-
-      {winner ? (
-        <p className="mt-4 text-xs text-muted-foreground">
-          Winner:{" "}
-          <TeamName
-            code={winner}
-            className="font-medium text-foreground"
-          />
-        </p>
-      ) : null}
     </BapePanel>
   )
 }
