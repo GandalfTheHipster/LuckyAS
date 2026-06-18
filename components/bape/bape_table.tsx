@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/table"
 
 import { TableAvatar } from "@/components/bape/TableAvatar"
+import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 
 type AvatarItem = {
   src: string
@@ -18,7 +19,7 @@ type Column<T> = {
   key: keyof T
   label: string
   align?: "left" | "right" | "center"
-  type?: "text" | "avatar" | "avatars"
+  type?: "text" | "avatar" | "avatars" | "country"
   rounded?: boolean
   size?: number
 }
@@ -76,6 +77,10 @@ export function BapeTable<T extends { name: string }>({
           ))}
         </div>
       )
+    }
+
+    if (col.type === "country") {
+      return <CountryProfileButton country={String(value)} compact />
     }
 
     return String(value)

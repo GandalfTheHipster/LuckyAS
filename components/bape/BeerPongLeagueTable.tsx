@@ -78,7 +78,6 @@ function TeamMobileCard({
           <TeamProfileButton
             code={team.code}
             compact
-            badge={isLeader ? "Leader" : undefined}
           />
 
           {team.players.length > 0 && (
@@ -89,7 +88,6 @@ function TeamMobileCard({
                   bapeID={String(player.id)}
                   compact
                   className="max-w-full"
-                  meta={`${team.code} player`}
                 />
               ))}
             </div>
@@ -189,7 +187,6 @@ export function BeerPongLeagueTable() {
 
                 <TeamProfileButton
                   code={team.code}
-                  badge={isLeader ? "Leader" : undefined}
                   className="min-w-0"
                 />
 
@@ -199,7 +196,6 @@ export function BeerPongLeagueTable() {
                       key={player.id}
                       bapeID={String(player.id)}
                       className="max-w-full"
-                      meta={`${team.code} player`}
                     />
                   ))}
                 </div>

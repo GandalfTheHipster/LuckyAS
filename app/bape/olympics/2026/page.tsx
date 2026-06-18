@@ -11,7 +11,7 @@ export default function Olympics2026Page() {
         <BapeHero
           eyebrow="Olympics"
           title="2026 Coming Soon"
-          description="The next BAPE Olympics is not ready for the archive yet."
+          description="The next Bape Olympics is not ready for the archive yet."
         />
 
         <BapePanel className="p-6">

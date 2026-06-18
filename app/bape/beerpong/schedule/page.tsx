@@ -9,6 +9,10 @@ import {
   BEERPONG_COMPLETED_FIXTURES,
   BEERPONG_UPCOMING_FIXTURES,
 } from "@/lib/data/beerpong/BeerPongFixture"
+import Image from "next/image"
+
+const BEERPONG_LEAGUE_LOGO =
+  "https://i.postimg.cc/ZR6kb86T/beerponglogo.png"
 
 const completedFixtures = [...BEERPONG_COMPLETED_FIXTURES].sort((a, b) => {
   if (b.round !== a.round) return b.round - a.round
@@ -28,8 +32,19 @@ export default function BeerPongSchedulePage() {
         <BapeHero
           eyebrow="Beer Pong"
           title="Schedule"
-          description="Regular-season results, newest first."
-        />
+          description="See results and upcoming games in the league."
+        >
+          <div className="flex justify-center lg:justify-end">
+            <Image
+              src={BEERPONG_LEAGUE_LOGO}
+              alt="Bape Beer Pong League logo"
+              width={180}
+              height={180}
+              priority
+              className="h-44 w-44 object-contain drop-shadow-2xl sm:h-56 sm:w-56 lg:h-64 lg:w-64"
+            />
+          </div>
+        </BapeHero>
 
         <BeerPongSectionNav />
 

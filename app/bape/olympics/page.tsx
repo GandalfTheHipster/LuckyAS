@@ -40,17 +40,17 @@ export default function OlympicsHubPage() {
       <div className="flex flex-col gap-10">
         <BapeHero
           eyebrow="Olympics"
-          title="BAPE Olympics"
+          title="Bape Olympics"
           description="Results, event winners, medal tables, and all-time records."
         />
 
-        <section className="grid gap-5 lg:grid-cols-[1fr_320px]">
+        <section className="grid gap-5 lg:grid-cols-[1fr_0px]">
           <BapePanel className="overflow-hidden">
             <div className="grid gap-0 md:grid-cols-[1fr_1.1fr]">
               <div className="relative min-h-72">
                 <Image
                   src={OLYMPICS_2023_DATA.imageOfTheDay}
-                  alt="BAPE Olympics"
+                  alt="Bape Olympics"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 50vw"
@@ -58,9 +58,6 @@ export default function OlympicsHubPage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               </div>
               <div className="flex flex-col justify-center p-6 sm:p-8">
-                <Badge variant="secondary" className="mb-4 w-fit">
-                  Start Here
-                </Badge>
                 <h2 className="text-2xl font-semibold tracking-tight">
                   All-Time Leaderboard
                 </h2>
@@ -73,16 +70,6 @@ export default function OlympicsHubPage() {
                   </Link>
                 </Button>
               </div>
-            </div>
-          </BapePanel>
-
-          <BapePanel className="p-6">
-            <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
-              Quick Notes
-            </p>
-            <div className="mt-5 space-y-5 text-sm leading-6 text-muted-foreground">
-              <p>Finished editions include event results, podiums, standings, host, and MVP.</p>
-              <p>2026 is listed as a placeholder until event details are locked in.</p>
             </div>
           </BapePanel>
         </section>

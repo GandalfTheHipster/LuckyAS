@@ -7,14 +7,17 @@ import {
   BapeSectionHeader,
 } from "@/components/bape/BapePageChrome"
 import { BapeTable } from "@/components/bape/bape_table"
+import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
+import { PersonProfileButtonByName } from "@/components/entity/PersonProfileButton"
 import { Badge } from "@/components/ui/badge"
+import { getOlympicCountry } from "@/lib/data/olympics/countries"
 import type {
   OlympicEvent,
   OlympicPageData,
 } from "@/lib/data/olympics/olympics-template"
 
 const standingColumns = [
-  { key: "name", label: "Team", align: "left" },
+  { key: "name", label: "Team", align: "left", type: "country" },
   { key: "pts", label: "PTS", align: "right" },
   { key: "gold", label: "Gold", align: "right" },
   { key: "silver", label: "Silver", align: "right" },
@@ -69,7 +72,14 @@ export function OlympicsPageTemplate({ data }: OlympicsPageTemplateProps) {
               Snapshot
             </p>
             <div className="mt-5 space-y-4 text-sm leading-6 text-muted-foreground">
-              <p>Champion: {data.winner ?? "TBA"}</p>
+              <div className="flex items-center gap-2">
+                <span>Champion:</span>
+                {data.winner ? (
+                  <OlympicEntityBadge value={data.winner} />
+                ) : (
+                  <span>TBA</span>
+                )}
+              </div>
               <p>MVP: {data.mvp ?? "TBA"}</p>
               <p>
                 {completedEvents} of {data.events.length} events completed.
@@ -98,7 +108,11 @@ export function OlympicsPageTemplate({ data }: OlympicsPageTemplateProps) {
                       {index + 1}
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate font-semibold">{team.name}</p>
+                      <CountryProfileButton
+                        country={team.name}
+                        compact
+                        className="border-0 bg-transparent p-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                      />
                       <p className="text-xs text-muted-foreground">
                         {team.gold} gold, {team.silver} silver, {team.bronze}{" "}
                         bronze
@@ -162,7 +176,9 @@ function EventCard({ event }: { event: OlympicEvent }) {
         <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
           Winner
         </p>
-        <p className="mt-1 font-semibold">{event.winner ?? "TBA"}</p>
+        <div className="mt-2">
+          {event.winner ? <OlympicEntityBadge value={event.winner} /> : "TBA"}
+        </div>
       </div>
 
       <div className="mt-4 grid gap-2 text-sm">
@@ -180,11 +196,25 @@ function MedalLine({ label, value }: { label: string; value?: string[] }) {
       <span className="shrink-0 text-xs font-medium uppercase tracking-wide text-muted-foreground">
         {label}
       </span>
-      <span className="min-w-0 text-right text-sm">
-        {value && value.length > 0 ? value.join(", ") : "-"}
-      </span>
+      <div className="flex min-w-0 flex-wrap justify-end gap-2">
+        {value && value.length > 0
+          ? value.map((name) => (
+              <PersonProfileButtonByName key={name} name={name} />
+            ))
+          : "-"}
+      </div>
     </div>
   )
+}
+
+function OlympicEntityBadge({ value }: { value: string }) {
+  const country = getOlympicCountry(value)
+
+  if (country) {
+    return <CountryProfileButton country={value} compact />
+  }
+
+  return <PersonProfileButtonByName name={value} compact />
 }
 
 function formatStatus(status?: string) {

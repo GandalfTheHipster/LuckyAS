@@ -14,7 +14,6 @@ export function BapePageShell({ children }: { children: ReactNode }) {
 }
 
 export function BapeHero({
-  eyebrow,
   title,
   description,
   children,
@@ -43,9 +42,6 @@ export function BapeHero({
         )}
       >
         <div className="max-w-3xl">
-          <Badge variant="outline" className="mb-5 rounded-full bg-background">
-            {eyebrow}
-          </Badge>
           <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
             {title}
           </h1>

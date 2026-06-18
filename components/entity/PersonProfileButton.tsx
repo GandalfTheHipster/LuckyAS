@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 
 import { EntityTrigger } from "@/components/entity/EntityTrigger"
@@ -13,6 +14,8 @@ type PersonProfileButtonProps = {
   meta?: string
 }
 
+type PersonLabelMode = "full" | "first" | "icon"
+
 export function PersonProfileButton({
   bapeID,
   className,
@@ -20,9 +23,37 @@ export function PersonProfileButton({
   meta,
 }: PersonProfileButtonProps) {
   const numericBapeID = Number(bapeID)
+  const buttonRef = useRef<HTMLButtonElement | null>(null)
+  const [labelMode, setLabelMode] = useState<PersonLabelMode>("full")
   const profile = BAPE_PROFILES.find(
     (profile) => profile.bapeID === numericBapeID,
   )
+
+  useEffect(() => {
+    const button = buttonRef.current
+    if (!button || !profile) return
+
+    const fullName = `${profile.firstName} ${profile.lastName}`
+    const fullWidth = 62 + fullName.length * 8
+    const firstWidth = 58 + profile.firstName.length * 8
+
+    function updateLabelMode(width: number) {
+      if (width >= fullWidth) setLabelMode("full")
+      else if (width >= firstWidth) setLabelMode("first")
+      else setLabelMode("icon")
+    }
+
+    updateLabelMode(button.getBoundingClientRect().width)
+
+    const observer = new ResizeObserver((entries) => {
+      const entry = entries[0]
+      if (entry) updateLabelMode(entry.contentRect.width)
+    })
+
+    observer.observe(button)
+
+    return () => observer.disconnect()
+  }, [profile])
 
   if (!profile) {
     return (
@@ -33,14 +64,22 @@ export function PersonProfileButton({
   }
 
   const fullName = `${profile.firstName} ${profile.lastName}`
+  const visibleName =
+    labelMode === "full"
+      ? fullName
+      : labelMode === "first"
+        ? profile.firstName
+        : null
 
   return (
     <EntityTrigger
+      ref={buttonRef}
       type="person"
       id={bapeID}
       className={cn(
         "group flex min-w-0 items-center gap-2 rounded-full border bg-background px-2.5 py-1.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-muted/40 hover:no-underline hover:shadow-md",
         compact && "px-2 py-1",
+        labelMode === "icon" && "w-fit px-1.5",
         className,
       )}
     >
@@ -55,16 +94,51 @@ export function PersonProfileButton({
         )}
       />
 
-      <span className="min-w-0">
-        <span className="block truncate text-sm font-medium text-foreground group-hover:underline">
-          {fullName}
-        </span>
-        {meta ? (
-          <span className="block truncate text-xs text-muted-foreground">
-            {meta}
+      {visibleName ? (
+        <span className="min-w-0">
+          <span className="block whitespace-nowrap text-sm font-medium text-foreground group-hover:underline">
+            {visibleName}
           </span>
-        ) : null}
-      </span>
+          {meta && labelMode === "full" ? (
+            <span className="block whitespace-nowrap text-xs text-muted-foreground">
+              {meta}
+            </span>
+          ) : null}
+        </span>
+      ) : null}
     </EntityTrigger>
+  )
+}
+
+export function PersonProfileButtonByName({
+  name,
+  className,
+  compact = true,
+  meta,
+}: {
+  name: string
+  className?: string
+  compact?: boolean
+  meta?: string
+}) {
+  const profile = BAPE_PROFILES.find(
+    (profile) => `${profile.firstName} ${profile.lastName}` === name,
+  )
+
+  if (!profile) {
+    return (
+      <span className={cn("text-sm font-medium text-foreground", className)}>
+        {name}
+      </span>
+    )
+  }
+
+  return (
+    <PersonProfileButton
+      bapeID={String(profile.bapeID)}
+      className={className}
+      compact={compact}
+      meta={meta}
+    />
   )
 }

@@ -8,12 +8,16 @@ import { BeerPongLeagueTable } from "@/components/bape/BeerPongLeagueTable"
 import { BeerPongSectionNav } from "@/components/bape/BeerPongSectionNav"
 import { TeamName } from "@/components/entity/TeamName"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
+import Image from "next/image"
 
 const sortedTeams = [...BEERPONG_TEAMS].sort((a, b) => {
   if (b.pts !== a.pts) return b.pts - a.pts
   if (b.w !== a.w) return b.w - a.w
   return b.netCups - a.netCups
 })
+
+const BEERPONG_LEAGUE_LOGO =
+  "https://i.postimg.cc/ZR6kb86T/beerponglogo.png"
 
 export default function BeerPongLeagueTablePage() {
   const leader = sortedTeams[0]
@@ -24,8 +28,19 @@ export default function BeerPongLeagueTablePage() {
         <BapeHero
           eyebrow="Beer Pong"
           title="League Table"
-          description="Final regular-season standings."
-        />
+          description="Where is everyone stacking up on the table?"
+        >
+          <div className="flex justify-center lg:justify-end">
+            <Image
+              src={BEERPONG_LEAGUE_LOGO}
+              alt="Bape Beer Pong League logo"
+              width={280}
+              height={280}
+              priority
+              className="h-44 w-44 object-contain drop-shadow-2xl sm:h-56 sm:w-56 lg:h-64 lg:w-64"
+            />
+          </div>
+        </BapeHero>
 
         <BeerPongSectionNav />
 

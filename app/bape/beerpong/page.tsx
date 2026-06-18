@@ -34,7 +34,7 @@ export default function BeerPongPlayoffsPage() {
           <div className="flex justify-center lg:justify-end">
             <Image
               src={BEERPONG_LEAGUE_LOGO}
-              alt="BAPE Beer Pong League logo"
+              alt="Bape Beer Pong League logo"
               width={280}
               height={280}
               priority

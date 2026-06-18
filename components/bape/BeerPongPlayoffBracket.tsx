@@ -123,16 +123,13 @@ export function BeerPongPlayoffBracket() {
     <section className="flex flex-col gap-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.24em] text-muted-foreground">
-            Playoffs
-          </p>
           <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
-            Bracket Ready
+            Playoffs
           </h2>
         </div>
 
         <div className="rounded-full border bg-card px-4 py-2 text-sm font-medium">
-          6 teams / single elimination
+          6 Teams / Single Elimination
         </div>
       </div>
 
@@ -223,10 +220,6 @@ export function BeerPongPlayoffBracket() {
               </div>
             )}
           </div>
-        </div>
-
-        <div className="mt-6 rounded-2xl border bg-background/80 p-4 text-sm text-muted-foreground">
-          Bracket is based on the final league table.
         </div>
       </div>
     </section>

@@ -1,14 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { forwardRef, useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { XIcon } from "lucide-react"
 
+import { CountryModalContent } from "@/components/entity/CountryModalContent"
 import { PersonModalContent } from "@/components/entity/PersonModalContent"
 import { TeamModalContent } from "@/components/entity/TeamModalContent"
 import { cn } from "@/lib/utils"
 
-export type EntityType = "team" | "person"
+export type EntityType = "team" | "person" | "country"
 
 type EntityTriggerProps = {
   type: EntityType
@@ -17,50 +18,60 @@ type EntityTriggerProps = {
   className?: string
 }
 
-export function EntityTrigger({
-  type,
-  id,
-  children,
-  className,
-}: EntityTriggerProps) {
-  const title = type === "team" ? "Team profile" : "Player profile"
-  const [open, setOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
+export const EntityTrigger = forwardRef<HTMLButtonElement, EntityTriggerProps>(
+  function EntityTrigger(
+    {
+      type,
+      id,
+      children,
+      className,
+    },
+    ref,
+  ) {
+    const title =
+      type === "team"
+        ? "Team profile"
+        : type === "person"
+          ? "Player profile"
+          : "Country profile"
+    const [open, setOpen] = useState(false)
+    const [mounted, setMounted] = useState(false)
 
-  useEffect(() => {
-    setMounted(true)
-  }, [])
+    useEffect(() => {
+      setMounted(true)
+    }, [])
 
-  useEffect(() => {
-    if (!open) return
+    useEffect(() => {
+      if (!open) return
 
-    const originalOverflow = document.body.style.overflow
+      const originalOverflow = document.body.style.overflow
 
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") setOpen(false)
-    }
+      function handleKeyDown(event: KeyboardEvent) {
+        if (event.key === "Escape") setOpen(false)
+      }
 
-    document.body.style.overflow = "hidden"
-    window.addEventListener("keydown", handleKeyDown)
+      document.body.style.overflow = "hidden"
+      window.addEventListener("keydown", handleKeyDown)
 
-    return () => {
-      document.body.style.overflow = originalOverflow
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [open])
+      return () => {
+        document.body.style.overflow = originalOverflow
+        window.removeEventListener("keydown", handleKeyDown)
+      }
+    }, [open])
 
-  return (
-    <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className={cn(
-          "cursor-pointer text-left underline-offset-4 transition hover:underline focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          className ?? "font-medium",
-        )}
-      >
-        {children}
-      </button>
+    return (
+      <>
+        <button
+          ref={ref}
+          type="button"
+          onClick={() => setOpen(true)}
+          className={cn(
+            "cursor-pointer text-left underline-offset-4 transition hover:underline focus-visible:rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+            className ?? "font-medium",
+          )}
+        >
+          {children}
+        </button>
 
       {mounted && open
         ? createPortal(
@@ -89,8 +100,10 @@ export function EntityTrigger({
                 <div className="max-h-[86vh] overflow-y-auto p-5 sm:p-6">
                   {type === "team" ? (
                     <TeamModalContent teamCode={id} />
-                  ) : (
+                  ) : type === "person" ? (
                     <PersonModalContent personId={id} />
+                  ) : (
+                    <CountryModalContent countryId={id} />
                   )}
                 </div>
               </div>
@@ -98,6 +111,9 @@ export function EntityTrigger({
             document.body,
           )
         : null}
-    </>
-  )
-}
+      </>
+    )
+  },
+)
+
+EntityTrigger.displayName = "EntityTrigger"

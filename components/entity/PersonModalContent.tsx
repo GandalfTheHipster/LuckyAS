@@ -1,12 +1,18 @@
 import Image from "next/image"
 
+import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
 import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
+import { OLYMPICS_2021_DATA } from "@/lib/data/olympics/olympics-2021"
+import { OLYMPICS_2023_DATA } from "@/lib/data/olympics/olympics-2023"
+import { getOlympicCountry } from "@/lib/data/olympics/countries"
 
 type PersonModalContentProps = {
   personId: string
 }
+
+const olympicsArchive = [OLYMPICS_2021_DATA, OLYMPICS_2023_DATA]
 
 function StatTile({
   label,
@@ -58,6 +64,52 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
   const winRate = primaryTeam?.mp
     ? Math.round((primaryTeam.w / primaryTeam.mp) * 100)
     : 0
+  const olympicEditions = olympicsArchive
+    .map((olympics) => {
+      const medals = olympics.events.flatMap((event) => {
+        const results = [
+          { medal: "Gold", names: event.gold ?? [] },
+          { medal: "Silver", names: event.silver ?? [] },
+          { medal: "Bronze", names: event.bronze ?? [] },
+        ]
+
+        return results
+          .filter((result) => result.names.includes(fullName))
+          .map((result) => ({
+            event: event.name,
+            medal: result.medal,
+          }))
+      })
+
+      if (medals.length === 0) return null
+
+      return {
+        year: olympics.date,
+        medals,
+      }
+    })
+    .filter((edition): edition is NonNullable<typeof edition> =>
+      Boolean(edition),
+    )
+
+  let countryIndex = 0
+  const olympicTeams = olympicEditions.map((edition) => {
+    const flag = profile.country[countryIndex] ?? profile.country[0]
+    countryIndex += 1
+    const country = flag ? getOlympicCountry(flag) : undefined
+    const gold = edition.medals.filter((medal) => medal.medal === "Gold")
+    const silver = edition.medals.filter((medal) => medal.medal === "Silver")
+    const bronze = edition.medals.filter((medal) => medal.medal === "Bronze")
+
+    return {
+      ...edition,
+      country,
+      gold,
+      silver,
+      bronze,
+      points: gold.length * 3 + silver.length * 2 + bronze.length,
+    }
+  })
 
   return (
     <div className="space-y-6">
@@ -112,6 +164,63 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
         ) : (
           <p className="mt-3 text-sm text-muted-foreground">
             Not currently listed on a beer pong team.
+          </p>
+        )}
+      </div>
+
+      <div className="rounded-2xl border bg-muted/30 p-4">
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Olympics
+        </h3>
+
+        {olympicTeams.length > 0 ? (
+          <div className="mt-3 grid gap-3">
+            {olympicTeams.map((edition) => (
+              <div
+                key={edition.year}
+                className="rounded-xl border bg-background p-3"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold">
+                      {edition.year} Olympics
+                    </p>
+                    {edition.country ? (
+                      <div className="mt-2">
+                        <CountryProfileButton
+                          country={edition.country.name}
+                          compact
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                  <p className="text-lg font-bold tabular-nums">
+                    {edition.points} pts
+                  </p>
+                </div>
+
+                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                  <StatTile label="Gold" value={edition.gold.length} />
+                  <StatTile label="Silver" value={edition.silver.length} />
+                  <StatTile label="Bronze" value={edition.bronze.length} />
+                </div>
+
+                <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                  {edition.medals.map((medal) => (
+                    <span
+                      key={`${medal.event}-${medal.medal}`}
+                      className="rounded-full border bg-muted/40 px-2 py-1"
+                    >
+                      {medal.medal}: {medal.event}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-muted-foreground">
+            No Olympics results recorded yet.
           </p>
         )}
       </div>
