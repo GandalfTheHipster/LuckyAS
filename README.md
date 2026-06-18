@@ -1,2 +1,3 @@
-# LuckyAS
-A Project Allocation System for Capstone
+# noahedge.com
+
+Personal site built with Next.js and Supabase.

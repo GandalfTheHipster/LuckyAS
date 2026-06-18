@@ -1,13 +1,12 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasEnvVars } from "../../utils";
+import { hasEnvVars } from "@/lib/utils";
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
 
-  // Skip if env not configured
   if (!hasEnvVars) {
     return supabaseResponse;
   }
@@ -36,28 +35,10 @@ export async function updateSession(request: NextRequest) {
   );
 
   const { data } = await supabase.auth.getClaims();
-  const user = data?.claims;
 
-  // ✅ Define public routes here
-  const publicRoutes = [
-    "/",
-    "/auth",
-    "/login",
-    "/bape",
-    "/luckyas",
-    "/projects",
-  ];
-
-  const pathname = request.nextUrl.pathname;
-
-  const isPublicRoute = publicRoutes.some((route) =>
-    pathname === route || pathname.startsWith(`${route}/`)
-  );
-
-  // ✅ Only protect non-public routes
-  if (!user && !isPublicRoute) {
+  if (!data?.claims) {
     const url = request.nextUrl.clone();
-    url.pathname = "/luckyas/login";
+    url.pathname = "/auth/login";
     return NextResponse.redirect(url);
   }
 
