@@ -1,5 +1,12 @@
 "use client"
 
+import { useMemo } from "react"
+import type { ColumnDef } from "@tanstack/react-table"
+
+import {
+  BapeSortableHeader,
+  BapeSortableTable,
+} from "@/components/bape/BapeSortableTable"
 import { PersonProfileButton } from "@/components/entity/PersonProfileButton"
 import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
@@ -41,10 +48,7 @@ function getNetCupsLabel(value: number) {
   return value.toString()
 }
 
-function getWinRate(wins: number, matchesPlayed: number) {
-  if (matchesPlayed === 0) return "0%"
-  return `${Math.round((wins / matchesPlayed) * 100)}%`
-}
+type LeagueTeam = (typeof teams)[number]
 
 function TeamMobileCard({
   team,
@@ -78,6 +82,7 @@ function TeamMobileCard({
           <TeamProfileButton
             code={team.code}
             compact
+            labelMode="short"
           />
 
           {team.players.length > 0 && (
@@ -87,6 +92,7 @@ function TeamMobileCard({
                   key={player.id}
                   bapeID={String(player.id)}
                   compact
+                  labelMode="first"
                   className="max-w-full"
                 />
               ))}
@@ -136,6 +142,89 @@ function TeamMobileCard({
 }
 
 export function BeerPongLeagueTable() {
+  const columns = useMemo<ColumnDef<LeagueTeam>[]>(
+    () => [
+      {
+        id: "rank",
+        header: "#",
+        enableSorting: false,
+        cell: ({ row }) => <RankBadge rank={row.index + 1} />,
+      },
+      {
+        accessorKey: "name",
+        header: ({ column }) => (
+          <BapeSortableHeader label="Club" column={column} />
+        ),
+        cell: ({ row }) => (
+          <TeamProfileButton
+            code={row.original.code}
+            labelMode="short"
+            className="w-full min-w-0"
+          />
+        ),
+      },
+      {
+        id: "player",
+        header: "Player",
+        enableSorting: false,
+        cell: ({ row }) => (
+          <div className="flex items-center gap-2">
+            {row.original.players.map((player) => (
+              <PersonProfileButton
+                key={player.id}
+                bapeID={String(player.id)}
+                labelMode="first"
+                className="max-w-40"
+              />
+            ))}
+          </div>
+        ),
+      },
+      {
+        accessorKey: "mp",
+        header: ({ column }) => (
+          <BapeSortableHeader label="MP" column={column} align="right" />
+        ),
+        cell: ({ row }) => <NumberCell value={row.original.mp} />,
+      },
+      {
+        accessorKey: "w",
+        header: ({ column }) => (
+          <BapeSortableHeader label="W" column={column} align="right" />
+        ),
+        cell: ({ row }) => <NumberCell value={row.original.w} />,
+      },
+      {
+        accessorKey: "l",
+        header: ({ column }) => (
+          <BapeSortableHeader label="L" column={column} align="right" />
+        ),
+        cell: ({ row }) => <NumberCell value={row.original.l} />,
+      },
+      {
+        accessorKey: "netCups",
+        header: ({ column }) => (
+          <BapeSortableHeader label="Net" column={column} align="right" />
+        ),
+        cell: ({ row }) => (
+          <NumberCell
+            value={getNetCupsLabel(row.original.netCups)}
+            positive={row.original.netCups > 0}
+            muted={row.original.netCups <= 0}
+          />
+        ),
+      },
+      {
+        accessorKey: "pts",
+        header: ({ column }) => (
+          <BapeSortableHeader label="PTS" column={column} align="right" />
+        ),
+        cell: ({ row }) => <NumberCell value={row.original.pts} strong />,
+      },
+    ],
+    [],
+  )
+
   return (
     <>
       <div className="flex flex-col gap-3 md:hidden">
@@ -144,100 +233,57 @@ export function BeerPongLeagueTable() {
         ))}
       </div>
 
-      <div className="hidden overflow-hidden rounded-[1.5rem] border bg-card shadow-sm md:block">
-        <div className="border-b bg-muted/40 px-4 py-3">
-          <div className="grid grid-cols-[48px_1.8fr_1fr_64px_64px_64px_64px_90px_90px] items-center gap-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground max-lg:grid-cols-[42px_1.8fr_64px_64px_64px_80px]">
-            <div>#</div>
-            <div>Club</div>
-            <div className="max-lg:hidden">Player</div>
-            <div className="text-center">MP</div>
-            <div className="text-center">W</div>
-            <div className="text-center max-lg:hidden">L</div>
-            <div className="text-center max-lg:hidden">Net</div>
-            <div className="text-center">Win %</div>
-            <div className="text-right">PTS</div>
-          </div>
-        </div>
-
-        <div className="divide-y">
-          {teams.map((team, index) => {
-            const rank = index + 1
-            const isLeader = rank === 1
-
-            return (
-              <div
-                key={team.code}
-                className={
-                  isLeader
-                    ? "grid grid-cols-[48px_1.8fr_1fr_64px_64px_64px_64px_90px_90px] items-center gap-3 bg-foreground/[0.03] px-4 py-4 transition hover:bg-foreground/[0.06] max-lg:grid-cols-[42px_1.8fr_64px_64px_64px_80px]"
-                    : "grid grid-cols-[48px_1.8fr_1fr_64px_64px_64px_64px_90px_90px] items-center gap-3 px-4 py-4 transition hover:bg-muted/40 max-lg:grid-cols-[42px_1.8fr_64px_64px_64px_80px]"
-                }
-              >
-                <div>
-                  <div
-                    className={
-                      isLeader
-                        ? "flex h-8 w-8 items-center justify-center rounded-full bg-foreground text-sm font-bold text-background"
-                        : "flex h-8 w-8 items-center justify-center rounded-full border bg-background text-sm font-semibold"
-                    }
-                  >
-                    {rank}
-                  </div>
-                </div>
-
-                <TeamProfileButton
-                  code={team.code}
-                  className="w-full min-w-0"
-                />
-
-                <div className="flex items-center gap-2 max-lg:hidden">
-                  {team.players.map((player) => (
-                    <PersonProfileButton
-                      key={player.id}
-                      bapeID={String(player.id)}
-                      className="w-full max-w-full"
-                    />
-                  ))}
-                </div>
-
-                <div className="text-center text-sm font-medium tabular-nums">
-                  {team.mp}
-                </div>
-
-                <div className="text-center text-sm font-medium tabular-nums">
-                  {team.w}
-                </div>
-
-                <div className="text-center text-sm font-medium tabular-nums max-lg:hidden">
-                  {team.l}
-                </div>
-
-                <div
-                  className={
-                    team.netCups > 0
-                      ? "text-center text-sm font-semibold tabular-nums text-green-600 dark:text-green-400 max-lg:hidden"
-                      : team.netCups < 0
-                        ? "text-center text-sm font-semibold tabular-nums text-muted-foreground max-lg:hidden"
-                        : "text-center text-sm font-semibold tabular-nums text-muted-foreground max-lg:hidden"
-                  }
-                >
-                  {getNetCupsLabel(team.netCups)}
-                </div>
-
-                <div className="text-center">
-                  <span className="rounded-full border bg-muted px-2 py-1 text-xs font-medium tabular-nums">
-                    {getWinRate(team.w, team.mp)}
-                  </span>
-                </div>
-
-                <div className="text-right text-xl font-bold tabular-nums">
-                  {team.pts}
-                </div>
-              </div>
-            )
-          })}
-        </div>
+      <div className="hidden md:block">
+        <BapeSortableTable
+          data={teams}
+          columns={columns}
+          initialSort={[{ id: "pts", desc: true }]}
+          getRowKey={(team) => team.code}
+          isHighlighted={(_, index) => index === 0}
+        />
       </div>
     </>
+  )
+}
+
+function RankBadge({ rank }: { rank: number }) {
+  return (
+    <span
+      className={
+        rank === 1
+          ? "grid size-8 place-items-center rounded-full bg-foreground text-sm font-semibold text-background"
+          : "grid size-8 place-items-center rounded-full border bg-background text-sm font-semibold"
+      }
+    >
+      {rank}
+    </span>
+  )
+}
+
+function NumberCell({
+  value,
+  strong,
+  positive,
+  muted,
+}: {
+  value: number | string
+  strong?: boolean
+  positive?: boolean
+  muted?: boolean
+}) {
+  return (
+    <div
+      className={
+        positive
+          ? "text-right text-sm font-semibold tabular-nums text-green-600 dark:text-green-400"
+          : muted
+            ? "text-right text-sm font-semibold tabular-nums text-muted-foreground"
+            : strong
+              ? "text-right text-base font-semibold tabular-nums"
+              : "text-right text-sm font-medium tabular-nums"
+      }
+    >
+      {value}
+    </div>
   )
 }

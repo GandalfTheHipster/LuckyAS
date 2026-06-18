@@ -39,9 +39,8 @@ export default function OlympicsHubPage() {
     <BapePageShell>
       <div className="flex flex-col gap-10">
         <BapeHero
-          eyebrow="Olympics"
           title="Bape Olympics"
-          description="Results, event winners, medal tables, and all-time records."
+          variant="wordmark"
         />
 
         <section className="grid gap-5 lg:grid-cols-[1fr_0px]">
@@ -76,7 +75,6 @@ export default function OlympicsHubPage() {
 
         <section className="flex flex-col gap-6">
           <BapeSectionHeader
-            eyebrow="Editions"
             title="Years"
           />
 

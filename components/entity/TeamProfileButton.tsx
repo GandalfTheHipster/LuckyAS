@@ -15,6 +15,7 @@ type TeamProfileButtonProps = {
   badge?: string
   align?: "left" | "right"
   showMeta?: boolean
+  labelMode?: TeamLabelMode
 }
 
 type TeamLabelMode = "full" | "short" | "code" | "icon"
@@ -27,9 +28,11 @@ export function TeamProfileButton({
   badge,
   align = "left",
   showMeta = true,
+  labelMode: fixedLabelMode,
 }: TeamProfileButtonProps) {
   const buttonRef = useRef<HTMLButtonElement | null>(null)
-  const [labelMode, setLabelMode] = useState<TeamLabelMode>("full")
+  const [adaptiveLabelMode, setAdaptiveLabelMode] =
+    useState<TeamLabelMode>("full")
   const team = BEERPONG_TEAMS.find((team) => team.code === code)
 
   useEffect(() => {
@@ -41,16 +44,22 @@ export function TeamProfileButton({
     const codeWidth = 58 + team.code.length * 9
 
     function getAvailableWidth(element: HTMLButtonElement) {
+      const buttonWidth = element.getBoundingClientRect().width
       const parentWidth =
         element.parentElement?.getBoundingClientRect().width ?? 0
-      return Math.max(element.getBoundingClientRect().width, parentWidth)
+
+      if (parentWidth <= buttonWidth + 2) {
+        return fullWidth
+      }
+
+      return Math.max(buttonWidth, parentWidth)
     }
 
     function updateLabelMode(width: number) {
-      if (width >= fullWidth) setLabelMode("full")
-      else if (width >= shortWidth) setLabelMode("short")
-      else if (width >= codeWidth) setLabelMode("code")
-      else setLabelMode("icon")
+      if (width >= fullWidth) setAdaptiveLabelMode("full")
+      else if (width >= shortWidth) setAdaptiveLabelMode("short")
+      else if (width >= codeWidth) setAdaptiveLabelMode("code")
+      else setAdaptiveLabelMode("icon")
     }
 
     updateLabelMode(getAvailableWidth(button))
@@ -64,7 +73,7 @@ export function TeamProfileButton({
     if (button.parentElement) observer.observe(button.parentElement)
 
     return () => observer.disconnect()
-  }, [team])
+  }, [team, fixedLabelMode])
 
   if (!team) {
     return (
@@ -74,6 +83,7 @@ export function TeamProfileButton({
     )
   }
 
+  const labelMode = fixedLabelMode ?? adaptiveLabelMode
   const visibleName =
     labelMode === "full"
       ? team.name

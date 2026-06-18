@@ -5,6 +5,7 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
   date: "2023",
   location: "Perth CBD",
   imageOfTheDay: "https://i.postimg.cc/XqCM53zH/IMG-0994.jpg",
+  images: ["https://i.postimg.cc/XqCM53zH/IMG-0994.jpg"],
   description:
     "The 2023 Bape Olympics featured events across FIFA, basketball, futsal, pool, darts, sprinting, cricket, beer pong, cooking, drinking, and more.",
 

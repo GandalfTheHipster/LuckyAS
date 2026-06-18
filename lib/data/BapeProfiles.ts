@@ -152,7 +152,7 @@ export const BAPE_PROFILES: BapeProfile[] = [
     bronze: 1,
     pointsAllTime: 14,
     avatarUrl: "https://i.postimg.cc/j5f5BRd4/hs-priyen.png",
-    country: ["🇨🇮"],
+    country: ["🇷🇸"],
   },
   {
     bapeID: 9,

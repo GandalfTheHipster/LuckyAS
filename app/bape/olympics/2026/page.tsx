@@ -9,9 +9,8 @@ export default function Olympics2026Page() {
     <BapePageShell>
       <div className="flex flex-col gap-6">
         <BapeHero
-          eyebrow="Olympics"
           title="2026 Coming Soon"
-          description="The next Bape Olympics is not ready for the archive yet."
+          variant="wordmark"
         />
 
         <BapePanel className="p-6">

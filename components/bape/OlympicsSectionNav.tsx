@@ -5,14 +5,18 @@ import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 
-const items = [
-  { href: "/bape/beerpong", label: "Playoffs" },
-  { href: "/bape/beerpong/table", label: "League Table" },
-  { href: "/bape/beerpong/schedule", label: "Results" },
-]
+type OlympicsSectionNavProps = {
+  year: string
+}
 
-export function BeerPongSectionNav() {
+export function OlympicsSectionNav({ year }: OlympicsSectionNavProps) {
   const pathname = usePathname()
+  const baseHref = `/bape/olympics/${year}`
+  const items = [
+    { href: baseHref, label: "Overview" },
+    { href: `${baseHref}/standings`, label: "Standings" },
+    { href: `${baseHref}/events`, label: "Events" },
+  ]
 
   return (
     <nav className="flex flex-wrap gap-2 rounded-[1.5rem] border bg-card p-2 shadow-sm">
@@ -25,7 +29,8 @@ export function BeerPongSectionNav() {
             href={item.href}
             className={cn(
               "rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground",
-              isActive && "bg-foreground text-background hover:bg-foreground hover:text-background",
+              isActive &&
+                "bg-foreground text-background hover:bg-foreground hover:text-background",
             )}
           >
             {item.label}

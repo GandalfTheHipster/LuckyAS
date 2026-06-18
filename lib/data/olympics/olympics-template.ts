@@ -24,6 +24,7 @@ export type OlympicPageData = {
   date: string
   location: string
   imageOfTheDay: string
+  images?: string[]
   description: string
   host?: string
   mvp?: string

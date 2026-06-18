@@ -117,17 +117,6 @@ export function BeerPongPlayoffBracket() {
 
   return (
     <section className="flex flex-col gap-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
-            2025/2026 Playoff Bracket
-          </h2>
-        </div>
-
-        <div className="rounded-full border bg-card px-4 py-2 text-sm font-medium">
-          6 Teams / Single Elimination
-        </div>
-      </div>
 
       <div className="rounded-[1.5rem] border bg-card p-4 shadow-sm md:p-6">
         <div className="grid gap-6 xl:grid-cols-[1fr_1fr_1fr] xl:items-start">

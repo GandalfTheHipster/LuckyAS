@@ -17,6 +17,7 @@ function TeamBadge({
       compact
       align={align}
       showMeta={false}
+      labelMode="code"
       className="w-full"
     />
   )

@@ -5,6 +5,7 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
   date: "2021",
   location: "Rockingham",
   imageOfTheDay: "https://i.postimg.cc/JhNgyCnb/IMG-2088.jpg",
+  images: ["https://i.postimg.cc/JhNgyCnb/IMG-2088.jpg"],
   description:
     "The 2021 Bape Olympics featured FIFA, pool, drinking, basketball, indoor soccer, handball, table tennis, chess, and trivia events.",
 
@@ -113,9 +114,9 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
       emoji: "🏓",
       status: "completed",
       winner: "Cote d'Ivoire",
-      gold: [],
-      silver: [],
-      bronze: [],
+      gold: ["Jack Coleman"],
+      silver: ["Todd Williams"],
+      bronze: ["Aleksa Kvrgic"],
     },
     {
       id: "chess",

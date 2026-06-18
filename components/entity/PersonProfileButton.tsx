@@ -13,6 +13,7 @@ type PersonProfileButtonProps = {
   compact?: boolean
   meta?: string
   teamFlag?: string
+  labelMode?: PersonLabelMode
 }
 
 type PersonLabelMode = "full" | "first" | "icon"
@@ -23,10 +24,12 @@ export function PersonProfileButton({
   compact = false,
   meta,
   teamFlag,
+  labelMode: fixedLabelMode,
 }: PersonProfileButtonProps) {
   const numericBapeID = Number(bapeID)
   const buttonRef = useRef<HTMLButtonElement | null>(null)
-  const [labelMode, setLabelMode] = useState<PersonLabelMode>("full")
+  const [adaptiveLabelMode, setAdaptiveLabelMode] =
+    useState<PersonLabelMode>("full")
   const profile = BAPE_PROFILES.find(
     (profile) => profile.bapeID === numericBapeID,
   )
@@ -40,15 +43,21 @@ export function PersonProfileButton({
     const firstWidth = 58 + profile.firstName.length * 8
 
     function getAvailableWidth(element: HTMLButtonElement) {
+      const buttonWidth = element.getBoundingClientRect().width
       const parentWidth =
         element.parentElement?.getBoundingClientRect().width ?? 0
-      return Math.max(element.getBoundingClientRect().width, parentWidth)
+
+      if (parentWidth <= buttonWidth + 2) {
+        return fullWidth
+      }
+
+      return Math.max(buttonWidth, parentWidth)
     }
 
     function updateLabelMode(width: number) {
-      if (width >= fullWidth) setLabelMode("full")
-      else if (width >= firstWidth) setLabelMode("first")
-      else setLabelMode("icon")
+      if (width >= fullWidth) setAdaptiveLabelMode("full")
+      else if (width >= firstWidth) setAdaptiveLabelMode("first")
+      else setAdaptiveLabelMode("icon")
     }
 
     updateLabelMode(getAvailableWidth(button))
@@ -62,7 +71,7 @@ export function PersonProfileButton({
     if (button.parentElement) observer.observe(button.parentElement)
 
     return () => observer.disconnect()
-  }, [profile])
+  }, [profile, fixedLabelMode])
 
   if (!profile) {
     return (
@@ -73,6 +82,7 @@ export function PersonProfileButton({
   }
 
   const fullName = `${profile.firstName} ${profile.lastName}`
+  const labelMode = fixedLabelMode ?? adaptiveLabelMode
   const visibleName =
     labelMode === "full"
       ? fullName
