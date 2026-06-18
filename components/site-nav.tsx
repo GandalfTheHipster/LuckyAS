@@ -8,6 +8,7 @@ import { hasEnvVars } from "@/lib/utils";
 
 const navItems = [
   { href: "/", label: "Home" },
+  { href: "/#projects", label: "Projects" },
   { href: "/bape/olympics", label: "Olympics" },
   { href: "/bape/beerpong", label: "Beer Pong" },
 ];
@@ -17,8 +18,8 @@ export function SiteNav() {
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-5">
         <Link href="/" className="group flex items-center gap-3">
-          <span className="grid size-8 place-items-center rounded-full border border-border/70 bg-card text-xs font-semibold shadow-sm transition group-hover:-translate-y-0.5 group-hover:shadow-md">
-            NE
+          <span className="flex h-9 items-center border-l-2 border-foreground pl-3 text-sm font-bold tracking-[0.25em] transition group-hover:pl-4">
+            NE.
           </span>
           <span className="hidden text-sm font-semibold tracking-[0.18em] sm:inline">
             NOAHEDGE
