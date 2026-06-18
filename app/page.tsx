@@ -1,10 +1,8 @@
-import { AuthButton } from "@/components/auth-button"
 import { Hero } from "@/components/hero"
 import { ThemeSwitcher } from "@/components/theme-switcher"
-import Link from "next/link"
-import { Suspense } from "react"
 import { CardImage } from "@/components/ui/image_card"
 import { SocialLinks } from "@/components/landing/SocialLinks"
+import { SiteNav } from "@/components/site-nav"
 
 const projects = [
   {
@@ -37,21 +35,7 @@ export default function Home() {
       </div>
 
       <div className="flex min-h-screen w-full flex-col items-center">
-        <nav className="sticky top-0 z-50 flex h-16 w-full justify-center border-b border-border/60 bg-background/80 backdrop-blur-xl">
-          <div className="flex w-full max-w-6xl items-center justify-between px-5 text-sm">
-            <Link
-              href="/"
-              className="group flex items-center gap-3 font-semibold tracking-[0.2em]"
-            >
-              <span className="h-2.5 w-2.5 rounded-full bg-primary transition group-hover:scale-125" />
-              <span>noahedgedotcom</span>
-            </Link>
-
-            <Suspense>
-              <AuthButton />
-            </Suspense>
-          </div>
-        </nav>
+        <SiteNav />
 
         <div className="flex w-full max-w-6xl flex-1 flex-col items-center px-5 py-12 sm:py-16">
           <section className="flex w-full flex-col items-center gap-8 rounded-[2rem] border border-border/60 bg-card/50 px-6 py-12 text-center shadow-sm backdrop-blur sm:px-10">
@@ -59,7 +43,7 @@ export default function Home() {
             <SocialLinks />
           </section>
 
-          <section className="w-full py-16">
+          <section id="projects" className="w-full py-16">
             <div className="mb-8">
               <p className="text-sm font-medium uppercase tracking-[0.25em] text-muted-foreground">
                 Projects
