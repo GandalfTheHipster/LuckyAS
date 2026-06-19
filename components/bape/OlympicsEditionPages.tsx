@@ -347,18 +347,10 @@ function MedalTableMobileCard({
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-4 gap-2 text-center">
+      <div className="mt-4 grid grid-cols-3 gap-2 text-center">
         <MobileMedalStat label="Gold" value={entry.gold} tone="gold" />
         <MobileMedalStat label="Silver" value={entry.silver} tone="silver" />
         <MobileMedalStat label="Bronze" value={entry.bronze} tone="bronze" />
-        <div className="rounded-xl border bg-background p-3">
-          <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
-            Total
-          </p>
-          <p className="mt-2 text-xl font-bold tabular-nums">
-            {getMedalTotal(entry)}
-          </p>
-        </div>
       </div>
     </div>
   )

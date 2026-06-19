@@ -83,10 +83,6 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
 
   const fullName = `${profile.firstName} ${profile.lastName}`
   const badges = getBadgesForPerson(profile.bapeID)
-  const allTimeRank =
-    [...BAPE_PROFILES]
-      .sort((a, b) => b.pointsAllTime - a.pointsAllTime)
-      .findIndex((person) => person.bapeID === profile.bapeID) + 1
 
   const olympicEditions = olympicsArchive
     .map((olympics) => {
@@ -172,9 +168,6 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
       <StatSection title="Olympics">
         {olympicTeams.length > 0 ? (
           <div className="grid gap-4">
-            <div className="grid gap-3 sm:max-w-xs">
-              <StatTile label="All-Time Rank" value={`#${allTimeRank}`} />
-            </div>
 
             {olympicTeams.map((edition) => (
               <div
@@ -192,9 +185,6 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
                         compact
                       />
                     ) : null}
-                  </div>
-                  <div className="rounded-full border bg-muted/35 px-3 py-1 text-sm font-bold tabular-nums">
-                    {edition.points} pts
                   </div>
                 </div>
 
@@ -315,24 +305,13 @@ function BeerPongClubSection({
     <StatSection title="Beer Pong Club">
       {beerPongTeams.length > 0 ? (
         <div className="grid gap-3">
-          {beerPongTeams.map((team) => {
-            const winRate = team.mp ? Math.round((team.w / team.mp) * 100) : 0
-
-            return (
-              <div key={team.code} className="grid gap-3">
-                <TeamProfileButton
-                  code={team.code}
-                  meta={`${team.pts} pts · ${team.mp} matches · ${team.w}-${team.l}`}
-                />
-                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-                  <StatTile label="Points" value={team.pts} />
-                  <StatTile label="Record" value={`${team.w}-${team.l}`} />
-                  <StatTile label="Win Rate" value={`${winRate}%`} />
-                  <StatTile label="Net Cups" value={team.netCups} />
-                </div>
-              </div>
-            )
-          })}
+          {beerPongTeams.map((team) => (
+            <TeamProfileButton
+              key={team.code}
+              code={team.code}
+              meta={`${team.pts} pts · ${getBeerPongPlace(team.code)} place · ${team.w}-${team.l}`}
+            />
+          ))}
         </div>
       ) : (
         <p className="text-sm text-muted-foreground">
@@ -348,6 +327,35 @@ function getMedalSortValue(medal: string) {
   if (medal === "Silver") return 1
   if (medal === "Bronze") return 2
   return 3
+}
+
+function getBeerPongPlace(teamCode: string) {
+  const standings = [...BEERPONG_TEAMS].sort((a, b) => {
+    if (b.pts !== a.pts) return b.pts - a.pts
+    if (b.w !== a.w) return b.w - a.w
+    return b.netCups - a.netCups
+  })
+  const place =
+    standings.findIndex((standing) => standing.code === teamCode) + 1
+
+  if (place <= 0) return "N/A"
+
+  return getOrdinal(place)
+}
+
+function getOrdinal(value: number) {
+  if (value % 100 >= 11 && value % 100 <= 13) return `${value}th`
+
+  switch (value % 10) {
+    case 1:
+      return `${value}st`
+    case 2:
+      return `${value}nd`
+    case 3:
+      return `${value}rd`
+    default:
+      return `${value}th`
+  }
 }
 
 function formatBadgeDate(dateReceived: string) {

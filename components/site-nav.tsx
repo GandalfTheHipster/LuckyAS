@@ -22,10 +22,8 @@ export function SiteNav() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/60 bg-background/85 backdrop-blur-xl">
       <div className="mx-auto flex min-h-16 w-full max-w-6xl flex-col gap-3 px-5 py-3 md:h-16 md:flex-row md:items-center md:justify-between md:gap-4 md:py-0">
-        <Link href="/" className="group flex items-center gap-3">
-          <span className="flex h-9 items-center border-l-2 border-foreground pl-3 text-sm font-bold tracking-[0.25em] transition group-hover:pl-4 sm:pl-0 sm:group-hover:pl-0">
-            <span className="sm:hidden">NE.</span>
-          </span>
+        <Link href="/" className="group hidden items-center gap-3 md:flex">
+          <span className="flex h-9 items-center border-l-2 border-foreground pl-3 text-sm font-bold tracking-[0.25em] transition group-hover:pl-4 sm:pl-0 sm:group-hover:pl-0" />
           <span className="hidden text-sm font-semibold tracking-[0.18em] sm:inline">
             NOAHEDGE
           </span>
