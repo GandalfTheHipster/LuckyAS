@@ -230,63 +230,137 @@ function OlympicsMedalTable({
   entries: OlympicMedalTableEntry[]
 }) {
   return (
-    <Table className="min-w-[760px]">
-      <TableHeader className="bg-background">
-        <TableRow className="hover:bg-transparent">
-          <TableHead className="w-16 px-4 text-center text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            Rank
-          </TableHead>
-          <TableHead className="min-w-[280px] px-4 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            Team
-          </TableHead>
-          <MedalHead label="Gold" />
-          <MedalHead label="Silver" />
-          <MedalHead label="Bronze" />
-          <TableHead className="px-4 text-right text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            Total
-          </TableHead>
-          <TableHead className="px-4 text-right text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            PTS
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
+    <>
+      <div className="grid gap-3 p-3 md:hidden">
         {entries.map((entry, index) => (
-          <TableRow
+          <MedalTableMobileCard
             key={entry.name}
-            className={cn(
-              "group border-border/80 hover:bg-muted/25",
-              index === 0 && "bg-amber-50/60 hover:bg-amber-50/80 dark:bg-amber-950/15 dark:hover:bg-amber-950/25",
-            )}
-          >
-            <TableCell className="px-4 py-5 text-center text-sm font-semibold text-muted-foreground">
-              {index + 1}
-            </TableCell>
-            <TableCell className="px-4 py-5">
-              <CountryProfileButton
-                country={entry.name}
-                className="border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
-              />
-            </TableCell>
-            <TableCell className="px-4 py-5 text-right">
-              <MedalCount value={entry.gold} tone="gold" />
-            </TableCell>
-            <TableCell className="px-4 py-5 text-right">
-              <MedalCount value={entry.silver} tone="silver" />
-            </TableCell>
-            <TableCell className="px-4 py-5 text-right">
-              <MedalCount value={entry.bronze} tone="bronze" />
-            </TableCell>
-            <TableCell className="px-4 py-5 text-right text-base font-semibold">
-              {getMedalTotal(entry)}
-            </TableCell>
-            <TableCell className="px-4 py-5 text-right text-sm font-semibold text-muted-foreground">
-              {entry.pts}
-            </TableCell>
-          </TableRow>
+            entry={entry}
+            rank={index + 1}
+          />
         ))}
-      </TableBody>
-    </Table>
+      </div>
+
+      <div className="hidden md:block">
+        <Table className="min-w-[760px]">
+          <TableHeader className="bg-background">
+            <TableRow className="hover:bg-transparent">
+              <TableHead className="w-16 px-4 text-center text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Rank
+              </TableHead>
+              <TableHead className="min-w-[280px] px-4 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Team
+              </TableHead>
+              <MedalHead label="Gold" />
+              <MedalHead label="Silver" />
+              <MedalHead label="Bronze" />
+              <TableHead className="px-4 text-right text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                Total
+              </TableHead>
+              <TableHead className="px-4 text-right text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                PTS
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {entries.map((entry, index) => (
+              <TableRow
+                key={entry.name}
+                className={cn(
+                  "group border-border/80 hover:bg-muted/25",
+                  index === 0 && "bg-amber-50/60 hover:bg-amber-50/80 dark:bg-amber-950/15 dark:hover:bg-amber-950/25",
+                )}
+              >
+                <TableCell className="px-4 py-5 text-center text-sm font-semibold text-muted-foreground">
+                  {index + 1}
+                </TableCell>
+                <TableCell className="px-4 py-5">
+                  <CountryProfileButton
+                    country={entry.name}
+                    className="border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                  />
+                </TableCell>
+                <TableCell className="px-4 py-5 text-right">
+                  <MedalCount value={entry.gold} tone="gold" />
+                </TableCell>
+                <TableCell className="px-4 py-5 text-right">
+                  <MedalCount value={entry.silver} tone="silver" />
+                </TableCell>
+                <TableCell className="px-4 py-5 text-right">
+                  <MedalCount value={entry.bronze} tone="bronze" />
+                </TableCell>
+                <TableCell className="px-4 py-5 text-right text-base font-semibold">
+                  {getMedalTotal(entry)}
+                </TableCell>
+                <TableCell className="px-4 py-5 text-right text-sm font-semibold text-muted-foreground">
+                  {entry.pts}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </>
+  )
+}
+
+function MedalTableMobileCard({
+  entry,
+  rank,
+}: {
+  entry: OlympicMedalTableEntry
+  rank: number
+}) {
+  const isLeader = rank === 1
+
+  return (
+    <div
+      className={cn(
+        "rounded-2xl border bg-card p-4 shadow-sm",
+        isLeader && "bg-amber-50/60 dark:bg-amber-950/15",
+      )}
+    >
+      <div className="flex items-start gap-3">
+        <span
+          className={cn(
+            "grid size-9 shrink-0 place-items-center rounded-full border text-sm font-bold tabular-nums",
+            isLeader
+              ? "border-foreground bg-foreground text-background shadow-sm"
+              : "bg-muted/35 text-muted-foreground",
+          )}
+        >
+          {rank}
+        </span>
+
+        <div className="min-w-0 flex-1">
+          <CountryProfileButton
+            country={entry.name}
+            className="border-transparent bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+          />
+        </div>
+
+        <div className="text-right">
+          <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+            PTS
+          </p>
+          <p className="text-2xl font-bold tabular-nums">{entry.pts}</p>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-4 gap-2 text-center">
+        <MobileMedalStat label="Gold" value={entry.gold} tone="gold" />
+        <MobileMedalStat label="Silver" value={entry.silver} tone="silver" />
+        <MobileMedalStat label="Bronze" value={entry.bronze} tone="bronze" />
+        <div className="rounded-xl border bg-background p-3">
+          <p className="text-[10px] font-bold uppercase tracking-wide text-muted-foreground">
+            Total
+          </p>
+          <p className="mt-2 text-xl font-bold tabular-nums">
+            {getMedalTotal(entry)}
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -326,6 +400,34 @@ function MedalCount({
     >
       {value}
     </span>
+  )
+}
+
+function MobileMedalStat({
+  label,
+  value,
+  tone,
+}: {
+  label: string
+  value: number
+  tone: "gold" | "silver" | "bronze"
+}) {
+  return (
+    <div className="rounded-xl border bg-background p-3">
+      <p
+        className={cn(
+          "text-[10px] font-bold uppercase tracking-wide text-muted-foreground",
+          tone === "gold" && "text-[#9a6500] dark:text-[#f8c75c]",
+          tone === "silver" && "text-slate-600 dark:text-[#d8dde3]",
+          tone === "bronze" && "text-[#9a5724] dark:text-[#d98a4b]",
+        )}
+      >
+        {label}
+      </p>
+      <div className="mt-2 flex justify-center">
+        <MedalCount value={value} tone={tone} />
+      </div>
+    </div>
   )
 }
 
