@@ -20,14 +20,11 @@ export default function OlympicsAllTimePage() {
     <BapePageShell>
       <div className="flex flex-col gap-10">
         <BapeHero
-          title="All-Time Leaderboard"
+          title="All-Time Athlete Medal Table"
           variant="wordmark"
         />
 
         <section className="grid gap-6">
-          <BapeSectionHeader
-            title="All-Time Medal Table"
-          />
           <div className="overflow-x-auto">
             <Suspense fallback={null}>
               <AllTimeLeaderboardTable athletes={athletes} />
