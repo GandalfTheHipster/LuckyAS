@@ -9,7 +9,10 @@ const supabasePublishableKey =
 
 export const hasSupabaseEnv = Boolean(supabaseUrl && supabasePublishableKey);
 
-export function getSupabaseEnv() {
+export function getSupabaseEnv(): {
+  supabaseUrl: string;
+  supabasePublishableKey: string;
+} {
   const url = supabaseUrl;
   const publishableKey = supabasePublishableKey;
   const missing: string[] = [];
@@ -30,6 +33,10 @@ export function getSupabaseEnv() {
     throw new Error(
       `Supabase is not configured. Missing: ${missing.join("; ")}.`,
     );
+  }
+
+  if (!url || !publishableKey) {
+    throw new Error("Supabase is not configured.");
   }
 
   return {
