@@ -32,6 +32,24 @@ export const BAPE_BADGES: BapeBadge[] = [
     description: "A badge awarded for winning the 2023 Olympics with Kazakhstan",
     imageUrl: "https://i.postimg.cc/7ZRB8XwZ/kazak.png",
   },
+  {
+    id: "vanburen",
+    name: "Van Buren Boy",
+    description: "A badge awarded for plaing for the Van Buren Boys.",
+    imageUrl: "https://i.postimg.cc/L5RcX26c/vanburen.png",
+  },
+  {
+    id: "l_oftheyear",
+    name: "L of the Year",
+    description: "This badge recognises a nomination for the annual L of the Year award.",
+    imageUrl: "https://i.postimg.cc/hjWphjJF/lossoftheyear.png",
+  },
+  {
+    id: "w_oftheyear",
+    name: "W of the Year",
+    description: "This badge recognises a nomination for the annual W of the Year award.",
+    imageUrl: "https://i.postimg.cc/Ghq7zdfY/bigw.png",
+  },
 ]
 
 // Current BAPE roster reference:
@@ -131,6 +149,51 @@ export const PERSON_BADGE_ASSIGNMENTS: PersonBadgeAssignment[] = [
     personName: "Brady Swift",
     badgeId: "olympicchampion_2023",
     dateReceived: "2023-11-27",
+  },
+  {
+    personName: "Thomas Dempsey",
+    badgeId: "l_oftheyear",
+    dateReceived: "2021-12-30",
+  },
+  {
+    personName: "Priyen Moodley",
+    badgeId: "l_oftheyear",
+    dateReceived: "2022-12-30",
+  },
+  {
+    personName: "Andrew Turnbull",
+    badgeId: "l_oftheyear",
+    dateReceived: "2023-12-30",
+  },
+  {
+    personName: "Lucas Cinquina",
+    badgeId: "l_oftheyear",
+    dateReceived: "2024-12-30",
+  },
+  {
+    personName: "Aleksa Kvrgic",
+    badgeId: "l_oftheyear",
+    dateReceived: "2025-12-30",
+  },
+  {
+    personName: "Lucas Cinquina",
+    badgeId: "w_oftheyear",
+    dateReceived: "2022-12-30",
+  },
+  {
+    personName: "Kyle Taplin",
+    badgeId: "w_oftheyear",
+    dateReceived: "2023-12-30",
+  },
+  {
+    personName: "Aleksa Kvrgic",
+    badgeId: "w_oftheyear",
+    dateReceived: "2024-12-30",
+  },
+  {
+    personName: "Joseph Hart",
+    badgeId: "w_oftheyear",
+    dateReceived: "2025-12-30",
   },
 ]
 

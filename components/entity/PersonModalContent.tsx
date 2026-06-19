@@ -1,4 +1,5 @@
 import Image from "next/image"
+import type { ReactNode } from "react"
 
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
@@ -18,16 +19,42 @@ const olympicsArchive = [OLYMPICS_2021_DATA, OLYMPICS_2023_DATA]
 function StatTile({
   label,
   value,
+  tone,
 }: {
   label: string
   value: string | number
+  tone?: "gold" | "silver" | "bronze"
 }) {
   return (
     <div className="rounded-xl border bg-muted/35 p-3">
-      <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+      <p
+        className={[
+          "text-[11px] font-semibold uppercase tracking-wide text-muted-foreground",
+          tone === "gold" ? "text-[#9a6500] dark:text-[#f8c75c]" : "",
+          tone === "silver" ? "text-slate-600 dark:text-[#d8dde3]" : "",
+          tone === "bronze" ? "text-[#8a4f18] dark:text-[#dfb582]" : "",
+        ].join(" ")}
+      >
         {label}
       </p>
       <p className="mt-1 text-xl font-bold tabular-nums">{value}</p>
+    </div>
+  )
+}
+
+function StatSection({
+  title,
+  children,
+}: {
+  title: string
+  children: ReactNode
+}) {
+  return (
+    <div className="rounded-2xl border bg-muted/30 p-4">
+      <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+        {title}
+      </h3>
+      <div className="mt-3">{children}</div>
     </div>
   )
 }
@@ -56,16 +83,11 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
 
   const fullName = `${profile.firstName} ${profile.lastName}`
   const badges = getBadgesForPerson(profile.bapeID)
-  const medalCount = profile.gold + profile.silver + profile.bronze
   const allTimeRank =
     [...BAPE_PROFILES]
       .sort((a, b) => b.pointsAllTime - a.pointsAllTime)
       .findIndex((person) => person.bapeID === profile.bapeID) + 1
 
-  const primaryTeam = beerPongTeams[0]
-  const winRate = primaryTeam?.mp
-    ? Math.round((primaryTeam.w / primaryTeam.mp) * 100)
-    : 0
   const olympicEditions = olympicsArchive
     .map((olympics) => {
       const medals = olympics.events.flatMap((event) => {
@@ -80,6 +102,7 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
           .map((result) => ({
             event: event.name,
             medal: result.medal,
+            emoji: event.emoji,
           }))
       })
 
@@ -110,8 +133,15 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
       silver,
       bronze,
       points: gold.length * 3 + silver.length * 2 + bronze.length,
+      medals: edition.medals.toSorted(
+        (a, b) => getMedalSortValue(a.medal) - getMedalSortValue(b.medal),
+      ),
     }
   })
+  const hasBeerPongClub = beerPongTeams.length > 0
+  const beerPongSection = (
+    <BeerPongClubSection beerPongTeams={beerPongTeams} />
+  )
 
   return (
     <div className="space-y-6">
@@ -137,84 +167,63 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatTile label="All-Time Rank" value={`#${allTimeRank}`} />
-        <StatTile label="BAPE Points" value={profile.pointsAllTime} />
-        <StatTile label="Medals" value={medalCount} />
-        <StatTile label="Golds" value={profile.gold} />
-        <StatTile label="Silver" value={profile.silver} />
-        <StatTile label="Bronze" value={profile.bronze} />
-        <StatTile label="Beer Pong W%" value={`${winRate}%`} />
-        <StatTile label="Net Cups" value={primaryTeam?.netCups ?? "N/A"} />
-      </div>
+      {hasBeerPongClub ? beerPongSection : null}
 
-      <div className="rounded-2xl border bg-muted/30 p-4">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Beer Pong Club
-        </h3>
-
-        {beerPongTeams.length > 0 ? (
-          <div className="mt-3 grid gap-3">
-            {beerPongTeams.map((team) => (
-              <TeamProfileButton
-                key={team.code}
-                code={team.code}
-                meta={`${team.pts} pts · ${team.mp} matches · ${team.w}-${team.l}`}
-              />
-            ))}
-          </div>
-        ) : (
-          <p className="mt-3 text-sm text-muted-foreground">
-            Not currently listed on a beer pong team.
-          </p>
-        )}
-      </div>
-
-      <div className="rounded-2xl border bg-muted/30 p-4">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Olympics
-        </h3>
-
+      <StatSection title="Olympics">
         {olympicTeams.length > 0 ? (
-          <div className="mt-3 grid gap-3">
+          <div className="grid gap-4">
+            <div className="grid gap-3 sm:max-w-xs">
+              <StatTile label="All-Time Rank" value={`#${allTimeRank}`} />
+            </div>
+
             {olympicTeams.map((edition) => (
               <div
                 key={edition.year}
-                className="rounded-xl border bg-background p-3"
+                className="rounded-xl border bg-background p-4"
               >
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-semibold">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex min-w-0 flex-wrap items-center gap-3">
+                    <p className="text-base font-semibold">
                       {edition.year} Olympics
                     </p>
                     {edition.country ? (
-                      <div className="mt-2">
-                        <CountryProfileButton
-                          country={edition.country.name}
-                          compact
-                        />
-                      </div>
+                      <CountryProfileButton
+                        country={edition.country.name}
+                        compact
+                      />
                     ) : null}
                   </div>
-                  <p className="text-lg font-bold tabular-nums">
+                  <div className="rounded-full border bg-muted/35 px-3 py-1 text-sm font-bold tabular-nums">
                     {edition.points} pts
-                  </p>
+                  </div>
                 </div>
 
-                <div className="mt-3 grid grid-cols-3 gap-2 text-center">
-                  <StatTile label="Gold" value={edition.gold.length} />
-                  <StatTile label="Silver" value={edition.silver.length} />
-                  <StatTile label="Bronze" value={edition.bronze.length} />
+                <div className="mt-4 grid grid-cols-3 gap-2 text-center">
+                  <StatTile
+                    label="Gold"
+                    value={edition.gold.length}
+                    tone="gold"
+                  />
+                  <StatTile
+                    label="Silver"
+                    value={edition.silver.length}
+                    tone="silver"
+                  />
+                  <StatTile
+                    label="Bronze"
+                    value={edition.bronze.length}
+                    tone="bronze"
+                  />
                 </div>
 
-                <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                <div className="mt-4 flex flex-wrap gap-2 text-xs text-muted-foreground">
                   {edition.medals.map((medal) => (
-                    <span
+                    <MedalPill
                       key={`${medal.event}-${medal.medal}`}
-                      className="rounded-full border bg-muted/40 px-2 py-1"
-                    >
-                      {medal.medal}: {medal.event}
-                    </span>
+                      medal={medal.medal}
+                      emoji={medal.emoji}
+                      event={medal.event}
+                    />
                   ))}
                 </div>
               </div>
@@ -225,15 +234,11 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
             No Olympics results recorded yet.
           </p>
         )}
-      </div>
+      </StatSection>
 
-      <div className="rounded-2xl border bg-muted/30 p-4">
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Badges
-        </h3>
-
+      <StatSection title="Badges">
         {badges.length > 0 ? (
-          <div className="mt-3 grid gap-3">
+          <div className="grid gap-3">
             {badges.map((badge) => (
               <div
                 key={`${badge.id}-${badge.dateReceived}`}
@@ -265,9 +270,84 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
             No badges assigned yet.
           </p>
         )}
-      </div>
+      </StatSection>
+
+      {!hasBeerPongClub ? beerPongSection : null}
     </div>
   )
+}
+
+function MedalPill({
+  medal,
+  emoji,
+  event,
+}: {
+  medal: string
+  emoji: string
+  event: string
+}) {
+  return (
+    <span
+      className={[
+        "rounded-full border px-2 py-1 font-semibold",
+        medal === "Gold"
+          ? "border-[#b47a00]/25 bg-[#f8c75c]/25 text-[#7a5100] dark:text-[#f8c75c]"
+          : "",
+        medal === "Silver"
+          ? "border-black/10 bg-[#e5e7e9]/55 text-slate-700 dark:bg-[#d8dde3]/20 dark:text-[#d8dde3]"
+          : "",
+        medal === "Bronze"
+          ? "border-[#7a3f16]/35 bg-[#8a4f18]/25 text-[#8a3f0f] dark:border-[#ff9b54]/30 dark:bg-[#7a3f16]/35 dark:text-[#ff9b54]"
+          : "",
+      ].join(" ")}
+    >
+      {emoji} {event}
+    </span>
+  )
+}
+
+function BeerPongClubSection({
+  beerPongTeams,
+}: {
+  beerPongTeams: typeof BEERPONG_TEAMS
+}) {
+  return (
+    <StatSection title="Beer Pong Club">
+      {beerPongTeams.length > 0 ? (
+        <div className="grid gap-3">
+          {beerPongTeams.map((team) => {
+            const winRate = team.mp ? Math.round((team.w / team.mp) * 100) : 0
+
+            return (
+              <div key={team.code} className="grid gap-3">
+                <TeamProfileButton
+                  code={team.code}
+                  meta={`${team.pts} pts · ${team.mp} matches · ${team.w}-${team.l}`}
+                />
+                <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                  <StatTile label="Points" value={team.pts} />
+                  <StatTile label="Record" value={`${team.w}-${team.l}`} />
+                  <StatTile label="Win Rate" value={`${winRate}%`} />
+                  <StatTile label="Net Cups" value={team.netCups} />
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      ) : (
+        <p className="text-sm text-muted-foreground">
+          Not currently listed on a beer pong team.
+        </p>
+      )}
+    </StatSection>
+  )
+}
+
+function getMedalSortValue(medal: string) {
+  if (medal === "Gold") return 0
+  if (medal === "Silver") return 1
+  if (medal === "Bronze") return 2
+  return 3
 }
 
 function formatBadgeDate(dateReceived: string) {

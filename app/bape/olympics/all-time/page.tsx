@@ -26,8 +26,7 @@ export default function OlympicsAllTimePage() {
 
         <section className="grid gap-6">
           <BapeSectionHeader
-            title="Medal Table"
-            description="Sort by athlete, points, medals, or any podium finish."
+            title="All-Time Medal Table"
           />
           <div className="overflow-x-auto">
             <Suspense fallback={null}>
