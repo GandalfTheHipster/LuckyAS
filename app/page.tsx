@@ -92,10 +92,6 @@ export default function Home() {
               <h2 className="mt-2 text-3xl font-semibold tracking-tight">
                 Current work
               </h2>
-              <p className="mt-3 text-muted-foreground">
-                A mix of personal tools, event archives, and class projects I am
-                actively building or shaping.
-              </p>
             </div>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -128,9 +124,6 @@ export default function Home() {
                         </div>
                       </div>
                     )}
-                    <Badge className="absolute left-4 top-4" variant="secondary">
-                      {project.badge}
-                    </Badge>
                   </div>
                   <CardHeader>
                     <CardTitle>{project.title}</CardTitle>

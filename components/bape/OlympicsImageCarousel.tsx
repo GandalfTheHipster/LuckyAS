@@ -36,13 +36,13 @@ export function OlympicsImageCarousel({
   }
 
   return (
-    <div className="relative aspect-[16/10] min-h-80 overflow-hidden rounded-[1.5rem] border bg-card shadow-sm">
+    <div className="relative h-[360px] overflow-hidden rounded-[1.5rem] border bg-card shadow-sm sm:h-[420px] lg:h-[520px]">
       <Image
         src={activeImage}
         alt={`${title} photo ${index + 1}`}
         fill
         priority={index === 0}
-        className="object-cover"
+        className="object-cover object-center"
         sizes="(max-width: 1024px) 100vw, 760px"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />

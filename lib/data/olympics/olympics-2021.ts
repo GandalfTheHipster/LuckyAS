@@ -5,7 +5,7 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
   date: "2021",
   location: "Rockingham",
   imageOfTheDay: "https://i.postimg.cc/JhNgyCnb/IMG-2088.jpg",
-  images: ["https://i.postimg.cc/JhNgyCnb/IMG-2088.jpg"],
+  images: ["https://i.postimg.cc/JhNgyCnb/IMG-2088.jpg", "https://i.postimg.cc/x8JnMmg6/81A7CEEB-C84F-4834-93CD-4A3788ED1FAD-1-105-c.jpg", "https://i.postimg.cc/qgHVK5z5/FD22329F-10EA-4BF6-B4BA-5C1A196A87B5-1-105-c.jpg", "https://i.postimg.cc/7ZmPvqCm/79012570-13F8-436B-8BBA-9BA27FD6744C-1-105-c.jpg"],
   description:
     "The 2021 Bape Olympics featured FIFA, pool, drinking, basketball, indoor soccer, handball, table tennis, chess, and trivia events.",
 
