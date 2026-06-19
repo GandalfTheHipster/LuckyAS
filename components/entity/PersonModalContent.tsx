@@ -3,6 +3,7 @@ import Image from "next/image"
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
 import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
+import { getBadgesForPerson } from "@/lib/data/badges"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 import { OLYMPICS_2021_DATA } from "@/lib/data/olympics/olympics-2021"
 import { OLYMPICS_2023_DATA } from "@/lib/data/olympics/olympics-2023"
@@ -54,6 +55,7 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
   }
 
   const fullName = `${profile.firstName} ${profile.lastName}`
+  const badges = getBadgesForPerson(profile.bapeID)
   const medalCount = profile.gold + profile.silver + profile.bronze
   const allTimeRank =
     [...BAPE_PROFILES]
@@ -224,6 +226,58 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
           </p>
         )}
       </div>
+
+      <div className="rounded-2xl border bg-muted/30 p-4">
+        <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Badges
+        </h3>
+
+        {badges.length > 0 ? (
+          <div className="mt-3 grid gap-3">
+            {badges.map((badge) => (
+              <div
+                key={`${badge.id}-${badge.dateReceived}`}
+                className="flex gap-3 rounded-xl border bg-background p-3"
+              >
+                <Image
+                  src={badge.imageUrl}
+                  alt={badge.name}
+                  width={56}
+                  height={56}
+                  className="h-14 w-14 shrink-0 object-contain"
+                />
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                    <p className="font-semibold">{badge.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {formatBadgeDate(badge.dateReceived)}
+                    </p>
+                  </div>
+                  <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                    {badge.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-3 text-sm text-muted-foreground">
+            No badges assigned yet.
+          </p>
+        )}
+      </div>
     </div>
   )
+}
+
+function formatBadgeDate(dateReceived: string) {
+  const date = new Date(`${dateReceived}T00:00:00`)
+
+  if (Number.isNaN(date.getTime())) return dateReceived
+
+  return new Intl.DateTimeFormat("en-AU", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date)
 }
