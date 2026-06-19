@@ -1,19 +1,23 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { hasEnvVars } from "@/lib/utils";
+import { getSupabaseEnv, hasSupabaseEnv } from "@/lib/supabase/env";
+
+const SESSION_CHECK_TIMEOUT_MS = 4_000;
 
 export async function updateSession(request: NextRequest) {
   let supabaseResponse = NextResponse.next({
     request,
   });
 
-  if (!hasEnvVars) {
+  if (!hasSupabaseEnv) {
     return supabaseResponse;
   }
 
+  const { supabaseUrl, supabasePublishableKey } = getSupabaseEnv();
+
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_NOAHEDGEDOTCOM_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_NOAHEDGEDOTCOM_SUPABASE_PUBLISHABLE_KEY!,
+    supabaseUrl,
+    supabasePublishableKey,
     {
       cookies: {
         getAll() {
@@ -34,7 +38,12 @@ export async function updateSession(request: NextRequest) {
     },
   );
 
-  const { data } = await supabase.auth.getClaims();
+  const { data } = await Promise.race([
+    supabase.auth.getClaims(),
+    new Promise<{ data: null }>((resolve) =>
+      setTimeout(() => resolve({ data: null }), SESSION_CHECK_TIMEOUT_MS),
+    ),
+  ]);
 
   if (!data?.claims) {
     const url = request.nextUrl.clone();
