@@ -85,7 +85,7 @@ export function OlympicsMedalTablePage({ data }: OlympicsEditionPageProps) {
         <BapePanel className="overflow-hidden">
           <div className="border-b bg-muted/20 px-4 py-3 sm:px-5">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-              {data.date} standings
+              {data.date} MEDAL TABLE
             </p>
           </div>
           <OlympicsMedalTable entries={data.medalTable} />
