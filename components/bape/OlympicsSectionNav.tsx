@@ -14,7 +14,7 @@ export function OlympicsSectionNav({ year }: OlympicsSectionNavProps) {
   const baseHref = `/bape/olympics/${year}`
   const items = [
     { href: baseHref, label: "Overview" },
-    { href: `${baseHref}/standings`, label: "Standings" },
+    { href: `${baseHref}/medaltable`, label: "Medal Table" },
     { href: `${baseHref}/events`, label: "Events" },
   ]
 

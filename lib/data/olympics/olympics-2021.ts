@@ -13,7 +13,7 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
   mvp: "Jack Coleman",
   winner: "Cote d'Ivoire",
 
-  standings: [
+  medalTable: [
     {
       name: "Cote d'Ivoire",
       gold: 12,

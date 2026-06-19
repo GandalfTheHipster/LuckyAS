@@ -1,7 +1,6 @@
 import Image from "next/image"
 import Link from "next/link"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -19,7 +18,7 @@ const projects = [
     imageSrc: "https://i.postimg.cc/wB8jxcqN/IMG-0666.jpg",
     title: "Bape Olympics",
     description:
-      "A living archive and event hub for Bape's annual Olympics, with yearly results, events, teams, and all-time standings.",
+      "A living archive and event hub for Bape's annual Olympics, with yearly results, events, teams, and all-time medal tables.",
     badge: "Featured",
     buttonText: "View Event",
     href: "/bape/olympics",

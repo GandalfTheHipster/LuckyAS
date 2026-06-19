@@ -50,37 +50,59 @@ export function CountryModalContent({ countryId }: CountryModalContentProps) {
     profile.country.includes(country.flag),
   )
 
-  const standings = olympicsArchive
+  const medalTableEntries = olympicsArchive
     .map((olympics) => {
-      const standing = olympics.standings.find(
-        (standing) => standing.name === country.name,
+      const medalTableEntry = olympics.medalTable.find(
+        (entry) => entry.name === country.name,
       )
 
-      if (!standing) return null
+      if (!medalTableEntry) return null
 
       return {
+        title: olympics.title,
         year: olympics.date,
-        standing,
+        rank:
+          olympics.medalTable.findIndex((entry) => entry.name === country.name) +
+          1,
+        medalTableEntry,
       }
     })
     .filter((entry): entry is NonNullable<typeof entry> => entry !== null)
 
-  const eventsWon = olympicsArchive.flatMap((olympics) =>
-    olympics.events
-      .filter((event) => event.winner === country.name)
+  const memberNames = new Set(
+    members.map((member) => `${member.firstName} ${member.lastName}`),
+  )
+
+  const eventsWon = olympicsArchive.flatMap((olympics) => {
+    const hasTeamEntry = olympics.medalTable.some(
+      (entry) => entry.name === country.name,
+    )
+
+    if (!hasTeamEntry) return []
+
+    return olympics.events
+      .filter(
+        (event) =>
+          event.winner === country.name ||
+          event.gold?.some((name) => memberNames.has(name)),
+      )
       .map((event) => ({
         year: olympics.date,
         name: event.name,
+        emoji: event.emoji,
         gold: event.gold ?? [],
-      })),
-  )
+      }))
+  })
 
-  const totals = standings.reduce(
+  const olympicsTitle = medalTableEntries[0]?.title ?? "Olympics"
+  const finalRank = medalTableEntries[0]?.rank
+
+  const totals = medalTableEntries.reduce(
     (total, entry) => ({
-      gold: total.gold + entry.standing.gold,
-      silver: total.silver + entry.standing.silver,
-      bronze: total.bronze + entry.standing.bronze,
-      pts: total.pts + entry.standing.pts,
+      gold: total.gold + entry.medalTableEntry.gold,
+      silver: total.silver + entry.medalTableEntry.silver,
+      bronze: total.bronze + entry.medalTableEntry.bronze,
+      pts: total.pts + entry.medalTableEntry.pts,
     }),
     { gold: 0, silver: 0, bronze: 0, pts: 0 },
   )
@@ -100,13 +122,16 @@ export function CountryModalContent({ countryId }: CountryModalContentProps) {
             {country.name}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {members.length} listed members · {eventsWon.length} event wins
+            {olympicsTitle} · {eventsWon.length} event wins
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <StatTile label="Points" value={totals.pts} />
+        <StatTile
+          label="Final Rank"
+          value={finalRank ? formatRank(finalRank) : "TBA"}
+        />
         <StatTile label="Gold" value={totals.gold} />
         <StatTile label="Silver" value={totals.silver} />
         <StatTile label="Bronze" value={totals.bronze} />
@@ -139,7 +164,10 @@ export function CountryModalContent({ countryId }: CountryModalContentProps) {
                 className="rounded-xl border bg-background px-3 py-2"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className="font-medium">{event.name}</p>
+                  <p className="font-medium">
+                    <span className="mr-2">{event.emoji}</span>
+                    {event.name}
+                  </p>
                   <p className="text-xs text-muted-foreground">{event.year}</p>
                 </div>
                 {event.gold.length > 0 ? (
@@ -158,4 +186,19 @@ export function CountryModalContent({ countryId }: CountryModalContentProps) {
       </div>
     </div>
   )
+}
+
+function formatRank(rank: number) {
+  const suffix =
+    rank % 100 >= 11 && rank % 100 <= 13
+      ? "th"
+      : rank % 10 === 1
+        ? "st"
+        : rank % 10 === 2
+          ? "nd"
+          : rank % 10 === 3
+            ? "rd"
+            : "th"
+
+  return `${rank}${suffix}`
 }

@@ -7,25 +7,26 @@ import {
   BapePanel,
   BapeSectionHeader,
 } from "@/components/bape/BapePageChrome"
-import { BapeTable } from "@/components/bape/bape_table"
 import { OlympicsEventCard } from "@/components/bape/OlympicsEventCard"
 import { OlympicsImageCarousel } from "@/components/bape/OlympicsImageCarousel"
 import { OlympicsSectionNav } from "@/components/bape/OlympicsSectionNav"
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 import { PersonProfileButtonByName } from "@/components/entity/PersonProfileButton"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { getOlympicCountry } from "@/lib/data/olympics/countries"
 import type {
   OlympicEvent,
+  OlympicMedalTableEntry,
   OlympicPageData,
 } from "@/lib/data/olympics/olympics-template"
-
-const standingColumns = [
-  { key: "name", label: "Team", align: "left", type: "country" },
-  { key: "pts", label: "PTS", align: "right" },
-  { key: "gold", label: "Gold", align: "right" },
-  { key: "silver", label: "Silver", align: "right" },
-  { key: "bronze", label: "Bronze", align: "right" },
-] as const
+import { cn } from "@/lib/utils"
 
 const OLYMPICS_2023_LOGO =
   "https://i.postimg.cc/15jcNzGy/Bape-Olymics2023Logo.png"
@@ -37,7 +38,7 @@ type OlympicsEditionPageProps = {
 }
 
 export function OlympicsOverviewPage({ data }: OlympicsEditionPageProps) {
-  const champion = data.winner ?? data.standings[0]?.name
+  const champion = data.winner ?? data.medalTable[0]?.name
 
   return (
     <OlympicsPageFrame
@@ -69,7 +70,7 @@ export function OlympicsOverviewPage({ data }: OlympicsEditionPageProps) {
   )
 }
 
-export function OlympicsStandingsPage({ data }: OlympicsEditionPageProps) {
+export function OlympicsMedalTablePage({ data }: OlympicsEditionPageProps) {
   return (
     <OlympicsPageFrame
       data={data}
@@ -77,13 +78,17 @@ export function OlympicsStandingsPage({ data }: OlympicsEditionPageProps) {
     >
       <section className="flex flex-col gap-5">
         <BapeSectionHeader
-          title="Standings"
+          title="Medal Table"
           description="Ranked by total points, then medal count."
         />
-        <BapePanel className="overflow-hidden p-3 sm:p-4">
-          <div className="overflow-x-auto">
-            <BapeTable columns={standingColumns} athletes={data.standings} />
+
+        <BapePanel className="overflow-hidden">
+          <div className="border-b bg-muted/20 px-4 py-3 sm:px-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+              {data.date} standings
+            </p>
           </div>
+          <OlympicsMedalTable entries={data.medalTable} />
         </BapePanel>
       </section>
     </OlympicsPageFrame>
@@ -217,6 +222,115 @@ function OlympicEntityBadge({ value }: { value: string }) {
   }
 
   return <PersonProfileButtonByName name={value} compact />
+}
+
+function OlympicsMedalTable({
+  entries,
+}: {
+  entries: OlympicMedalTableEntry[]
+}) {
+  return (
+    <Table className="min-w-[760px]">
+      <TableHeader className="bg-background">
+        <TableRow className="hover:bg-transparent">
+          <TableHead className="w-16 px-4 text-center text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            Rank
+          </TableHead>
+          <TableHead className="min-w-[280px] px-4 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            Team
+          </TableHead>
+          <MedalHead label="Gold" />
+          <MedalHead label="Silver" />
+          <MedalHead label="Bronze" />
+          <TableHead className="px-4 text-right text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            Total
+          </TableHead>
+          <TableHead className="px-4 text-right text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            PTS
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {entries.map((entry, index) => (
+          <TableRow
+            key={entry.name}
+            className={cn(
+              "group border-border/80 hover:bg-muted/25",
+              index === 0 && "bg-amber-50/60 hover:bg-amber-50/80 dark:bg-amber-950/15 dark:hover:bg-amber-950/25",
+            )}
+          >
+            <TableCell className="px-4 py-5 text-center text-sm font-semibold text-muted-foreground">
+              {index + 1}
+            </TableCell>
+            <TableCell className="px-4 py-5">
+              <CountryProfileButton
+                country={entry.name}
+                className="border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+              />
+            </TableCell>
+            <TableCell className="px-4 py-5 text-right">
+              <MedalCount value={entry.gold} tone="gold" />
+            </TableCell>
+            <TableCell className="px-4 py-5 text-right">
+              <MedalCount value={entry.silver} tone="silver" />
+            </TableCell>
+            <TableCell className="px-4 py-5 text-right">
+              <MedalCount value={entry.bronze} tone="bronze" />
+            </TableCell>
+            <TableCell className="px-4 py-5 text-right text-base font-semibold">
+              {getMedalTotal(entry)}
+            </TableCell>
+            <TableCell className="px-4 py-5 text-right text-sm font-semibold text-muted-foreground">
+              {entry.pts}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+
+function MedalHead({ label }: { label: string }) {
+  return (
+    <TableHead className="px-4 text-right text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+      <span className="inline-flex items-center justify-end gap-2">
+        <span
+          className={cn(
+            "size-2.5 rounded-full",
+            label === "Gold" && "bg-[#f8c75c]",
+            label === "Silver" && "bg-[#d9dde1]",
+            label === "Bronze" && "bg-[#d9a66f]",
+          )}
+        />
+        {label}
+      </span>
+    </TableHead>
+  )
+}
+
+function MedalCount({
+  value,
+  tone,
+}: {
+  value: number
+  tone: "gold" | "silver" | "bronze"
+}) {
+  return (
+    <span
+      className={cn(
+        "inline-flex size-11 items-center justify-center rounded-full text-base font-bold text-neutral-950 shadow-sm ring-1 ring-inset",
+        tone === "gold" && "bg-[#f8c75c] ring-[#b47a00]/35",
+        tone === "silver" && "bg-[#e5e7e9] ring-black/10 dark:bg-[#d8dde3]",
+        tone === "bronze" && "bg-[#dfb582] ring-[#8a4f18]/30",
+      )}
+    >
+      {value}
+    </span>
+  )
+}
+
+function getMedalTotal(entry: OlympicMedalTableEntry) {
+  return entry.gold + entry.silver + entry.bronze
 }
 
 function getOlympicImages(data: OlympicPageData) {

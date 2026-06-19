@@ -12,7 +12,7 @@ export const OLYMPICS_2026_DATA: OlympicPageData = {
   mvp: "-",
   winner: "-",
 
-  standings: [
+  medalTable: [
     {
       name: "-",
       gold: 0,

@@ -13,7 +13,7 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
   mvp: "Brady Swift",
   winner: "Kazakhstan",
 
-  standings: [
+  medalTable: [
     {
       name: "Kazakhstan",
       gold: 7,

@@ -1,4 +1,4 @@
-export type OlympicStanding = {
+export type OlympicMedalTableEntry = {
   name: string
   logo?: string
   gold: number
@@ -29,6 +29,6 @@ export type OlympicPageData = {
   host?: string
   mvp?: string
   winner?: string
-  standings: OlympicStanding[]
+  medalTable: OlympicMedalTableEntry[]
   events: OlympicEvent[]
 }
