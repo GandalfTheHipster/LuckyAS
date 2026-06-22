@@ -108,7 +108,7 @@ function BracketMatch({
 function MobileTeamPill({ team, isBye = false }: { team?: SeededTeam; isBye?: boolean }) {
   if (!team) {
     return (
-      <div className="flex min-h-11 items-center rounded-xl border border-dashed bg-muted/25 px-3">
+      <div className="flex min-h-11 min-w-0 items-center overflow-hidden rounded-xl border border-dashed bg-muted/25 px-3">
         <p className="truncate text-sm font-medium text-muted-foreground">TBD</p>
       </div>
     )
@@ -118,8 +118,8 @@ function MobileTeamPill({ team, isBye = false }: { team?: SeededTeam; isBye?: bo
     <div
       className={
         isBye
-          ? "flex min-h-11 items-center gap-2 rounded-xl border border-foreground/20 bg-foreground/[0.04] px-2.5"
-          : "flex min-h-11 items-center gap-2 rounded-xl border bg-background px-2.5"
+          ? "flex min-h-11 min-w-0 items-center gap-2 overflow-hidden rounded-xl border border-foreground/20 bg-foreground/[0.04] px-2.5"
+          : "flex min-h-11 min-w-0 items-center gap-2 overflow-hidden rounded-xl border bg-background px-2.5"
       }
     >
       <span
@@ -144,7 +144,7 @@ function MobileTeamPill({ team, isBye = false }: { team?: SeededTeam; isBye?: bo
         className="min-w-0 flex-1 truncate text-sm font-semibold hover:underline"
       />
       {isBye ? (
-        <span className="ml-auto rounded-full border bg-background px-1.5 py-0.5 text-[9px] font-bold uppercase">
+        <span className="ml-auto shrink-0 rounded-full border bg-background px-1.5 py-0.5 text-[9px] font-bold uppercase">
           Bye
         </span>
       ) : null}
@@ -162,19 +162,19 @@ function MobileMatchCard({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-2xl border bg-card p-3 shadow-sm">
+    <div className="min-w-0 overflow-hidden rounded-2xl border bg-card p-3 shadow-sm">
       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
         {label}
       </p>
-      <p className="mt-1 text-sm font-semibold">{title}</p>
-      <div className="mt-3 grid gap-2">{children}</div>
+      <p className="mt-1 truncate text-sm font-semibold">{title}</p>
+      <div className="mt-3 grid min-w-0 gap-2">{children}</div>
     </div>
   )
 }
 
 function MobilePlaceholderPill({ label }: { label: string }) {
   return (
-    <div className="flex min-h-10 items-center justify-center rounded-xl border border-dashed bg-muted/25 px-3 text-center text-xs font-semibold text-muted-foreground">
+    <div className="flex min-h-10 min-w-0 items-center justify-center overflow-hidden rounded-xl border border-dashed bg-muted/25 px-3 text-center text-xs font-semibold text-muted-foreground">
       {label}
     </div>
   )
@@ -194,7 +194,7 @@ export function BeerPongPlayoffBracket() {
     <section className="flex flex-col gap-4">
       <div className="rounded-[1.5rem] border bg-card p-3 shadow-sm md:hidden">
         <div className="grid gap-3">
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-2">
             <MobileMatchCard label="QF 1" title="3 v 6">
               <MobileTeamPill team={seed3} />
               <MobileTeamPill team={seed6} />
@@ -206,7 +206,7 @@ export function BeerPongPlayoffBracket() {
             </MobileMatchCard>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-2">
             <MobileMatchCard label="SF 2" title="Seed 2 awaits QF1">
               <MobileTeamPill team={seed2} isBye />
               <MobilePlaceholderPill label="Winner QF1" />
@@ -219,7 +219,7 @@ export function BeerPongPlayoffBracket() {
           </div>
 
           <MobileMatchCard label="Grand Final" title="Championship Match">
-            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+            <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2">
               <MobilePlaceholderPill label="Winner SF1" />
               <span className="text-xs font-bold text-muted-foreground">v</span>
               <MobilePlaceholderPill label="Winner SF2" />
