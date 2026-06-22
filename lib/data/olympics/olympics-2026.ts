@@ -4,7 +4,7 @@ export const OLYMPICS_2026_DATA: OlympicPageData = {
   title: "Bape Olympics 2026",
   date: "2026",
   location: "Mundaring",
-  imageOfTheDay: "https://i.postimg.cc/rFdckRbF/f6e6c8d3-877f-4623-b897-399d55eeac75.png",
+  imageOfTheDay: "https://i.postimg.cc/DySHpqn9/IMG-3906.jpg",
   description: "The 2026 Bape Olympics is being prepared.",
 
   host: "Mundaring",
