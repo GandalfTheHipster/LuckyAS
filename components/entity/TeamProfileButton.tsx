@@ -99,7 +99,7 @@ export function TeamProfileButton({
       type="team"
       id={code}
       className={cn(
-        "group flex min-w-0 items-center gap-3 rounded-xl border bg-background px-3 py-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-muted/40 hover:no-underline hover:shadow-md",
+        "group flex max-w-full min-w-0 items-center gap-3 overflow-hidden rounded-xl border bg-background px-3 py-2 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-muted/40 hover:no-underline hover:shadow-md",
         compact && "gap-2 rounded-lg border-0 bg-transparent p-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none",
         align === "right" && "flex-row-reverse text-right",
         labelMode === "icon" && "justify-center",
@@ -118,14 +118,14 @@ export function TeamProfileButton({
       />
 
       {visibleName ? (
-        <span className="min-w-0">
+        <span className="min-w-0 flex-1 overflow-hidden">
           <span
             className={cn(
               "flex min-w-0 items-center gap-2",
               align === "right" && "flex-row-reverse",
             )}
           >
-            <span className="whitespace-nowrap text-sm font-semibold text-foreground group-hover:underline">
+            <span className="min-w-0 truncate text-sm font-semibold text-foreground group-hover:underline">
               {visibleName}
             </span>
             {badge && labelMode === "full" ? (
@@ -135,7 +135,7 @@ export function TeamProfileButton({
             ) : null}
           </span>
           {showMeta && labelMode !== "icon" ? (
-            <span className="mt-0.5 block whitespace-nowrap text-xs text-muted-foreground">
+            <span className="mt-0.5 block truncate text-xs text-muted-foreground">
               {meta ?? `${team.shortName} · ${team.code}`}
             </span>
           ) : null}

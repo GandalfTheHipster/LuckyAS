@@ -141,7 +141,7 @@ function MobileTeamPill({ team, isBye = false }: { team?: SeededTeam; isBye?: bo
       <TeamName
         code={team.code}
         fallback={team.shortName}
-        className="min-w-0 truncate text-sm font-semibold hover:underline"
+        className="min-w-0 flex-1 truncate text-sm font-semibold hover:underline"
       />
       {isBye ? (
         <span className="ml-auto rounded-full border bg-background px-1.5 py-0.5 text-[9px] font-bold uppercase">

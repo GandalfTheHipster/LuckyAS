@@ -26,18 +26,18 @@ export function CountryProfileButton({
       type="country"
       id={label}
       className={cn(
-        "group inline-flex min-w-0 items-center gap-2 rounded-full border bg-background px-3 py-1.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-muted/40 hover:no-underline hover:shadow-md",
+        "group inline-flex max-w-full min-w-0 items-center gap-2 overflow-hidden rounded-full border bg-background px-3 py-1.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:bg-muted/40 hover:no-underline hover:shadow-md",
         compact && "px-2 py-1",
         className,
       )}
     >
       {flag ? <span className="shrink-0 text-lg">{flag}</span> : null}
-      <span className="min-w-0">
-        <span className="block whitespace-nowrap text-sm font-semibold text-foreground group-hover:underline">
+      <span className="min-w-0 flex-1 overflow-hidden">
+        <span className="block truncate text-sm font-semibold text-foreground group-hover:underline">
           {label}
         </span>
         {meta ? (
-          <span className="block whitespace-nowrap text-xs text-muted-foreground">
+          <span className="block truncate text-xs text-muted-foreground">
             {meta}
           </span>
         ) : null}
