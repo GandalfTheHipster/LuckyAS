@@ -95,7 +95,7 @@ export default function OlympicsHubPage() {
             <div className="grid gap-0 md:grid-cols-[1fr_1.1fr]">
               <div className="relative min-h-72">
                 <Image
-                  src={OLYMPICS_2023_DATA.imageOfTheDay}
+                  src="https://i.postimg.cc/NFDtzH92/hardpic.png"
                   alt="Bape Olympics"
                   fill
                   className="object-cover"
