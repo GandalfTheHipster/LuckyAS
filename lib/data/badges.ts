@@ -17,43 +17,50 @@ export const BAPE_BADGES: BapeBadge[] = [
   {
     id: "pistolshrimp",
     name: "Pistolshrimp",
-    description: "A badge awarded for playing for the Pistolshrimps mixed basketball team.",
+    description:
+      "Awarded for representing the Pistolshrimps mixed basketball team.",
     imageUrl: "https://i.postimg.cc/Pq8StZ5z/pistolshrimp.png",
   },
   {
     id: "dinoco",
     name: "Team Dinoco",
-    description: "A badge awarded for playing for Team Dinoco mens basketball team.",
+    description:
+      "Awarded for representing the Team Dinoco men's basketball team.",
     imageUrl: "https://i.postimg.cc/HxpLNmsm/dinocobadge.png",
   },
   {
     id: "olympicchampion_2021",
     name: "Ivory March",
-    description: "A badge awarded for winning the 2021 Olympics with Cote D'Ivoire",
+    description:
+      "Awarded for winning the 2021 Bape Olympics with Cote d'Ivoire.",
     imageUrl: "https://i.postimg.cc/htvC5NFY/ivorycoastchamps.png",
   },
   {
     id: "olympicchampion_2023",
     name: "Very Nice!",
-    description: "A badge awarded for winning the 2023 Olympics with Kazakhstan",
+    description:
+      "Awarded for winning the 2023 Bape Olympics with Kazakhstan.",
     imageUrl: "https://i.postimg.cc/7ZRB8XwZ/kazak.png",
   },
   {
     id: "vanburen",
     name: "Van Buren Boy",
-    description: "A badge awarded for playing for the Van Buren Boys indoor soccer team.",
+    description:
+      "Awarded for representing the Van Buren Boys indoor soccer team.",
     imageUrl: "https://i.postimg.cc/L5RcX26c/vanburen.png",
   },
   {
     id: "l_oftheyear",
     name: "L of the Year",
-    description: "This badge recognises a nomination for the annual L of the Year award.",
+    description:
+      "Recognises a nomination for the annual L of the Year award.",
     imageUrl: "https://i.postimg.cc/hjWphjJF/lossoftheyear.png",
   },
   {
     id: "w_oftheyear",
     name: "W of the Year",
-    description: "This badge recognises a nomination for the annual W of the Year award.",
+    description:
+      "Recognises a nomination for the annual W of the Year award.",
     imageUrl: "https://i.postimg.cc/Ghq7zdfY/bigw.png",
   },
 ]
