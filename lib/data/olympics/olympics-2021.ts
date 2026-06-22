@@ -12,6 +12,11 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
   host: "12 Seagate St, Safety Bay",
   mvp: "Jack Coleman",
   winner: "Cote d'Ivoire",
+  captains: {
+    "Cote d'Ivoire": "Andrew Turnbull",
+    Yugoslavia: "Aleksa Kvrgic",
+    Germany: "Noah Edge",
+  },
 
   medalTable: [
     {

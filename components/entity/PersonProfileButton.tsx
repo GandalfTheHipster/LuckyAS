@@ -4,7 +4,10 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 
 import { EntityTrigger } from "@/components/entity/EntityTrigger"
-import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
+import {
+  BAPE_PROFILES,
+  getBapeProfileAvatar,
+} from "@/lib/data/BapeProfiles"
 import { cn } from "@/lib/utils"
 
 type PersonProfileButtonProps = {
@@ -104,7 +107,7 @@ export function PersonProfileButton({
     >
       <span className="relative shrink-0">
         <Image
-          src={profile.avatarUrl}
+          src={getBapeProfileAvatar(profile)}
           alt={fullName}
           width={compact ? 28 : 34}
           height={compact ? 28 : 34}
@@ -169,5 +172,90 @@ export function PersonProfileButtonByName({
       meta={meta}
       teamFlag={teamFlag}
     />
+  )
+}
+
+export function PersonProfileCardByName({
+  name,
+  className,
+  size = "lg",
+  subtitles,
+}: {
+  name: string
+  className?: string
+  size?: "sm" | "lg"
+  subtitles?: Array<{
+    label: string
+    tone?: "default" | "gold"
+  }>
+}) {
+  const profile = BAPE_PROFILES.find(
+    (profile) => `${profile.firstName} ${profile.lastName}` === name,
+  )
+
+  if (!profile) {
+    return (
+      <span className={cn("text-sm font-medium text-foreground", className)}>
+        {name}
+      </span>
+    )
+  }
+
+  const fullName = `${profile.firstName} ${profile.lastName}`
+  const isLarge = size === "lg"
+
+  return (
+    <EntityTrigger
+      type="person"
+      id={String(profile.bapeID)}
+      className={cn(
+        "group grid overflow-hidden rounded-2xl border bg-background text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:no-underline hover:shadow-md",
+        isLarge ? "w-full p-4" : "w-28 p-2.5",
+        className,
+      )}
+    >
+      <span
+        className={cn(
+          "relative overflow-hidden rounded-xl bg-muted",
+          isLarge ? "aspect-square" : "aspect-square",
+        )}
+      >
+        <Image
+          src={getBapeProfileAvatar(profile)}
+          alt={fullName}
+          fill
+          sizes={isLarge ? "320px" : "112px"}
+          className="object-cover transition duration-300 group-hover:scale-105"
+        />
+      </span>
+      <span className={cn("min-w-0", isLarge ? "mt-4" : "mt-2")}>
+        <span
+          className={cn(
+            "block truncate font-semibold leading-tight text-foreground group-hover:underline",
+            isLarge ? "text-xl" : "text-[13px]",
+          )}
+        >
+          {fullName}
+        </span>
+        {subtitles?.length ? (
+          <span className="mt-1 grid gap-0.5">
+            {subtitles.map((subtitle) => (
+              <span
+                key={`${subtitle.label}-${subtitle.tone ?? "default"}`}
+                className={cn(
+                  "block truncate text-xs font-semibold uppercase tracking-wide",
+                  !isLarge && "text-[10px]",
+                  subtitle.tone === "gold"
+                    ? "text-[#f5c451]"
+                    : "text-muted-foreground",
+                )}
+              >
+                {subtitle.label}
+              </span>
+            ))}
+          </span>
+        ) : null}
+      </span>
+    </EntityTrigger>
   )
 }

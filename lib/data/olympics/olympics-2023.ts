@@ -12,6 +12,11 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
   host: "Comfort Inn & Suites Goodearth Perth",
   mvp: "Brady Swift",
   winner: "Kazakhstan",
+  captains: {
+    Kazakhstan: "Aleksa Kvrgic",
+    Norway: "Thomas Dempsey",
+    "South Korea": "Joseph Hart",
+  },
 
   medalTable: [
     {

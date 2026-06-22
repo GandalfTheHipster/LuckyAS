@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 export function BapePageShell({ children }: { children: ReactNode }) {
   return (
     <main className="flex w-full flex-1 flex-col items-center">
-      <div className="w-full max-w-7xl px-4 py-8 sm:px-5 sm:py-10">
+      <div className="w-full max-w-7xl px-4 py-4 sm:px-5 sm:py-6">
         {children}
       </div>
     </main>
@@ -55,7 +55,7 @@ export function BapeHero({
       <div
         className={cn(
           isWordmark
-            ? "relative flex flex-wrap items-center gap-4 p-0 sm:gap-5"
+            ? "relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 p-0 sm:gap-5"
             : "relative grid gap-8 p-6 sm:p-8 lg:p-10",
           hasAside &&
             !isWordmark &&
@@ -74,7 +74,7 @@ export function BapeHero({
           <h1
             className={cn(
               "max-w-4xl text-4xl font-semibold tracking-tight text-foreground sm:text-5xl lg:text-6xl",
-              isWordmark && "text-3xl sm:text-4xl lg:text-5xl",
+              isWordmark && "text-3xl leading-tight sm:text-4xl lg:text-5xl",
             )}
           >
             {title}
@@ -89,7 +89,7 @@ export function BapeHero({
           <div
             className={cn(
               "relative flex justify-center lg:justify-end",
-              isWordmark && "items-center justify-start lg:justify-start",
+              isWordmark && "items-center justify-end",
             )}
           >
             {!isWordmark ? (

@@ -17,8 +17,14 @@ export const BAPE_BADGES: BapeBadge[] = [
   {
     id: "pistolshrimp",
     name: "Pistolshrimp",
-    description: "A badge awarded for playing for the Pistolshrimps.",
+    description: "A badge awarded for playing for the Pistolshrimps mixed basketball team.",
     imageUrl: "https://i.postimg.cc/Pq8StZ5z/pistolshrimp.png",
+  },
+  {
+    id: "dinoco",
+    name: "Team Dinoco",
+    description: "A badge awarded for playing for Team Dinoco mens basketball team.",
+    imageUrl: "https://i.postimg.cc/HxpLNmsm/dinocobadge.png",
   },
   {
     id: "olympicchampion_2021",
@@ -35,7 +41,7 @@ export const BAPE_BADGES: BapeBadge[] = [
   {
     id: "vanburen",
     name: "Van Buren Boy",
-    description: "A badge awarded for plaing for the Van Buren Boys.",
+    description: "A badge awarded for playing for the Van Buren Boys indoor soccer team.",
     imageUrl: "https://i.postimg.cc/L5RcX26c/vanburen.png",
   },
   {
@@ -109,6 +115,41 @@ export const PERSON_BADGE_ASSIGNMENTS: PersonBadgeAssignment[] = [
     personName: "Thomas Dempsey",
     badgeId: "pistolshrimp",
     dateReceived: "2021-10-19",
+  },
+  {
+    personName: "Noah Edge",
+    badgeId: "dinoco",
+    dateReceived: "2026-03-19",
+  },
+  {
+    personName: "Aleksa Kvrgic",
+    badgeId: "dinoco",
+    dateReceived: "2026-03-19",
+  },
+  {
+    personName: "Elvin Lamprecht",
+    badgeId: "dinoco",
+    dateReceived: "2026-03-19",
+  },
+  {
+    personName: "Cruz Deabreu",
+    badgeId: "dinoco",
+    dateReceived: "2026-03-19",
+  },
+  {
+    personName: "Eric Yao",
+    badgeId: "dinoco",
+    dateReceived: "2026-03-19",
+  },
+  {
+    personName: "Jayden Chang",
+    badgeId: "dinoco",
+    dateReceived: "2026-03-19",
+  },
+  {
+    personName: "Thomas Dempsey",
+    badgeId: "dinoco",
+    dateReceived: "2026-03-19",
   },
   {
     personName: "Kyle Taplin",
@@ -194,6 +235,46 @@ export const PERSON_BADGE_ASSIGNMENTS: PersonBadgeAssignment[] = [
     personName: "Joseph Hart",
     badgeId: "w_oftheyear",
     dateReceived: "2025-12-30",
+  },
+  {
+    personName: "Joseph Hart",
+    badgeId: "vanburen",
+    dateReceived: "2020-10-19",
+  },
+  {
+    personName: "Lucas Cinquina",
+    badgeId: "vanburen",
+    dateReceived: "2020-10-19",
+  },
+  {
+    personName: "Daniel Morrell",
+    badgeId: "vanburen",
+    dateReceived: "2020-10-19",
+  },
+  {
+    personName: "Thomas Dempsey",
+    badgeId: "vanburen",
+    dateReceived: "2020-10-19",
+  },
+  {
+    personName: "Andrew Turnbull",
+    badgeId: "vanburen",
+    dateReceived: "2020-10-19",
+  },
+  {
+    personName: "Aleksa Kvrgic",
+    badgeId: "vanburen",
+    dateReceived: "2020-10-19",
+  },
+  {
+    personName: "Jack Coleman",
+    badgeId: "vanburen",
+    dateReceived: "2020-10-19",
+  },
+  {
+    personName: "Kyle Taplin",
+    badgeId: "vanburen",
+    dateReceived: "2020-10-19",
   },
 ]
 

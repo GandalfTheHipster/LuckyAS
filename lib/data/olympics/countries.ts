@@ -32,6 +32,22 @@ export const OLYMPIC_COUNTRIES: OlympicCountry[] = [
     flag: "🇰🇷",
     aliases: ["Korea"],
   },
+  {
+    name: "South Africa",
+    flag: "🇿🇦",
+  },
+  {
+    name: "Mongolia",
+    flag: "🇲🇳",
+  },
+  {
+    name: "Brazil",
+    flag: "🇧🇷",
+  },
+  {
+    name: "Scotland",
+    flag: "\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}",
+  },
 ]
 
 export function getOlympicCountry(value: string) {

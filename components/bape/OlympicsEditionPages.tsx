@@ -1,17 +1,17 @@
 import type { ReactNode } from "react"
-import Image from "next/image"
 
 import {
-  BapeHero,
   BapePageShell,
   BapePanel,
   BapeSectionHeader,
 } from "@/components/bape/BapePageChrome"
+import { OlympicsEditionHeader } from "@/components/bape/OlympicsEditionHeader"
 import { OlympicsEventCard } from "@/components/bape/OlympicsEventCard"
 import { OlympicsImageCarousel } from "@/components/bape/OlympicsImageCarousel"
 import { OlympicsSectionNav } from "@/components/bape/OlympicsSectionNav"
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
-import { PersonProfileButtonByName } from "@/components/entity/PersonProfileButton"
+import { PersonProfileCardByName } from "@/components/entity/PersonProfileButton"
+import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
 import {
   Table,
   TableBody,
@@ -28,43 +28,37 @@ import type {
 } from "@/lib/data/olympics/olympics-template"
 import { cn } from "@/lib/utils"
 
-const OLYMPICS_2023_LOGO =
-  "https://i.postimg.cc/15jcNzGy/Bape-Olymics2023Logo.png"
-const OLYMPICS_2023_LOGO_DARK =
-  "https://i.postimg.cc/fTNkqQMp/white-Bape-Olympics2023Logo.png"
-
 type OlympicsEditionPageProps = {
   data: OlympicPageData
 }
 
 export function OlympicsOverviewPage({ data }: OlympicsEditionPageProps) {
-  const champion = data.winner ?? data.medalTable[0]?.name
+  const teamRosters = getTeamRosters(data)
 
   return (
     <OlympicsPageFrame
       data={data}
-      title={data.title}
     >
-      <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <OlympicsImageCarousel
-          images={getOlympicImages(data)}
-          title={data.title}
-          location={data.location}
-          host={data.host}
+      <section className="grid gap-8">
+        <BapeSectionHeader
+          title="Overview"
         />
 
-        <BapePanel className="p-5 sm:p-6">
-          <BapeSectionHeader title="Key Details" />
-          <div className="mt-6 grid gap-3">
-            <DetailRow label="Champion">
-              {champion ? <OlympicEntityBadge value={champion} /> : "TBA"}
-            </DetailRow>
-            <DetailRow label="MVP">
-              {data.mvp ? <PersonProfileButtonByName name={data.mvp} /> : "TBA"}
-            </DetailRow>
-            <DetailRow label="Host">{data.host ?? "TBA"}</DetailRow>
-          </div>
-        </BapePanel>
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+          <TeamRosterPanel
+            rosters={teamRosters}
+            mvp={data.mvp}
+          />
+
+          <BapePanel className="overflow-hidden lg:self-start">
+            <OlympicsImageCarousel
+              images={getOlympicImages(data)}
+              title={data.title}
+              location={data.location}
+              host={data.host}
+            />
+          </BapePanel>
+        </div>
       </section>
     </OlympicsPageFrame>
   )
@@ -74,7 +68,6 @@ export function OlympicsMedalTablePage({ data }: OlympicsEditionPageProps) {
   return (
     <OlympicsPageFrame
       data={data}
-      title={data.title}
     >
       <section className="flex flex-col gap-5">
         <BapeSectionHeader
@@ -106,14 +99,21 @@ export function OlympicsEventsPage({ data }: OlympicsEditionPageProps) {
   return (
     <OlympicsPageFrame
       data={data}
-      title={data.title}
     >
       <section className="flex flex-col gap-6">
         <BapeSectionHeader
           title="Events"
         />
 
-        <EventCategoryList events={completedEvents} year={data.date} />
+        {data.events.length > 0 ? (
+          <EventCategoryList events={completedEvents} year={data.date} />
+        ) : (
+          <BapePanel className="p-6">
+            <p className="text-sm font-medium text-muted-foreground">
+              To be decided.
+            </p>
+          </BapePanel>
+        )}
       </section>
 
       {upcomingEvents.length > 0 ? (
@@ -132,42 +132,42 @@ export function OlympicsEventsPage({ data }: OlympicsEditionPageProps) {
 
 function OlympicsPageFrame({
   data,
-  title,
   children,
 }: OlympicsEditionPageProps & {
-  title: string
   children: ReactNode
 }) {
   return (
     <BapePageShell>
       <div className="flex flex-col gap-8">
-        <BapeHero title={title} variant="wordmark">
-          {data.date === "2023" ? (
-            <>
-              <Image
-                src={OLYMPICS_2023_LOGO}
-                alt="Bape Olympics 2023 logo"
-                width={80}
-                height={80}
-                priority
-                className="h-14 w-14 object-contain dark:hidden sm:h-16 sm:w-16"
-              />
-              <Image
-                src={OLYMPICS_2023_LOGO_DARK}
-                alt="Bape Olympics 2023 logo"
-                width={80}
-                height={80}
-                priority
-                className="hidden h-14 w-14 object-contain dark:block sm:h-16 sm:w-16"
-              />
-            </>
-          ) : null}
-        </BapeHero>
+        <OlympicsEditionHeader
+          data={data}
+          logo={getOlympicsEditionLogo(data.date)}
+        />
         <OlympicsSectionNav year={data.date} />
         {children}
       </div>
     </BapePageShell>
   )
+}
+
+function getOlympicsEditionLogo(year: string) {
+  if (year === "2023") {
+    return {
+      light: "https://i.postimg.cc/T16hcGMv/Black-Bape-Olympics2023.png",
+      dark: "https://i.postimg.cc/J0LtQmVL/White-Bape-Olympics2023.png",
+      alt: "Bape Olympics 2023 logo",
+    }
+  }
+
+  if (year === "2021") {
+    return {
+      light:
+        "https://i.postimg.cc/Kv1C5TNW/Bape-Olympics-Logo-Rockingham-Black.png",
+      dark:
+        "https://i.postimg.cc/hPN6ZGZh/Bape-Olympics-Rockingham-White.png",
+      alt: "Bape Olympics Rockingham 2021 logo",
+    }
+  }
 }
 
 function EventCategoryList({
@@ -197,31 +197,104 @@ function EventCategoryList({
   )
 }
 
-function DetailRow({
-  label,
-  children,
-}: {
-  label: string
-  children: ReactNode
-}) {
-  return (
-    <div className="flex min-h-14 items-center justify-between gap-4 rounded-2xl border bg-background p-4">
-      <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
-        {label}
-      </p>
-      <div className="min-w-0 text-right text-sm font-medium">{children}</div>
-    </div>
-  )
+type TeamRoster = {
+  team: string
+  members: string[]
+  captain?: string
+  entry: OlympicMedalTableEntry
 }
 
-function OlympicEntityBadge({ value }: { value: string }) {
-  const country = getOlympicCountry(value)
+function TeamRosterPanel({
+  rosters,
+  mvp,
+}: {
+  rosters: TeamRoster[]
+  mvp?: string
+}) {
+  const pointsLeader = Math.max(...rosters.map((roster) => roster.entry.pts))
+  const shouldTintLeader = pointsLeader > 0
 
-  if (country) {
-    return <CountryProfileButton country={value} compact />
-  }
+  return (
+    <BapePanel className="p-4 sm:p-6">
+      <div className="flex flex-col gap-3">
+        <BapeSectionHeader title="Nations & Squads" />
+      </div>
 
-  return <PersonProfileButtonByName name={value} compact />
+      <div className="mt-5 grid gap-4">
+        {rosters.map((roster, index) => {
+          const isPointsLeader =
+            shouldTintLeader && roster.entry.pts === pointsLeader
+
+          return (
+            <div
+              key={roster.team}
+              className={cn(
+                "rounded-2xl border bg-background p-4 shadow-sm",
+                isPointsLeader &&
+                  "border-yellow-400/45 bg-yellow-400/[0.08] shadow-md shadow-yellow-900/5 dark:border-yellow-300/30 dark:bg-yellow-300/[0.07]",
+              )}
+            >
+            <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
+              <div className="flex min-w-0 items-start gap-3">
+                <span
+                  className={cn(
+                    "grid size-8 shrink-0 place-items-center rounded-full border text-xs font-bold tabular-nums",
+                    isPointsLeader
+                      ? "border-yellow-400/70 bg-yellow-400/20 text-yellow-950 dark:border-yellow-300/40 dark:bg-yellow-300/20 dark:text-yellow-100"
+                      : "bg-muted/35 text-muted-foreground",
+                  )}
+                >
+                  {index + 1}
+                </span>
+                <div className="min-w-0">
+                  <CountryProfileButton
+                    country={roster.team}
+                    className="border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-3 sm:justify-end">
+                {isPointsLeader ? (
+                  <span className="rounded-full bg-yellow-400/20 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-yellow-950 ring-1 ring-yellow-400/45 dark:text-yellow-100 dark:ring-yellow-300/35">
+                    Winner
+                  </span>
+                ) : null}
+                <div className="shrink-0 text-right">
+                  <p className="text-xl font-bold tabular-nums">
+                    {roster.entry.pts}
+                  </p>
+                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    pts
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 grid grid-cols-2 gap-3 min-[430px]:grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
+              {roster.members.map((member) => (
+                <PersonProfileCardByName
+                  key={member}
+                  name={member}
+                  size="sm"
+                  className="w-full"
+                  subtitles={[
+                    ...(member === roster.captain
+                      ? [{ label: "Captain" }]
+                      : []),
+                    ...(member === mvp
+                      ? [{ label: "MVP", tone: "gold" as const }]
+                      : []),
+                  ]}
+                />
+              ))}
+            </div>
+          </div>
+          )
+        })}
+      </div>
+    </BapePanel>
+  )
 }
 
 function OlympicsMedalTable({
@@ -431,6 +504,44 @@ function getOlympicImages(data: OlympicPageData) {
   return data.images && data.images.length > 0
     ? data.images
     : [data.imageOfTheDay]
+}
+
+function getTeamRosters(data: OlympicPageData): TeamRoster[] {
+  const hasResults = data.medalTable.some((entry) => entry.pts > 0)
+
+  return data.medalTable
+    .map((entry) => {
+      const country = getOlympicCountry(entry.name)
+      const captain = data.captains?.[entry.name]
+      const members = country
+        ? BAPE_PROFILES.filter((profile) =>
+            profile.country.includes(country.flag),
+          )
+            .map((profile) => `${profile.firstName} ${profile.lastName}`)
+            .sort((a, b) => {
+              const aRank = getRosterSortRank(a, captain, data.mvp)
+              const bRank = getRosterSortRank(b, captain, data.mvp)
+              return aRank - bRank || a.localeCompare(b)
+            })
+        : []
+
+      return {
+        team: entry.name,
+        entry,
+        captain,
+        members,
+      }
+    })
+    .sort((a, b) => {
+      if (!hasResults) return a.team.localeCompare(b.team)
+      return b.entry.pts - a.entry.pts || a.team.localeCompare(b.team)
+    })
+}
+
+function getRosterSortRank(name: string, captain?: string, mvp?: string) {
+  if (name === captain) return 0
+  if (name === mvp) return 1
+  return 2
 }
 
 function groupEventsByCategory(events: OlympicEvent[]) {

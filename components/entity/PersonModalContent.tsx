@@ -3,7 +3,10 @@ import type { ReactNode } from "react"
 
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
-import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
+import {
+  BAPE_PROFILES,
+  getBapeProfileAvatar,
+} from "@/lib/data/BapeProfiles"
 import { getBadgesForPerson } from "@/lib/data/badges"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 import { OLYMPICS_2021_DATA } from "@/lib/data/olympics/olympics-2021"
@@ -143,7 +146,7 @@ export function PersonModalContent({ personId }: PersonModalContentProps) {
     <div className="space-y-6">
       <div className="flex items-start gap-4 pr-10">
         <Image
-          src={profile.avatarUrl}
+          src={getBapeProfileAvatar(profile)}
           alt={fullName}
           width={88}
           height={88}

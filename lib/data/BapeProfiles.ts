@@ -10,6 +10,13 @@ export type BapeProfile = {
   country: string[] // flags as array
 }
 
+export const DEFAULT_BAPE_PROFILE_AVATAR =
+  "https://i.postimg.cc/rpbnfSZH/hs-generic.png"
+
+export function getBapeProfileAvatar(profile: Pick<BapeProfile, "avatarUrl">) {
+  return profile.avatarUrl?.trim() || DEFAULT_BAPE_PROFILE_AVATAR
+}
+
 export const BAPE_PROFILES: BapeProfile[] = [
   {
     bapeID: 5,
@@ -20,7 +27,7 @@ export const BAPE_PROFILES: BapeProfile[] = [
     bronze: 4,
     pointsAllTime: 41,
     avatarUrl: "https://i.postimg.cc/RFT8LHmj/hs-aleksa.png",
-    country: ["🇷🇸", "🇰🇿"],
+    country: ["🇷🇸", "🇰🇿", "🇧🇷"],
   },
   {
     bapeID: 1,
@@ -31,7 +38,7 @@ export const BAPE_PROFILES: BapeProfile[] = [
     bronze: 7,
     pointsAllTime: 38,
     avatarUrl: "https://i.postimg.cc/8C6Mj2Rn/hs-jack.png",
-    country: ["🇨🇮", "🇳🇴"],
+    country: ["🇨🇮", "🇳🇴", "🇲🇳"],
   },
   {
     bapeID: 3,
@@ -64,7 +71,11 @@ export const BAPE_PROFILES: BapeProfile[] = [
     bronze: 4,
     pointsAllTime: 32,
     avatarUrl: "https://i.postimg.cc/v8z9gLnM/hs-elvin.png",
-    country: ["🇩🇪", "🇰🇿"],
+    country: [
+      "🇩🇪",
+      "🇰🇿",
+      "\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}",
+    ],
   },
   {
     bapeID: 2,
@@ -75,7 +86,11 @@ export const BAPE_PROFILES: BapeProfile[] = [
     bronze: 4,
     pointsAllTime: 31,
     avatarUrl: "https://i.postimg.cc/5N1PK9pf/hs-kyle.png",
-    country: ["🇨🇮", "🇰🇿"],
+    country: [
+      "🇨🇮",
+      "🇰🇿",
+      "\u{1F3F4}\u{E0067}\u{E0062}\u{E0073}\u{E0063}\u{E0074}\u{E007F}",
+    ],
   },
   {
     bapeID: 6,
@@ -86,7 +101,7 @@ export const BAPE_PROFILES: BapeProfile[] = [
     bronze: 7,
     pointsAllTime: 30,
     avatarUrl: "https://i.postimg.cc/MGVgXLFZ/hs-dempsey.png",
-    country: ["🇷🇸", "🇳🇴"],
+    country: ["🇷🇸", "🇳🇴", "🇲🇳"],
   },
   {
     bapeID: 15,
@@ -108,7 +123,7 @@ export const BAPE_PROFILES: BapeProfile[] = [
     bronze: 4,
     pointsAllTime: 29,
     avatarUrl: "https://i.postimg.cc/yxYGQ8YW/hs-joe.png",
-    country: ["🇷🇸", "🇰🇷"],
+    country: ["🇷🇸", "🇰🇷", "🇲🇳"],
   },
   {
     bapeID: 4,
@@ -119,7 +134,7 @@ export const BAPE_PROFILES: BapeProfile[] = [
     bronze: 6,
     pointsAllTime: 25,
     avatarUrl: "https://i.postimg.cc/PqsNFPD2/hs-lucas.png",
-    country: ["🇨🇮", "🇰🇷"],
+    country: ["🇨🇮", "🇰🇷", "🇲🇳"],
   },
   {
     bapeID: 14,
@@ -163,7 +178,7 @@ export const BAPE_PROFILES: BapeProfile[] = [
     bronze: 2,
     pointsAllTime: 10,
     avatarUrl: "https://i.postimg.cc/wMfGSY72/hs-noah.png",
-    country: ["🇩🇪"],
+    country: ["🇩🇪", "🇿🇦"],
   },
   {
     bapeID: 11,
@@ -175,5 +190,71 @@ export const BAPE_PROFILES: BapeProfile[] = [
     pointsAllTime: 8,
     avatarUrl: "https://i.postimg.cc/5yxQP5gW/hs-todd.png",
     country: ["🇩🇪"],
+  },
+  {
+    bapeID: 16,
+    firstName: "Cruz",
+    lastName: "Deabreu",
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+    pointsAllTime: 0,
+    avatarUrl: "https://i.postimg.cc/CMPRWygF/hs-cruz-clean.png",
+    country: ["🇿🇦"],
+  },
+  {
+    bapeID: 17,
+    firstName: "Jayden",
+    lastName: "Chang",
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+    pointsAllTime: 0,
+    avatarUrl: "https://i.postimg.cc/QCH1RhYx/hs-jayden-clean.png",
+    country: ["🇿🇦"],
+  },
+  {
+    bapeID: 18,
+    firstName: "Eric",
+    lastName: "Yao",
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+    pointsAllTime: 0,
+    avatarUrl: "https://i.postimg.cc/tT75WKQd/hs-eric-clean.png",
+    country: ["🇿🇦"],
+  },
+  {
+    bapeID: 19,
+    firstName: "William",
+    lastName: "Booth",
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+    pointsAllTime: 0,
+    avatarUrl: "",
+    country: ["🇧🇷"],
+  },
+  {
+    bapeID: 20,
+    firstName: "Lucas",
+    lastName: "Waight",
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+    pointsAllTime: 0,
+    avatarUrl: "",
+    country: ["🇧🇷"],
+  },
+  {
+    bapeID: 21,
+    firstName: "Joel",
+    lastName: "Pita",
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+    pointsAllTime: 0,
+    avatarUrl: "",
+    country: ["🇧🇷"],
   },
 ]

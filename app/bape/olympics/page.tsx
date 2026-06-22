@@ -7,7 +7,7 @@ import {
   BapePanel,
   BapeSectionHeader,
 } from "@/components/bape/BapePageChrome"
-import { Badge } from "@/components/ui/badge"
+import { OlympicsEditionCard } from "@/components/bape/OlympicsEditionCard"
 import { Button } from "@/components/ui/button"
 import { OLYMPICS_2021_DATA } from "@/lib/data/olympics/olympics-2021"
 import { OLYMPICS_2023_DATA } from "@/lib/data/olympics/olympics-2023"
@@ -15,21 +15,33 @@ import { OLYMPICS_2026_DATA } from "@/lib/data/olympics/olympics-2026"
 
 const editions = [
   {
-    href: "/bape/olympics/2026",
-    data: OLYMPICS_2026_DATA,
-    status: "Upcoming",
-    disabled: true,
-  },
-  {
     href: "/bape/olympics/2023",
     data: OLYMPICS_2023_DATA,
     status: "Complete",
     disabled: false,
+    logo: {
+      light: "https://i.postimg.cc/T16hcGMv/Black-Bape-Olympics2023.png",
+      dark: "https://i.postimg.cc/J0LtQmVL/White-Bape-Olympics2023.png",
+      alt: "Bape Olympics 2023 logo",
+    },
   },
   {
     href: "/bape/olympics/2021",
     data: OLYMPICS_2021_DATA,
     status: "Complete",
+    disabled: false,
+    logo: {
+      light:
+        "https://i.postimg.cc/Kv1C5TNW/Bape-Olympics-Logo-Rockingham-Black.png",
+      dark:
+        "https://i.postimg.cc/hPN6ZGZh/Bape-Olympics-Rockingham-White.png",
+      alt: "Bape Olympics Rockingham 2021 logo",
+    },
+  },
+  {
+    href: "/bape/olympics/2026",
+    data: OLYMPICS_2026_DATA,
+    status: "Upcoming",
     disabled: false,
   },
 ]
@@ -43,7 +55,12 @@ export default function OlympicsHubPage() {
           variant="wordmark"
         />
 
-        <section className="grid gap-5 lg:grid-cols-[1fr_0px]">
+        <section className="grid gap-5">
+          <BapeSectionHeader
+            title="All-Time Stats"
+            description="Leaderboard, records, and future Olympics stats will live here."
+          />
+
           <BapePanel className="overflow-hidden">
             <div className="grid gap-0 md:grid-cols-[1fr_1.1fr]">
               <div className="relative min-h-72">
@@ -75,83 +92,13 @@ export default function OlympicsHubPage() {
 
         <section className="flex flex-col gap-6">
           <BapeSectionHeader
-            title="Years"
+            title="Editions"
           />
 
           <div className="grid gap-5 md:grid-cols-3">
-            {editions.map(({ href, data, status, disabled }) => {
-              const card = (
-                <>
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                      src={data.imageOfTheDay}
-                      alt={data.title}
-                      fill
-                      className={
-                        disabled
-                          ? "object-cover opacity-70"
-                          : "object-cover transition duration-500 group-hover:scale-105"
-                      }
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                    <Badge className="absolute left-4 top-4" variant="secondary">
-                      {status}
-                    </Badge>
-                    <div className="absolute bottom-4 left-4 right-4 text-white">
-                      <p className="text-sm text-white/75">{data.location}</p>
-                      <h3 className="mt-1 text-2xl font-semibold">
-                        {data.title}
-                      </h3>
-                    </div>
-                  </div>
-                  <div className="p-5">
-                    {disabled ? (
-                      <p className="text-sm text-muted-foreground">
-                        Coming soon. Details will appear here once the 2026
-                        format is confirmed.
-                      </p>
-                    ) : (
-                      <div className="grid grid-cols-2 gap-2 text-sm">
-                        <div className="rounded-xl border bg-background p-3">
-                          <p className="text-xs text-muted-foreground">
-                            Winner
-                          </p>
-                          <p className="truncate font-semibold">
-                            {data.winner}
-                          </p>
-                        </div>
-                        <div className="rounded-xl border bg-background p-3">
-                          <p className="text-xs text-muted-foreground">MVP</p>
-                          <p className="truncate font-semibold">{data.mvp}</p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </>
-              )
-
-              if (disabled) {
-                return (
-                  <div
-                    key={href}
-                    className="overflow-hidden rounded-[1.5rem] border bg-card shadow-sm"
-                  >
-                    {card}
-                  </div>
-                )
-              }
-
-              return (
-                <Link
-                key={href}
-                href={href}
-                className="group overflow-hidden rounded-[1.5rem] border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
-              >
-                  {card}
-              </Link>
-              )
-            })}
+            {editions.map((edition) => (
+              <OlympicsEditionCard key={edition.href} {...edition} />
+            ))}
           </div>
         </section>
       </div>

@@ -8,11 +8,11 @@ export default function BapeLayout({
 }) {
   return (
     <main className="min-h-screen flex flex-col items-center">
-      <div className="flex-1 w-full flex flex-col gap-20 items-center">
+      <div className="flex-1 w-full flex flex-col items-center">
         <SiteNav />
 
         {/* CONTENT */}
-        <div className="flex-1 flex flex-col items-center gap-20 max-w-5xl p-5 w-full">
+        <div className="flex-1 flex flex-col items-center max-w-5xl w-full px-5 pb-10 pt-4 sm:pt-6">
           {children}
         </div>
 

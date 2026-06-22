@@ -4,7 +4,10 @@ import Image from "next/image"
 import { X } from "lucide-react"
 
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
-import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
+import {
+  BAPE_PROFILES,
+  getBapeProfileAvatar,
+} from "@/lib/data/BapeProfiles"
 import { BEERPONG_FIXTURES } from "@/lib/data/beerpong/BeerPongFixture"
 
 type BeerPongTeamModalProps = {
@@ -62,7 +65,7 @@ export function BeerPongTeamModal({
       if (!profile) return null
 
       return {
-        src: profile.avatarUrl,
+        src: getBapeProfileAvatar(profile),
         name: `${profile.firstName} ${profile.lastName}`,
       }
     })

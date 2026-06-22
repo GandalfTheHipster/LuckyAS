@@ -29,6 +29,7 @@ export type OlympicPageData = {
   host?: string
   mvp?: string
   winner?: string
+  captains?: Record<string, string>
   medalTable: OlympicMedalTableEntry[]
   events: OlympicEvent[]
 }
