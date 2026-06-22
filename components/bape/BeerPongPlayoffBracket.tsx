@@ -105,6 +105,81 @@ function BracketMatch({
   )
 }
 
+function MobileTeamPill({ team, isBye = false }: { team?: SeededTeam; isBye?: boolean }) {
+  if (!team) {
+    return (
+      <div className="flex min-h-11 items-center rounded-xl border border-dashed bg-muted/25 px-3">
+        <p className="truncate text-sm font-medium text-muted-foreground">TBD</p>
+      </div>
+    )
+  }
+
+  return (
+    <div
+      className={
+        isBye
+          ? "flex min-h-11 items-center gap-2 rounded-xl border border-foreground/20 bg-foreground/[0.04] px-2.5"
+          : "flex min-h-11 items-center gap-2 rounded-xl border bg-background px-2.5"
+      }
+    >
+      <span
+        className={
+          isBye
+            ? "grid size-6 shrink-0 place-items-center rounded-full bg-foreground text-[11px] font-bold text-background"
+            : "grid size-6 shrink-0 place-items-center rounded-full border bg-muted text-[11px] font-bold"
+        }
+      >
+        {team.seed}
+      </span>
+      <Image
+        src={team.logo}
+        alt={team.name}
+        width={28}
+        height={28}
+        className="size-7 shrink-0 object-contain"
+      />
+      <TeamName
+        code={team.code}
+        fallback={team.shortName}
+        className="min-w-0 truncate text-sm font-semibold hover:underline"
+      />
+      {isBye ? (
+        <span className="ml-auto rounded-full border bg-background px-1.5 py-0.5 text-[9px] font-bold uppercase">
+          Bye
+        </span>
+      ) : null}
+    </div>
+  )
+}
+
+function MobileMatchCard({
+  label,
+  title,
+  children,
+}: {
+  label: string
+  title: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="rounded-2xl border bg-card p-3 shadow-sm">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        {label}
+      </p>
+      <p className="mt-1 text-sm font-semibold">{title}</p>
+      <div className="mt-3 grid gap-2">{children}</div>
+    </div>
+  )
+}
+
+function MobilePlaceholderPill({ label }: { label: string }) {
+  return (
+    <div className="flex min-h-10 items-center justify-center rounded-xl border border-dashed bg-muted/25 px-3 text-center text-xs font-semibold text-muted-foreground">
+      {label}
+    </div>
+  )
+}
+
 export function BeerPongPlayoffBracket() {
   const seededTeams = sortTeamsForSeeding()
 
@@ -117,8 +192,43 @@ export function BeerPongPlayoffBracket() {
 
   return (
     <section className="flex flex-col gap-4">
+      <div className="rounded-[1.5rem] border bg-card p-3 shadow-sm md:hidden">
+        <div className="grid gap-3">
+          <div className="grid grid-cols-2 gap-2">
+            <MobileMatchCard label="QF 1" title="3 v 6">
+              <MobileTeamPill team={seed3} />
+              <MobileTeamPill team={seed6} />
+            </MobileMatchCard>
 
-      <div className="rounded-[1.5rem] border bg-card p-4 shadow-sm md:p-6">
+            <MobileMatchCard label="QF 2" title="4 v 5">
+              <MobileTeamPill team={seed4} />
+              <MobileTeamPill team={seed5} />
+            </MobileMatchCard>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <MobileMatchCard label="SF 2" title="Seed 2 awaits QF1">
+              <MobileTeamPill team={seed2} isBye />
+              <MobilePlaceholderPill label="Winner QF1" />
+            </MobileMatchCard>
+
+            <MobileMatchCard label="SF 1" title="Seed 1 awaits QF2">
+              <MobileTeamPill team={seed1} isBye />
+              <MobilePlaceholderPill label="Winner QF2" />
+            </MobileMatchCard>
+          </div>
+
+          <MobileMatchCard label="Grand Final" title="Championship Match">
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+              <MobilePlaceholderPill label="Winner SF1" />
+              <span className="text-xs font-bold text-muted-foreground">v</span>
+              <MobilePlaceholderPill label="Winner SF2" />
+            </div>
+          </MobileMatchCard>
+        </div>
+      </div>
+
+      <div className="hidden rounded-[1.5rem] border bg-card p-4 shadow-sm md:block md:p-6">
         <div className="grid gap-6 xl:grid-cols-[1fr_1fr_1fr] xl:items-start">
           <div className="flex flex-col gap-4">
             <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
