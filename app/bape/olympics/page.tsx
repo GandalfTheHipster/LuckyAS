@@ -49,15 +49,33 @@ const editions = [
 export default function OlympicsHubPage() {
   return (
     <BapePageShell>
-      <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-8">
         <BapeHero
           title="Bape Olympics"
           variant="wordmark"
         />
 
-        <section className="flex flex-col gap-6">
+        <BapePanel className="p-5 sm:p-6">
+          <div className="max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-muted-foreground">
+              What it is
+            </p>
+            <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+              A yearly multi-event tournament for bragging rights.
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-muted-foreground sm:text-base">
+              The Bape Olympics turns a weekend of games, sports, table events,
+              drinking challenges, and oddball skill tests into a full medal
+              competition. Players represent nations, collect points through
+              event podiums, and chase the title of Olympic champion.
+            </p>
+          </div>
+        </BapePanel>
+
+        <section className="flex flex-col gap-5">
           <BapeSectionHeader
             title="Editions"
+            description="Browse each Olympics by year, including squads, medal tables, events, winners, and MVPs."
           />
 
           <div className="grid gap-5 md:grid-cols-3">
@@ -67,9 +85,10 @@ export default function OlympicsHubPage() {
           </div>
         </section>
 
-                <section className="grid gap-5">
+        <section className="grid gap-5">
           <BapeSectionHeader
             title="All-Time Stats"
+            description="A running leaderboard that combines every completed edition."
           />
 
           <BapePanel className="overflow-hidden">

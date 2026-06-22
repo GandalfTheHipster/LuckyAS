@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import Image from "next/image"
 
 import {
   BapePageShell,
@@ -10,8 +11,9 @@ import { OlympicsEventCard } from "@/components/bape/OlympicsEventCard"
 import { OlympicsImageCarousel } from "@/components/bape/OlympicsImageCarousel"
 import { OlympicsSectionNav } from "@/components/bape/OlympicsSectionNav"
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
+import { EntityTrigger } from "@/components/entity/EntityTrigger"
 import { PersonProfileCardByName } from "@/components/entity/PersonProfileButton"
-import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
+import { BAPE_PROFILES, getBapeProfileAvatar } from "@/lib/data/BapeProfiles"
 import {
   Table,
   TableBody,
@@ -39,9 +41,10 @@ export function OlympicsOverviewPage({ data }: OlympicsEditionPageProps) {
     <OlympicsPageFrame
       data={data}
     >
-      <section className="grid gap-8">
+      <section className="grid gap-5">
         <BapeSectionHeader
           title="Overview"
+          description="The full edition snapshot: nations, squads, medal position, and the photo archive."
         />
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
@@ -72,7 +75,7 @@ export function OlympicsMedalTablePage({ data }: OlympicsEditionPageProps) {
       <section className="flex flex-col gap-5">
         <BapeSectionHeader
           title="Medal Table"
-          description="Ranked by total points, then medal count."
+          description="Ranked by points, then medal count. Gold, silver, and bronze decide bragging rights."
         />
 
         <BapePanel className="overflow-hidden">
@@ -100,9 +103,10 @@ export function OlympicsEventsPage({ data }: OlympicsEditionPageProps) {
     <OlympicsPageFrame
       data={data}
     >
-      <section className="flex flex-col gap-6">
+      <section className="flex flex-col gap-5">
         <BapeSectionHeader
           title="Events"
+          description="Every completed event from the edition, grouped by category with podium results."
         />
 
         {data.events.length > 0 ? (
@@ -117,8 +121,11 @@ export function OlympicsEventsPage({ data }: OlympicsEditionPageProps) {
       </section>
 
       {upcomingEvents.length > 0 ? (
-        <section className="flex flex-col gap-6">
-          <BapeSectionHeader title="Upcoming" />
+        <section className="flex flex-col gap-5">
+          <BapeSectionHeader
+            title="Upcoming"
+            description="Events still waiting for a result."
+          />
           <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {upcomingEvents.map((event) => (
               <OlympicsEventCard key={event.id} event={event} year={data.date} />
@@ -180,7 +187,7 @@ function EventCategoryList({
   const categories = groupEventsByCategory(events)
 
   return (
-    <div className="grid gap-8">
+    <div className="grid gap-6">
       {categories.map((category) => (
         <section key={category.name} className="grid gap-3">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-muted-foreground">
@@ -216,9 +223,10 @@ function TeamRosterPanel({
 
   return (
     <BapePanel className="p-4 sm:p-6">
-      <div className="flex flex-col gap-3">
-        <BapeSectionHeader title="Nations & Squads" />
-      </div>
+      <BapeSectionHeader
+        title="Nations & Squads"
+        description="Each country roster, ordered by the current medal table."
+      />
 
       <div className="mt-5 grid gap-4">
         {rosters.map((roster, index) => {
@@ -234,11 +242,10 @@ function TeamRosterPanel({
                   "border-yellow-400/45 bg-yellow-400/[0.08] shadow-md shadow-yellow-900/5 dark:border-yellow-300/30 dark:bg-yellow-300/[0.07]",
               )}
             >
-            <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-start">
-              <div className="flex min-w-0 items-start gap-3">
+              <div className="flex items-start gap-3">
                 <span
                   className={cn(
-                    "grid size-8 shrink-0 place-items-center rounded-full border text-xs font-bold tabular-nums",
+                    "grid size-9 shrink-0 place-items-center rounded-full border text-sm font-bold tabular-nums",
                     isPointsLeader
                       ? "border-yellow-400/70 bg-yellow-400/20 text-yellow-950 dark:border-yellow-300/40 dark:bg-yellow-300/20 dark:text-yellow-100"
                       : "bg-muted/35 text-muted-foreground",
@@ -246,54 +253,123 @@ function TeamRosterPanel({
                 >
                   {index + 1}
                 </span>
-                <div className="min-w-0">
+
+                <div className="min-w-0 flex-1">
                   <CountryProfileButton
                     country={roster.team}
                     className="border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
                   />
                 </div>
-              </div>
 
-              <div className="flex items-center justify-between gap-3 sm:justify-end">
-                {isPointsLeader ? (
-                  <span className="rounded-full bg-yellow-400/20 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-yellow-950 ring-1 ring-yellow-400/45 dark:text-yellow-100 dark:ring-yellow-300/35">
-                    Winner
-                  </span>
-                ) : null}
-                <div className="shrink-0 text-right">
-                  <p className="text-xl font-bold tabular-nums">
-                    {roster.entry.pts}
-                  </p>
-                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                    pts
-                  </p>
+                <div className="flex shrink-0 items-start gap-3 text-right">
+                  {isPointsLeader ? (
+                    <span className="mt-1 inline-flex rounded-full bg-yellow-400/20 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-yellow-950 ring-1 ring-yellow-400/45 dark:text-yellow-100 dark:ring-yellow-300/35">
+                      Winner
+                    </span>
+                  ) : null}
+                  <div>
+                    <p className="text-2xl font-bold tabular-nums">
+                      {roster.entry.pts}
+                    </p>
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                      pts
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="mt-4 grid grid-cols-2 gap-3 min-[430px]:grid-cols-3 sm:grid-cols-4 lg:grid-cols-3 xl:grid-cols-4">
-              {roster.members.map((member) => (
-                <PersonProfileCardByName
-                  key={member}
-                  name={member}
-                  size="sm"
-                  className="w-full"
-                  subtitles={[
-                    ...(member === roster.captain
-                      ? [{ label: "Captain" }]
-                      : []),
-                    ...(member === mvp
-                      ? [{ label: "MVP", tone: "gold" as const }]
-                      : []),
-                  ]}
-                />
-              ))}
+              <div className="mt-4 grid gap-2 sm:hidden">
+                {roster.members.map((member) => (
+                  <RosterMemberRow
+                    key={member}
+                    name={member}
+                    subtitles={getRosterSubtitles(member, roster.captain, mvp)}
+                  />
+                ))}
+              </div>
+
+              <div className="mt-4 hidden gap-3 sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+                {roster.members.map((member) => (
+                  <PersonProfileCardByName
+                    key={member}
+                    name={member}
+                    size="sm"
+                    className="w-full"
+                    subtitles={getRosterSubtitles(member, roster.captain, mvp)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
           )
         })}
       </div>
     </BapePanel>
+  )
+}
+
+function getRosterSubtitles(member: string, captain?: string, mvp?: string) {
+  return [
+    ...(member === captain ? [{ label: "Captain" }] : []),
+    ...(member === mvp ? [{ label: "MVP", tone: "gold" as const }] : []),
+  ]
+}
+
+function RosterMemberRow({
+  name,
+  subtitles,
+}: {
+  name: string
+  subtitles: Array<{
+    label: string
+    tone?: "default" | "gold"
+  }>
+}) {
+  const profile = BAPE_PROFILES.find(
+    (profile) => `${profile.firstName} ${profile.lastName}` === name,
+  )
+
+  if (!profile) {
+    return <p className="text-sm font-medium text-foreground">{name}</p>
+  }
+
+  return (
+    <EntityTrigger
+      type="person"
+      id={String(profile.bapeID)}
+      className="group flex min-w-0 items-center gap-3 rounded-2xl border bg-background p-2.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:no-underline hover:shadow-md"
+    >
+      <span className="relative size-14 shrink-0 overflow-hidden rounded-xl bg-muted">
+        <Image
+          src={getBapeProfileAvatar(profile)}
+          alt={name}
+          fill
+          sizes="56px"
+          className="object-cover"
+        />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block whitespace-normal text-base font-semibold leading-tight text-foreground group-hover:underline">
+          {name}
+        </span>
+        {subtitles.length ? (
+          <span className="mt-1 flex flex-wrap gap-1.5">
+            {subtitles.map((subtitle) => (
+              <span
+                key={`${subtitle.label}-${subtitle.tone ?? "default"}`}
+                className={cn(
+                  "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+                  subtitle.tone === "gold"
+                    ? "border-yellow-400/45 bg-yellow-400/15 text-[#f5c451]"
+                    : "bg-muted/45 text-muted-foreground",
+                )}
+              >
+                {subtitle.label}
+              </span>
+            ))}
+          </span>
+        ) : null}
+      </span>
+    </EntityTrigger>
   )
 }
 
