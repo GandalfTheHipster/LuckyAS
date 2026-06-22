@@ -15,7 +15,7 @@ export function BeerPongSectionNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="flex flex-wrap gap-2 rounded-[1.5rem] border bg-card p-2 shadow-sm">
+    <nav className="flex flex-wrap justify-center gap-2 rounded-[1.5rem] border bg-card p-2 shadow-sm sm:justify-start">
       {items.map((item) => {
         const isActive = pathname === item.href
 

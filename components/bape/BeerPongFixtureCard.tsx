@@ -1,25 +1,44 @@
+import Image from "next/image"
+
 import { BapePanel } from "@/components/bape/BapePageChrome"
-import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
+import { EntityTrigger } from "@/components/entity/EntityTrigger"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { BEERPONG_FIXTURES } from "@/lib/data/beerpong/BeerPongFixture"
+import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
 
-function TeamBadge({
-  code,
-  align = "left",
-}: {
-  code: string
-  align?: "left" | "right"
-}) {
+function TeamBadge({ code }: { code: string }) {
+  const team = BEERPONG_TEAMS.find((team) => team.code === code)
+
+  if (!team) {
+    return (
+      <EntityTrigger
+        type="team"
+        id={code}
+        className="flex w-full items-center justify-center text-sm font-semibold"
+      >
+        {code}
+      </EntityTrigger>
+    )
+  }
+
   return (
-    <TeamProfileButton
-      code={code}
-      compact
-      align={align}
-      showMeta={false}
-      labelMode="code"
-      className="w-full"
-    />
+    <EntityTrigger
+      type="team"
+      id={code}
+      className="flex w-full min-w-0 items-center justify-center gap-2 hover:underline"
+    >
+      <Image
+        src={team.logo}
+        alt={team.name}
+        width={36}
+        height={36}
+        className="size-9 shrink-0 object-contain"
+      />
+      <span className="shrink-0 text-sm font-semibold tracking-wide">
+        {team.code}
+      </span>
+    </EntityTrigger>
   )
 }
 
@@ -72,7 +91,7 @@ export function BeerPongFixtureCard({
       <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
         <div
           className={cn(
-            "rounded-xl border bg-background px-3 py-2",
+            "rounded-xl border bg-background px-2 py-2",
             teamAWon &&
               "border-emerald-300 bg-emerald-50 text-emerald-950 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-100",
           )}
@@ -86,12 +105,12 @@ export function BeerPongFixtureCard({
 
         <div
           className={cn(
-            "rounded-xl border bg-background px-3 py-2",
+            "rounded-xl border bg-background px-2 py-2",
             teamBWon &&
               "border-emerald-300 bg-emerald-50 text-emerald-950 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-100",
           )}
         >
-          <TeamBadge code={fixture.teamB} align="right" />
+          <TeamBadge code={fixture.teamB} />
         </div>
       </div>
     </BapePanel>

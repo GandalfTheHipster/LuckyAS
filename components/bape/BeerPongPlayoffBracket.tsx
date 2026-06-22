@@ -1,6 +1,7 @@
 import Image from "next/image"
 
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
+import { EntityTrigger } from "@/components/entity/EntityTrigger"
 import { TeamName } from "@/components/entity/TeamName"
 import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
 
@@ -78,11 +79,6 @@ function BracketTeamSlot({
         />
       </div>
 
-      {isBye && (
-        <span className="shrink-0 rounded-full border bg-background px-2 py-1 text-[10px] font-semibold uppercase text-foreground">
-          Bye
-        </span>
-      )}
     </div>
   )
 }
@@ -138,17 +134,21 @@ function MobileTeamPill({ team, isBye = false }: { team?: SeededTeam; isBye?: bo
         height={28}
         className="size-7 shrink-0 object-contain"
       />
-      <TeamName
-        code={team.code}
-        fallback={team.shortName}
-        className="min-w-0 flex-1 truncate text-sm font-semibold hover:underline"
-      />
-      {isBye ? (
-        <span className="ml-auto shrink-0 rounded-full border bg-background px-1.5 py-0.5 text-[9px] font-bold uppercase">
-          Bye
-        </span>
-      ) : null}
+      <MobileTeamName team={team} />
     </div>
+  )
+}
+
+function MobileTeamName({ team }: { team: SeededTeam }) {
+  return (
+    <EntityTrigger
+      type="team"
+      id={team.code}
+      className="min-w-0 flex-1 truncate text-sm font-semibold hover:underline"
+    >
+      <span className="min-[430px]:hidden">{team.code}</span>
+      <span className="hidden min-[430px]:inline">{team.shortName}</span>
+    </EntityTrigger>
   )
 }
 

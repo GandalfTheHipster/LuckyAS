@@ -7,18 +7,8 @@ import {
   BapeSortableHeader,
   BapeSortableTable,
 } from "@/components/bape/BapeSortableTable"
-import { PersonProfileButton } from "@/components/entity/PersonProfileButton"
 import { TeamProfileButton } from "@/components/entity/TeamProfileButton"
 import { BEERPONG_TEAMS } from "@/lib/data/beerpong/beerpong"
-import { BAPE_PROFILES } from "@/lib/data/BapeProfiles"
-
-type TeamPlayer = {
-  id: number
-}
-
-function isTeamPlayer(player: TeamPlayer | null): player is TeamPlayer {
-  return player !== null
-}
 
 const sortedTeams = [...BEERPONG_TEAMS].sort((a, b) => {
   if (b.pts !== a.pts) return b.pts - a.pts
@@ -26,35 +16,18 @@ const sortedTeams = [...BEERPONG_TEAMS].sort((a, b) => {
   return b.netCups - a.netCups
 })
 
-const teams = sortedTeams.map((team) => ({
-  ...team,
-  players: team.players
-    .map((bapeID): TeamPlayer | null => {
-      const profile = Object.values(BAPE_PROFILES).find(
-        (profile) => profile.bapeID === bapeID,
-      )
-
-      if (!profile) return null
-
-      return {
-        id: profile.bapeID,
-      }
-    })
-    .filter(isTeamPlayer),
-}))
-
 function getNetCupsLabel(value: number) {
   if (value > 0) return `+${value}`
   return value.toString()
 }
 
-type LeagueTeam = (typeof teams)[number]
+type LeagueTeam = (typeof sortedTeams)[number]
 
 function TeamMobileCard({
   team,
   rank,
 }: {
-  team: (typeof teams)[number]
+  team: LeagueTeam
   rank: number
 }) {
   const isLeader = rank === 1
@@ -82,31 +55,18 @@ function TeamMobileCard({
           <TeamProfileButton
             code={team.code}
             compact
-            labelMode="short"
+            labelMode="full"
+            className="w-full"
           />
-
-          {team.players.length > 0 && (
-            <div className="mt-2 flex flex-wrap gap-2">
-              {team.players.map((player) => (
-                <PersonProfileButton
-                  key={player.id}
-                  bapeID={String(player.id)}
-                  compact
-                  labelMode="first"
-                  className="max-w-full"
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="text-right">
-          <p className="text-[11px] uppercase text-muted-foreground">PTS</p>
-          <p className="text-2xl font-bold tabular-nums">{team.pts}</p>
         </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-4 gap-2 text-center">
+      <div className="mt-4 grid grid-cols-5 gap-2 text-center">
+        <div className="rounded-lg border bg-muted/40 px-2 py-2">
+          <p className="text-[10px] uppercase text-muted-foreground">PTS</p>
+          <p className="text-sm font-bold tabular-nums">{team.pts}</p>
+        </div>
+
         <div className="rounded-lg border bg-muted/40 px-2 py-2">
           <p className="text-[10px] uppercase text-muted-foreground">MP</p>
           <p className="text-sm font-semibold tabular-nums">{team.mp}</p>
@@ -156,27 +116,12 @@ export function BeerPongLeagueTable() {
           <BapeSortableHeader label="Club" column={column} />
         ),
         cell: ({ row }) => (
-          <TeamProfileButton
-            code={row.original.code}
-            labelMode="short"
-            className="w-full min-w-0"
-          />
-        ),
-      },
-      {
-        id: "player",
-        header: "Player",
-        enableSorting: false,
-        cell: ({ row }) => (
-          <div className="flex items-center gap-2">
-            {row.original.players.map((player) => (
-              <PersonProfileButton
-                key={player.id}
-                bapeID={String(player.id)}
-                labelMode="first"
-                className="max-w-40"
-              />
-            ))}
+          <div className="min-w-[260px] max-w-[420px]">
+            <TeamProfileButton
+              code={row.original.code}
+              labelMode="full"
+              className="w-full min-w-0"
+            />
           </div>
         ),
       },
@@ -228,14 +173,14 @@ export function BeerPongLeagueTable() {
   return (
     <>
       <div className="flex flex-col gap-3 md:hidden">
-        {teams.map((team, index) => (
+        {sortedTeams.map((team, index) => (
           <TeamMobileCard key={team.code} team={team} rank={index + 1} />
         ))}
       </div>
 
       <div className="hidden md:block">
         <BapeSortableTable
-          data={teams}
+          data={sortedTeams}
           columns={columns}
           initialSort={[{ id: "pts", desc: true }]}
           getRowKey={(team) => team.code}

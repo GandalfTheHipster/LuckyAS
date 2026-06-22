@@ -62,7 +62,6 @@ export default function BeerPongPlayoffsPage() {
             <div className="grid grid-cols-3 border-t bg-muted/25 text-center lg:grid-cols-1 lg:border-l lg:border-t-0">
               <StatusStat label="Format" value="6 teams" />
               <StatusStat label="Top 2" value="Byes" />
-              <StatusStat label="Byes" value={topSeeds.join(" & ")} />
             </div>
           </div>
         </BapePanel>
