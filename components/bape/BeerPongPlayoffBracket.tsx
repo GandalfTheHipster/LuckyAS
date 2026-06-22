@@ -146,8 +146,7 @@ function MobileTeamName({ team }: { team: SeededTeam }) {
       id={team.code}
       className="min-w-0 flex-1 truncate text-sm font-semibold hover:underline"
     >
-      <span className="min-[430px]:hidden">{team.code}</span>
-      <span className="hidden min-[430px]:inline">{team.shortName}</span>
+      {team.code}
     </EntityTrigger>
   )
 }

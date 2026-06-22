@@ -59,14 +59,14 @@ function TeamMobileCard({
             className="w-full"
           />
         </div>
+
+        <div className="shrink-0 text-right">
+          <p className="text-[11px] uppercase text-muted-foreground">PTS</p>
+          <p className="text-2xl font-bold tabular-nums">{team.pts}</p>
+        </div>
       </div>
 
-      <div className="mt-4 grid grid-cols-5 gap-2 text-center">
-        <div className="rounded-lg border bg-muted/40 px-2 py-2">
-          <p className="text-[10px] uppercase text-muted-foreground">PTS</p>
-          <p className="text-sm font-bold tabular-nums">{team.pts}</p>
-        </div>
-
+      <div className="mt-4 grid grid-cols-4 gap-2 text-center">
         <div className="rounded-lg border bg-muted/40 px-2 py-2">
           <p className="text-[10px] uppercase text-muted-foreground">MP</p>
           <p className="text-sm font-semibold tabular-nums">{team.mp}</p>
