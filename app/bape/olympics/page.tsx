@@ -55,10 +55,21 @@ export default function OlympicsHubPage() {
           variant="wordmark"
         />
 
-        <section className="grid gap-5">
+        <section className="flex flex-col gap-6">
+          <BapeSectionHeader
+            title="Editions"
+          />
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {editions.map((edition) => (
+              <OlympicsEditionCard key={edition.href} {...edition} />
+            ))}
+          </div>
+        </section>
+
+                <section className="grid gap-5">
           <BapeSectionHeader
             title="All-Time Stats"
-            description="Leaderboard, records, and future Olympics stats will live here."
           />
 
           <BapePanel className="overflow-hidden">
@@ -88,18 +99,6 @@ export default function OlympicsHubPage() {
               </div>
             </div>
           </BapePanel>
-        </section>
-
-        <section className="flex flex-col gap-6">
-          <BapeSectionHeader
-            title="Editions"
-          />
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {editions.map((edition) => (
-              <OlympicsEditionCard key={edition.href} {...edition} />
-            ))}
-          </div>
         </section>
       </div>
     </BapePageShell>
