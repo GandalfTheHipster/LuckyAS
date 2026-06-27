@@ -73,26 +73,61 @@ export function CountryModalContent({ countryId }: CountryModalContentProps) {
     members.map((member) => `${member.firstName} ${member.lastName}`),
   )
 
-  const eventsWon = olympicsArchive.flatMap((olympics) => {
-    const hasTeamEntry = olympics.medalTable.some(
-      (entry) => entry.name === country.name,
+  const olympicMedalEditions = olympicsArchive
+    .map((olympics) => {
+      const hasTeamEntry = olympics.medalTable.some(
+        (entry) => entry.name === country.name,
+      )
+
+      if (!hasTeamEntry) return null
+
+      const medals = olympics.events
+        .flatMap((event) => {
+          const results = [
+            { medal: "Gold", names: event.gold ?? [] },
+            { medal: "Silver", names: event.silver ?? [] },
+            { medal: "Bronze", names: event.bronze ?? [] },
+          ]
+
+          return results
+            .filter((result) =>
+              result.names.some((name) => memberNames.has(name)),
+            )
+            .map((result) => ({
+              event: event.name,
+              emoji: event.emoji,
+              medal: result.medal,
+              winners: result.names.filter((name) => memberNames.has(name)),
+            }))
+        })
+        .toSorted(
+          (a, b) =>
+            getMedalSortValue(a.medal) - getMedalSortValue(b.medal) ||
+            a.event.localeCompare(b.event),
+        )
+
+      if (medals.length === 0) return null
+
+      const gold = medals.filter((medal) => medal.medal === "Gold")
+      const silver = medals.filter((medal) => medal.medal === "Silver")
+      const bronze = medals.filter((medal) => medal.medal === "Bronze")
+
+      return {
+        year: olympics.date,
+        medals,
+        gold,
+        silver,
+        bronze,
+      }
+    })
+    .filter((edition): edition is NonNullable<typeof edition> =>
+      Boolean(edition),
     )
 
-    if (!hasTeamEntry) return []
-
-    return olympics.events
-      .filter(
-        (event) =>
-          event.winner === country.name ||
-          event.gold?.some((name) => memberNames.has(name)),
-      )
-      .map((event) => ({
-        year: olympics.date,
-        name: event.name,
-        emoji: event.emoji,
-        gold: event.gold ?? [],
-      }))
-  })
+  const eventWinCount = olympicMedalEditions.reduce(
+    (total, edition) => total + edition.gold.length,
+    0,
+  )
 
   const olympicsTitle = medalTableEntries[0]?.title ?? "Olympics"
   const finalRank = medalTableEntries[0]?.rank
@@ -122,7 +157,7 @@ export function CountryModalContent({ countryId }: CountryModalContentProps) {
             {country.name}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            {olympicsTitle} · {eventsWon.length} event wins
+            {olympicsTitle} · {eventWinCount} event wins
           </p>
         </div>
       </div>
@@ -137,7 +172,7 @@ export function CountryModalContent({ countryId }: CountryModalContentProps) {
         <StatTile label="Bronze" value={totals.bronze} />
       </div>
 
-      <div className="rounded-2xl border bg-muted/30 p-4">
+      <section className="rounded-2xl border bg-muted/30 p-4">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
           Members
         </h3>
@@ -149,43 +184,163 @@ export function CountryModalContent({ countryId }: CountryModalContentProps) {
             />
           ))}
         </div>
-      </div>
+      </section>
 
-      <div className="rounded-2xl border bg-muted/30 p-4">
+      <section className="rounded-2xl border bg-muted/30 p-4">
         <h3 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-          Events Won
+          Medal Haul
         </h3>
 
-        {eventsWon.length > 0 ? (
-          <div className="mt-3 grid gap-2">
-            {eventsWon.map((event) => (
+        {olympicMedalEditions.length > 0 ? (
+          <div className="mt-3 grid gap-4">
+            {olympicMedalEditions.map((edition) => (
               <div
-                key={`${event.year}-${event.name}`}
-                className="rounded-xl border bg-background px-3 py-2"
+                key={edition.year}
+                className="rounded-xl border bg-background p-3"
               >
                 <div className="flex items-center justify-between gap-3">
-                  <p className="font-medium">
-                    <span className="mr-2">{event.emoji}</span>
-                    {event.name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">{event.year}</p>
+                  <p className="font-semibold">{edition.year} Olympics</p>
+                  <div className="flex gap-1.5 text-xs font-semibold">
+                    <MedalCountBadge medal="Gold" value={edition.gold.length} />
+                    <MedalCountBadge
+                      medal="Silver"
+                      value={edition.silver.length}
+                    />
+                    <MedalCountBadge
+                      medal="Bronze"
+                      value={edition.bronze.length}
+                    />
+                  </div>
                 </div>
-                {event.gold.length > 0 ? (
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {event.gold.join(", ")}
-                  </p>
-                ) : null}
+
+                <div className="mt-3 grid gap-2">
+                  {edition.medals.map((medal) => (
+                    <CountryMedalRow
+                      key={`${edition.year}-${medal.event}-${medal.medal}`}
+                      medal={medal.medal}
+                      emoji={medal.emoji}
+                      event={medal.event}
+                      winners={medal.winners}
+                      teamMemberCount={members.length}
+                    />
+                  ))}
+                </div>
               </div>
             ))}
           </div>
         ) : (
           <p className="mt-3 text-sm text-muted-foreground">
-            No event wins recorded yet.
+            No Olympic medals recorded yet.
           </p>
         )}
-      </div>
+      </section>
     </div>
   )
+}
+
+function CountryMedalRow({
+  medal,
+  emoji,
+  event,
+  winners,
+  teamMemberCount,
+}: {
+  medal: string
+  emoji: string
+  event: string
+  winners: string[]
+  teamMemberCount: number
+}) {
+  const showWinners = winners.length > 0 && winners.length < teamMemberCount
+
+  return (
+    <div className="grid h-16 grid-cols-[minmax(0,1fr)_auto] items-center gap-3 overflow-hidden rounded-xl border bg-muted/25 px-3 py-2">
+      <div className="flex min-w-0 items-center gap-2">
+        <MedalPill medal={medal} />
+        <p className="min-w-0 truncate font-medium">
+          <span className="mr-2">{emoji}</span>
+          {event}
+        </p>
+      </div>
+      {showWinners ? (
+        <div className="flex max-w-[42vw] flex-nowrap gap-1.5 overflow-x-auto sm:max-w-72 sm:justify-end">
+          {winners.map((winner) => (
+            <PersonProfileButton
+              key={`${event}-${medal}-${winner}`}
+              bapeID={getPersonIdByName(winner)}
+              compact
+              className="px-2 py-1"
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="w-0 sm:w-72" />
+      )}
+    </div>
+  )
+}
+
+function MedalCountBadge({
+  medal,
+  value,
+}: {
+  medal: string
+  value: number
+}) {
+  return (
+    <span
+      className={[
+        "rounded-full border px-2 py-0.5 tabular-nums",
+        getMedalToneClasses(medal),
+      ].join(" ")}
+    >
+      {medal[0]} {value}
+    </span>
+  )
+}
+
+function MedalPill({ medal }: { medal: string }) {
+  return (
+    <span
+      className={[
+        "w-fit rounded-full border px-2 py-1 text-xs font-semibold",
+        getMedalToneClasses(medal),
+      ].join(" ")}
+    >
+      {medal}
+    </span>
+  )
+}
+
+function getMedalToneClasses(medal: string) {
+  if (medal === "Gold") {
+    return "border-[#b47a00]/25 bg-[#f8c75c]/25 text-[#7a5100] dark:text-[#f8c75c]"
+  }
+
+  if (medal === "Silver") {
+    return "border-black/10 bg-[#e5e7e9]/55 text-slate-700 dark:bg-[#d8dde3]/20 dark:text-[#d8dde3]"
+  }
+
+  if (medal === "Bronze") {
+    return "border-[#7a3f16]/35 bg-[#8a4f18]/25 text-[#8a3f0f] dark:border-[#ff9b54]/30 dark:bg-[#7a3f16]/35 dark:text-[#ff9b54]"
+  }
+
+  return "bg-muted/35"
+}
+
+function getPersonIdByName(name: string) {
+  const profile = BAPE_PROFILES.find(
+    (profile) => `${profile.firstName} ${profile.lastName}` === name,
+  )
+
+  return profile ? String(profile.bapeID) : name
+}
+
+function getMedalSortValue(medal: string) {
+  if (medal === "Gold") return 0
+  if (medal === "Silver") return 1
+  if (medal === "Bronze") return 2
+  return 3
 }
 
 function formatRank(rank: number) {
