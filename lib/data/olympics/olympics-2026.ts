@@ -5,6 +5,21 @@ export const OLYMPICS_2026_DATA: OlympicPageData = {
   date: "2026",
   location: "Mundaring",
   imageOfTheDay: "https://i.postimg.cc/DySHpqn9/IMG-3906.jpg",
+  // Add image links for the Images page here.
+  images: [
+    // {
+    //   src: "https://example.com/olympics-photo.jpg",
+    //   caption: "Photo caption",
+    //   orientation: "landscape",
+    // },
+  ],
+  highlights: [
+    // {
+    //   title: "Highlight title",
+    //   description: "What happened.",
+    //   imageSrc: "https://example.com/highlight-image.jpg",
+    // },
+  ],
   description: "The 2026 Bape Olympics is being prepared.",
 
   host: "Mundaring",

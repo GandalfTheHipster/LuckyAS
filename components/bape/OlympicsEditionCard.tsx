@@ -1,7 +1,10 @@
+import type { ReactNode } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight } from "lucide-react"
 
+import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
+import { PersonProfileButtonByName } from "@/components/entity/PersonProfileButton"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
 import type { OlympicPageData } from "@/lib/data/olympics/olympics-template"
@@ -26,10 +29,23 @@ export function OlympicsEditionCard({
   disabled = false,
   logo,
 }: OlympicsEditionCardProps) {
-  const card = (
-    <>
+  const actionLabel =
+    status === "Upcoming" ? "View Upcoming Edition" : "View Previous Edition"
+
+  return (
+    <article
+      className={cn(
+        "overflow-hidden rounded-[1.5rem] border bg-card shadow-sm",
+        !disabled &&
+          "transition duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-xl",
+      )}
+    >
       <div className="relative overflow-hidden p-4 pb-0">
-        <div className="relative grid min-h-52 place-items-center overflow-hidden rounded-2xl border bg-muted/30">
+        <EditionCardLink
+          href={href}
+          disabled={disabled}
+          className="relative grid min-h-52 place-items-center overflow-hidden rounded-2xl border bg-muted/30"
+        >
           <Image
             src={data.imageOfTheDay}
             alt={data.title}
@@ -73,7 +89,7 @@ export function OlympicsEditionCard({
               </p>
             </div>
           )}
-        </div>
+        </EditionCardLink>
       </div>
       <div className="grid gap-4 p-5">
         <div>
@@ -104,37 +120,58 @@ export function OlympicsEditionCard({
             <div className="grid grid-cols-2 gap-2 text-sm">
               <div className="rounded-xl border bg-background p-3">
                 <p className="text-xs text-muted-foreground">Winner</p>
-                <p className="truncate font-semibold">{data.winner ?? "TBA"}</p>
+                {data.winner ? (
+                  <CountryProfileButton
+                    country={data.winner}
+                    compact
+                    className="mt-1 w-full border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                  />
+                ) : (
+                  <p className="truncate font-semibold">TBA</p>
+                )}
               </div>
               <div className="rounded-xl border bg-background p-3">
                 <p className="text-xs text-muted-foreground">MVP</p>
-                <p className="truncate font-semibold">{data.mvp ?? "TBA"}</p>
+                {data.mvp ? (
+                  <PersonProfileButtonByName
+                    name={data.mvp}
+                    compact
+                    className="mt-1 w-full border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                  />
+                ) : (
+                  <p className="truncate font-semibold">TBA</p>
+                )}
               </div>
             </div>
-            <span className={cn(buttonVariants(), "w-full")}>
-              View Edition
+            <Link href={href} className={cn(buttonVariants(), "w-full")}>
+              {actionLabel}
               <ArrowUpRight />
-            </span>
+            </Link>
           </>
         )}
       </div>
-    </>
+    </article>
   )
+}
 
+function EditionCardLink({
+  href,
+  disabled,
+  className,
+  children,
+}: {
+  href: string
+  disabled: boolean
+  className: string
+  children: ReactNode
+}) {
   if (disabled) {
-    return (
-      <div className="overflow-hidden rounded-[1.5rem] border bg-card shadow-sm">
-        {card}
-      </div>
-    )
+    return <div className={className}>{children}</div>
   }
 
   return (
-    <Link
-      href={href}
-      className="group overflow-hidden rounded-[1.5rem] border bg-card shadow-sm transition duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-xl"
-    >
-      {card}
+    <Link href={href} className={cn("group", className)}>
+      {children}
     </Link>
   )
 }

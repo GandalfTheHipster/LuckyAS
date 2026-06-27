@@ -5,7 +5,52 @@ export const OLYMPICS_2023_DATA: OlympicPageData = {
   date: "2023",
   location: "Perth CBD",
   imageOfTheDay: "https://i.postimg.cc/XqCM53zH/IMG-0994.jpg",
-  images: ["https://i.postimg.cc/XqCM53zH/IMG-0994.jpg", "https://i.postimg.cc/wB8jxcqN/IMG-0666.jpg", "https://i.postimg.cc/TwkWYBq0/IMG-0518.jpg", "https://i.postimg.cc/vTJzNxvy/IMG-0856.jpg", "https://i.postimg.cc/B66pfv3j/bapesports.jpg", "https://i.postimg.cc/DZzBJTz9/IMG-0205.png"],
+  // Add image links for the Images page here.
+  images: [
+    {
+      src: "https://i.postimg.cc/XqCM53zH/IMG-0994.jpg",
+      caption: "Aleksa and Elvin kiss the trophy.",
+    },
+    {
+      src: "https://i.postimg.cc/wB8jxcqN/IMG-0666.jpg",
+      caption: "Team Kazakstan.",
+    },
+    {
+      src: "https://i.postimg.cc/TwkWYBq0/IMG-0518.jpg",
+      caption: "Korea and Kazakhstan heading to their rooms.",
+    },
+    {
+      src: "https://i.postimg.cc/vTJzNxvy/IMG-0856.jpg",
+      caption: "Brady Swift on the cricket pitch.",
+    },
+    {
+      src: "https://i.postimg.cc/B66pfv3j/bapesports.jpg",
+      caption: "Thomas Dempsey sizes up Elvin Lamprecht in the Basketball Event.",
+    },
+    {
+      src: "https://i.postimg.cc/DZzBJTz9/IMG-0205.png",
+      caption: "Norway and South Korea face off in the FIFA Singles event with their custom uniforms.",
+    },
+  ],
+  highlights: [
+    {
+      title: "The Betrayal of Thomas",
+      description: "A true machiavellian betrayal of Tom by both Kazakhstan and South Korea saw Norway fall out of the PVP eggs event early despite purchasing a lockbox.",
+      imageSrc: "https://i.postimg.cc/wMHNZrwm/IMG-0618.jpg",
+    },
+    {
+      title: "Andrew wins FIFA Singles",
+      description:
+        "An all-time darkhorse victory for Andrew and Norway saw heavy favourites Brady and Cian defeated. Norway took the first night in style.",
+      imageSrc: "https://i.postimg.cc/44bVVJ31/IMG-0591.png",
+    },
+    {
+      title: "Jack's Tumultuous Morning",
+      description:
+        "After exploding his shoe, and a ball being thrown off his head by Brady to win the basketball event, Jack managed to turn around a rough morning for Norway by winning the 200m race.",
+      imageSrc: "https://i.postimg.cc/g0mPwqBm/IMG-0658.png",
+    },
+  ],
   description:
     "The 2023 Bape Olympics featured events across FIFA, basketball, futsal, pool, darts, sprinting, cricket, beer pong, cooking, drinking, and more.",
 

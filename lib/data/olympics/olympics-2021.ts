@@ -5,7 +5,45 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
   date: "2021",
   location: "Rockingham",
   imageOfTheDay: "https://i.postimg.cc/JhNgyCnb/IMG-2088.jpg",
-  images: ["https://i.postimg.cc/JhNgyCnb/IMG-2088.jpg", "https://i.postimg.cc/x8JnMmg6/81A7CEEB-C84F-4834-93CD-4A3788ED1FAD-1-105-c.jpg", "https://i.postimg.cc/qgHVK5z5/FD22329F-10EA-4BF6-B4BA-5C1A196A87B5-1-105-c.jpg", "https://i.postimg.cc/7ZmPvqCm/79012570-13F8-436B-8BBA-9BA27FD6744C-1-105-c.jpg"],
+  // Add image links for the Images page here.
+  images: [
+    {
+      src: "https://i.postimg.cc/JhNgyCnb/IMG-2088.jpg",
+      caption: "The Rosters 2021",
+    },
+    {
+      src: "https://i.postimg.cc/x8JnMmg6/81A7CEEB-C84F-4834-93CD-4A3788ED1FAD-1-105-c.jpg",
+      caption: "Jack dominates the chess competition",
+    },
+    {
+      src: "https://i.postimg.cc/qgHVK5z5/FD22329F-10EA-4BF6-B4BA-5C1A196A87B5-1-105-c.jpg",
+      caption: "Aleksa looks scared for his life",
+    },
+    {
+      src: "https://i.postimg.cc/7ZmPvqCm/79012570-13F8-436B-8BBA-9BA27FD6744C-1-105-c.jpg",
+      caption: "The drinks tallies across the weekend",
+    },
+  ],
+  highlights: [
+    {
+      title: "Priyen claims FIFA Singles",
+      description:
+        "Priyen Moodley won FIFA Singles with Manchester United, after some roster editing shenanigans. Still an all-time dark horse victory.",
+      imageSrc: "https://i.postimg.cc/SRjT2JhS/Screenshot-2026-06-27-at-1-45-41-pm.png",
+    },
+    {
+      title: "Culinary Chocolate Fizzer Crime",
+      description:
+        "Noah attempted to innovate on the second morning with a chocolate milk and fizzer breakfast, much to everyone's digust.",
+      imageSrc: "https://i.postimg.cc/V6fHwKZC/Screenshot-2026-06-27-at-1-49-15-pm.png",
+    },
+    {
+      title: "The Most Devious Lick",
+      description:
+        "Tom and Daniel violated Priyen's wardrobe and pulled off the most devious lick of 2021, wearing ALL his clothes.",
+      imageSrc: "https://i.postimg.cc/vHfjWxnF/Screenshot-2026-06-27-at-1-52-21-pm.png",
+    },
+  ],
   description:
     "The 2021 Bape Olympics featured FIFA, pool, drinking, basketball, indoor soccer, handball, table tennis, chess, and trivia events.",
 

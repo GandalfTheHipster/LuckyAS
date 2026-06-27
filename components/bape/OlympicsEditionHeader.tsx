@@ -1,5 +1,8 @@
+import type { ReactNode } from "react"
 import Image from "next/image"
 
+import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
+import { PersonProfileButtonByName } from "@/components/entity/PersonProfileButton"
 import type { OlympicPageData } from "@/lib/data/olympics/olympics-template"
 
 type OlympicsEditionLogo = {
@@ -42,9 +45,31 @@ export function OlympicsEditionHeader({
           </p>
 
           <div className="mt-5 grid gap-2 text-sm sm:grid-cols-3">
-            <HeaderStat label="Champion" value={data.winner ?? "TBA"} />
-            <HeaderStat label="MVP" value={data.mvp ?? "TBA"} />
-            <HeaderStat label="Host" value={data.host ?? "TBA"} />
+            <HeaderStat label="Champion">
+              {data.winner ? (
+                <CountryProfileButton
+                  country={data.winner}
+                  compact
+                  className="mt-1 w-full border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                />
+              ) : (
+                <HeaderStatValue value="TBA" />
+              )}
+            </HeaderStat>
+            <HeaderStat label="MVP">
+              {data.mvp ? (
+                <PersonProfileButtonByName
+                  name={data.mvp}
+                  compact
+                  className="mt-1 w-full border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                />
+              ) : (
+                <HeaderStatValue value="TBA" />
+              )}
+            </HeaderStat>
+            <HeaderStat label="Host">
+              <HeaderStatValue value={data.host ?? "TBA"} />
+            </HeaderStat>
           </div>
         </div>
 
@@ -84,13 +109,23 @@ export function OlympicsEditionHeader({
   )
 }
 
-function HeaderStat({ label, value }: { label: string; value: string }) {
+function HeaderStat({
+  label,
+  children,
+}: {
+  label: string
+  children: ReactNode
+}) {
   return (
     <div className="rounded-xl border bg-background/70 p-3 backdrop-blur-sm dark:bg-zinc-950/35">
       <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </p>
-      <p className="mt-1 truncate font-semibold">{value}</p>
+      {children}
     </div>
   )
+}
+
+function HeaderStatValue({ value }: { value: string }) {
+  return <p className="mt-1 truncate font-semibold">{value}</p>
 }

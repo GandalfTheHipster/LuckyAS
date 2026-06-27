@@ -105,16 +105,19 @@ export default function OlympicsHubPage() {
               </div>
               <div className="flex flex-col justify-center p-6 sm:p-8">
                 <h2 className="text-2xl font-semibold tracking-tight">
-                  All-Time Leaderboard
+                  All-Time Stats Hub
                 </h2>
                 <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                  The complete athlete ranking across every completed Olympics.
+                  A dedicated home for athlete medals, titles rankings, and
+                  future stats categories.
                 </p>
-                <Button asChild className="mt-6 w-fit">
-                  <Link href="/bape/olympics/all-time">
-                    View All-Time Stats
-                  </Link>
-                </Button>
+                <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+                  <Button asChild>
+                    <Link href="/bape/olympics/stats">
+                      View Stats Hub
+                    </Link>
+                  </Button>
+                </div>
               </div>
             </div>
           </BapePanel>

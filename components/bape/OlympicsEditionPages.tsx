@@ -8,7 +8,7 @@ import {
 } from "@/components/bape/BapePageChrome"
 import { OlympicsEditionHeader } from "@/components/bape/OlympicsEditionHeader"
 import { OlympicsEventCard } from "@/components/bape/OlympicsEventCard"
-import { OlympicsImageCarousel } from "@/components/bape/OlympicsImageCarousel"
+import { OlympicsImageGallery } from "@/components/bape/OlympicsImageGallery"
 import { OlympicsSectionNav } from "@/components/bape/OlympicsSectionNav"
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 import { EntityTrigger } from "@/components/entity/EntityTrigger"
@@ -25,6 +25,8 @@ import {
 import { getOlympicCountry } from "@/lib/data/olympics/countries"
 import type {
   OlympicEvent,
+  OlympicHighlight,
+  OlympicImage,
   OlympicMedalTableEntry,
   OlympicPageData,
 } from "@/lib/data/olympics/olympics-template"
@@ -44,24 +46,34 @@ export function OlympicsOverviewPage({ data }: OlympicsEditionPageProps) {
       <section className="grid gap-5">
         <BapeSectionHeader
           title="Overview"
-          description="The full edition snapshot: nations, squads, medal position, and the photo archive."
+          description="The full edition snapshot: nations, squads, and medal position."
         />
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-          <TeamRosterPanel
-            rosters={teamRosters}
-            mvp={data.mvp}
-          />
+        {data.highlights && data.highlights.length > 0 ? (
+          <OlympicsHighlightsPanel highlights={data.highlights} />
+        ) : null}
 
-          <BapePanel className="overflow-hidden lg:self-start">
-            <OlympicsImageCarousel
-              images={getOlympicImages(data)}
-              title={data.title}
-              location={data.location}
-              host={data.host}
-            />
-          </BapePanel>
-        </div>
+        <TeamRosterPanel
+          rosters={teamRosters}
+          mvp={data.mvp}
+        />
+      </section>
+    </OlympicsPageFrame>
+  )
+}
+
+export function OlympicsImagesPage({ data }: OlympicsEditionPageProps) {
+  const images = getOlympicImages(data)
+
+  return (
+    <OlympicsPageFrame data={data}>
+      <section className="grid gap-5">
+        <BapeSectionHeader
+          title="Images"
+          description="A scrollable collage of photos from the edition. Tap any image to preview it."
+        />
+
+        <OlympicsImageGallery images={images} title={data.title} />
       </section>
     </OlympicsPageFrame>
   )
@@ -302,6 +314,56 @@ function TeamRosterPanel({
             </div>
           )
         })}
+      </div>
+    </BapePanel>
+  )
+}
+
+function OlympicsHighlightsPanel({
+  highlights,
+}: {
+  highlights: OlympicHighlight[]
+}) {
+  return (
+    <BapePanel className="p-4 sm:p-6">
+      <BapeSectionHeader
+        title="Highlights"
+        description="The moments people still bring up after the medals are counted."
+      />
+
+      <div className="mt-5 grid gap-3 md:grid-cols-3">
+        {highlights.map((highlight) => (
+          <article
+            key={highlight.title}
+            className="overflow-hidden rounded-2xl border bg-background shadow-sm"
+          >
+            {highlight.imageSrc ? (
+              <div className="relative aspect-[4/3] overflow-hidden border-b bg-muted">
+                <Image
+                  src={highlight.imageSrc}
+                  alt={highlight.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                />
+              </div>
+            ) : (
+              <div className="grid aspect-[4/3] place-items-center border-b bg-muted/30 px-5 text-center">
+                <span className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+                  Image space
+                </span>
+              </div>
+            )}
+            <div className="p-4">
+              <h3 className="text-base font-semibold tracking-tight">
+                {highlight.title}
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {highlight.description}
+              </p>
+            </div>
+          </article>
+        ))}
       </div>
     </BapePanel>
   )
@@ -576,10 +638,15 @@ function getMedalTotal(entry: OlympicMedalTableEntry) {
   return entry.gold + entry.silver + entry.bronze
 }
 
-function getOlympicImages(data: OlympicPageData) {
-  return data.images && data.images.length > 0
-    ? data.images
-    : [data.imageOfTheDay]
+function getOlympicImages(data: OlympicPageData): OlympicImage[] {
+  const images =
+    data.images && data.images.length > 0
+      ? data.images
+      : [{ src: data.imageOfTheDay, caption: data.title }]
+
+  return images.map((image) =>
+    typeof image === "string" ? { src: image } : image,
+  )
 }
 
 function getTeamRosters(data: OlympicPageData): TeamRoster[] {

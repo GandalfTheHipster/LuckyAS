@@ -5,19 +5,14 @@ import { usePathname } from "next/navigation"
 
 import { cn } from "@/lib/utils"
 
-type OlympicsSectionNavProps = {
-  year: string
-}
+const items = [
+  { href: "/bape/olympics/stats", label: "Athlete Medal Table" },
+  { href: "/bape/olympics/stats/titles", label: "Titles Ranking" },
+  { href: "/bape/olympics/stats/records", label: "Future Stats" },
+]
 
-export function OlympicsSectionNav({ year }: OlympicsSectionNavProps) {
+export function OlympicsStatsNav() {
   const pathname = usePathname()
-  const baseHref = `/bape/olympics/${year}`
-  const items = [
-    { href: baseHref, label: "Overview" },
-    { href: `${baseHref}/medaltable`, label: "Medal Table" },
-    { href: `${baseHref}/events`, label: "Events" },
-    { href: `${baseHref}/images`, label: "Images" },
-  ]
 
   return (
     <nav className="mx-auto flex w-fit max-w-full flex-wrap justify-center gap-2 rounded-[1.5rem] border bg-card p-2 shadow-sm sm:mx-0 sm:w-full sm:justify-start">
