@@ -103,6 +103,10 @@ export function OlympicsMedalTablePage({ data }: OlympicsEditionPageProps) {
   )
 }
 
+export function OlympicsStandingsPage({ data }: OlympicsEditionPageProps) {
+  return <OlympicsMedalTablePage data={data} />
+}
+
 export function OlympicsEventsPage({ data }: OlympicsEditionPageProps) {
   const completedEvents = data.events.filter(
     (event) => event.status === "completed",
