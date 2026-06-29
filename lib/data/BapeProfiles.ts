@@ -257,4 +257,15 @@ export const BAPE_PROFILES: BapeProfile[] = [
     avatarUrl: "",
     country: ["🇧🇷"],
   },
+  {
+    bapeID: 22,
+    firstName: "Steven",
+    lastName: "Aldrin",
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+    pointsAllTime: 0,
+    avatarUrl: "https://i.postimg.cc/PJL8DfrB/hs-stevena.png",
+    country: ["🏴󠁧󠁢󠁳󠁣󠁴󠁿"],
+  },
 ]
