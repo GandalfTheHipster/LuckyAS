@@ -58,7 +58,7 @@ export const OLYMPICS_2021_DATA: OlympicPageData = {
 
   medalTable: [
     {
-      name: "Ivory Coast",
+      name: "Cote d'Ivoire",
       gold: 12,
       silver: 2,
       bronze: 11,
