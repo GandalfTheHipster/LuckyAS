@@ -31,11 +31,12 @@ export function OlympicsEditionCard({
 }: OlympicsEditionCardProps) {
   const actionLabel =
     status === "Upcoming" ? "View Upcoming Edition" : "View Previous Edition"
+  const actionClassName = cn(buttonVariants(), "w-full")
 
   return (
     <article
       className={cn(
-        "overflow-hidden rounded-[1.5rem] border bg-card shadow-sm",
+        "flex h-full flex-col overflow-hidden rounded-[1.5rem] border bg-card shadow-sm",
         !disabled &&
           "transition duration-300 hover:-translate-y-1 hover:border-foreground/20 hover:shadow-xl",
       )}
@@ -44,7 +45,9 @@ export function OlympicsEditionCard({
         <EditionCardLink
           href={href}
           disabled={disabled}
-          className="relative grid min-h-52 place-items-center overflow-hidden rounded-2xl border bg-muted/30"
+          className={cn(
+            "relative grid min-h-52 place-items-center overflow-hidden rounded-2xl border bg-muted/30",
+          )}
         >
           <Image
             src={data.imageOfTheDay}
@@ -56,7 +59,9 @@ export function OlympicsEditionCard({
             )}
             sizes="(max-width: 768px) 100vw, 33vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/80 to-background/45 dark:from-zinc-950/75 dark:via-zinc-900/55 dark:to-zinc-800/35" />
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-background/95 via-background/80 to-background/45 dark:from-zinc-950/75 dark:via-zinc-900/55 dark:to-zinc-800/35"
+          />
           {disabled ? (
             <Badge className="absolute left-4 top-4" variant="secondary">
               {status}
@@ -91,7 +96,7 @@ export function OlympicsEditionCard({
           )}
         </EditionCardLink>
       </div>
-      <div className="grid gap-4 p-5">
+      <div className="flex flex-1 flex-col gap-4 p-5">
         <div>
           <p className="text-sm font-medium text-muted-foreground">
             {data.location}
@@ -118,7 +123,7 @@ export function OlympicsEditionCard({
         ) : (
           <>
             <div className="grid grid-cols-2 gap-2 text-sm">
-              <div className="rounded-xl border bg-background p-3">
+              <div className="grid min-h-16 content-start rounded-xl border bg-background p-3">
                 <p className="text-xs text-muted-foreground">Winner</p>
                 {data.winner ? (
                   <CountryProfileButton
@@ -130,7 +135,7 @@ export function OlympicsEditionCard({
                   <p className="truncate font-semibold">TBA</p>
                 )}
               </div>
-              <div className="rounded-xl border bg-background p-3">
+              <div className="grid min-h-16 content-start rounded-xl border bg-background p-3">
                 <p className="text-xs text-muted-foreground">MVP</p>
                 {data.mvp ? (
                   <PersonProfileButtonByName
@@ -143,7 +148,7 @@ export function OlympicsEditionCard({
                 )}
               </div>
             </div>
-            <Link href={href} className={cn(buttonVariants(), "w-full")}>
+            <Link href={href} className={cn(actionClassName, "mt-auto")}>
               {actionLabel}
               <ArrowUpRight />
             </Link>

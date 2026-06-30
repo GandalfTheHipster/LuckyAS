@@ -15,6 +15,17 @@ import { OLYMPICS_2026_DATA } from "@/lib/data/olympics/olympics-2026"
 
 const editions = [
   {
+    href: "/bape/olympics/2026",
+    data: OLYMPICS_2026_DATA,
+    status: "Upcoming",
+    disabled: false,
+    logo: {
+      light: "https://i.postimg.cc/j5KKMgT0/lavendar.png",
+      dark: "https://i.postimg.cc/RFNrsj8m/Lavender-White.png",
+      alt: "Bape Olympics 2026 logo",
+    },
+  },
+  {
     href: "/bape/olympics/2023",
     data: OLYMPICS_2023_DATA,
     status: "Complete",
@@ -37,12 +48,6 @@ const editions = [
         "https://i.postimg.cc/hPN6ZGZh/Bape-Olympics-Rockingham-White.png",
       alt: "Bape Olympics Rockingham 2021 logo",
     },
-  },
-  {
-    href: "/bape/olympics/2026",
-    data: OLYMPICS_2026_DATA,
-    status: "Upcoming",
-    disabled: false,
   },
 ]
 

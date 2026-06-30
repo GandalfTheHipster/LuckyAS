@@ -174,6 +174,14 @@ function OlympicsPageFrame({
 }
 
 function getOlympicsEditionLogo(year: string) {
+  if (year === "2026") {
+    return {
+      light: "https://i.postimg.cc/j5KKMgT0/lavendar.png",
+      dark: "https://i.postimg.cc/RFNrsj8m/Lavender-White.png",
+      alt: "Bape Olympics 2026 logo",
+    }
+  }
+
   if (year === "2023") {
     return {
       light: "https://i.postimg.cc/T16hcGMv/Black-Bape-Olympics2023.png",
