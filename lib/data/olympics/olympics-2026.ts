@@ -20,7 +20,7 @@ export const OLYMPICS_2026_DATA: OlympicPageData = {
     //   imageSrc: "https://example.com/highlight-image.jpg",
     // },
   ],
-  description: "The 2026 Bape Olympics is being prepared.",
+  description: "",
 
   host: "Mundaring",
   captains: {
@@ -31,13 +31,6 @@ export const OLYMPICS_2026_DATA: OlympicPageData = {
   },
 
   medalTable: [
-    {
-      name: "Brazil",
-      gold: 0,
-      silver: 0,
-      bronze: 0,
-      pts: 0,
-    },
     {
       name: "Mongolia",
       gold: 0,
@@ -54,6 +47,13 @@ export const OLYMPICS_2026_DATA: OlympicPageData = {
     },
     {
       name: "South Africa",
+      gold: 0,
+      silver: 0,
+      bronze: 0,
+      pts: 0,
+    },
+    {
+      name: "Brazil",
       gold: 0,
       silver: 0,
       bronze: 0,

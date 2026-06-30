@@ -40,9 +40,11 @@ export function OlympicsEditionHeader({
           <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl">
             {data.title}
           </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
-            {data.description}
-          </p>
+          {data.description ? (
+            <p className="mt-4 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">
+              {data.description}
+            </p>
+          ) : null}
 
           <div className="mt-5 grid gap-2 text-sm sm:grid-cols-3">
             <HeaderStat label="Champion">
