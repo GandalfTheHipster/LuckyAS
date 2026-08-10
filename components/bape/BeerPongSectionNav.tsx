@@ -6,9 +6,9 @@ import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 
 const items = [
-  { href: "/bape/beerpong", label: "Playoffs" },
-  { href: "/bape/beerpong/table", label: "League Table" },
-  { href: "/bape/beerpong/schedule", label: "Results" },
+  { href: "/bape/beerpong", label: "2025–26 Playoffs" },
+  { href: "/bape/beerpong/table", label: "2025–26 Table" },
+  { href: "/bape/beerpong/schedule", label: "2025–26 Results" },
 ]
 
 export function BeerPongSectionNav() {

@@ -119,7 +119,10 @@ export function OlympicsMedalTablePage({ data }: OlympicsEditionPageProps) {
               {data.date} MEDAL TABLE
             </p>
           </div>
-          <OlympicsMedalTable entries={data.medalTable} />
+          <OlympicsMedalTable
+            entries={data.medalTable}
+            isUpcoming={!hasResults}
+          />
         </BapePanel>
       </section>
     </OlympicsPageFrame>
@@ -192,6 +195,7 @@ function OlympicsPageFrame({
         <OlympicsEditionHeader
           data={data}
           logo={getOlympicsEditionLogo(data.date)}
+          isUpcoming={!hasOlympicsResults(data)}
         />
         <OlympicsSectionNav year={data.date} />
         {children}
@@ -274,7 +278,12 @@ function TeamRosterPanel({
   const pointsLeader = Math.max(...rosters.map((roster) => roster.entry.pts))
   const shouldTintLeader = hasResults && pointsLeader > 0
   const rosterList = (
-    <div className={cn("grid gap-4", hasResults && "mt-5")}>
+    <div
+      className={cn(
+        "grid gap-4",
+        hasResults ? "mt-5" : "sm:grid-cols-2",
+      )}
+    >
       {rosters.map((roster, index) => {
         const isPointsLeader =
           shouldTintLeader && roster.entry.pts === pointsLeader
@@ -283,11 +292,19 @@ function TeamRosterPanel({
           <div
             key={roster.team}
             className={cn(
-              "rounded-2xl border bg-background p-4 shadow-sm",
+              "relative overflow-hidden rounded-2xl border bg-background p-4 shadow-sm",
+              !hasResults &&
+                "border-violet-200/80 bg-[linear-gradient(135deg,rgba(245,243,255,0.86),rgba(255,255,255,0.94)_42%,rgba(237,233,254,0.56))] shadow-violet-950/[0.03] dark:border-violet-400/20 dark:bg-[linear-gradient(135deg,rgba(76,29,149,0.18),rgba(24,24,27,0.96)_42%,rgba(91,33,182,0.1))]",
               isPointsLeader &&
                 "border-yellow-400/45 bg-yellow-400/[0.08] shadow-md shadow-yellow-900/5 dark:border-yellow-300/30 dark:bg-yellow-300/[0.07]",
             )}
           >
+            {!hasResults ? (
+              <div
+                aria-hidden="true"
+                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-500/70 to-transparent"
+              />
+            ) : null}
             <div className="flex items-start gap-3">
               {shouldTintLeader ? (
                 <span
@@ -328,27 +345,41 @@ function TeamRosterPanel({
               ) : null}
             </div>
 
-            <div className="mt-4 grid gap-2 sm:hidden">
-              {roster.members.map((member) => (
-                <RosterMemberRow
-                  key={member}
-                  name={member}
-                  subtitles={getRosterSubtitles(member, roster.captain, mvp)}
-                />
-              ))}
-            </div>
+            {hasResults ? (
+              <>
+                <div className="mt-4 grid gap-2 sm:hidden">
+                  {roster.members.map((member) => (
+                    <RosterMemberRow
+                      key={member}
+                      name={member}
+                      subtitles={getRosterSubtitles(member, roster.captain, mvp)}
+                    />
+                  ))}
+                </div>
 
-            <div className="mt-4 hidden gap-3 sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-              {roster.members.map((member) => (
-                <PersonProfileCardByName
-                  key={member}
-                  name={member}
-                  size="sm"
-                  className="w-full"
-                  subtitles={getRosterSubtitles(member, roster.captain, mvp)}
-                />
-              ))}
-            </div>
+                <div className="mt-4 hidden gap-3 sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+                  {roster.members.map((member) => (
+                    <PersonProfileCardByName
+                      key={member}
+                      name={member}
+                      size="sm"
+                      className="w-full"
+                      subtitles={getRosterSubtitles(member, roster.captain, mvp)}
+                    />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="mt-4 grid gap-2 sm:grid-cols-2">
+                {roster.members.map((member) => (
+                  <RosterMemberRow
+                    key={member}
+                    name={member}
+                    subtitles={getRosterSubtitles(member, roster.captain, mvp)}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         )
       })}
@@ -494,8 +525,10 @@ function RosterMemberRow({
 
 function OlympicsMedalTable({
   entries,
+  isUpcoming,
 }: {
   entries: OlympicMedalTableEntry[]
+  isUpcoming: boolean
 }) {
   return (
     <>
@@ -505,6 +538,7 @@ function OlympicsMedalTable({
             key={entry.name}
             entry={entry}
             rank={index + 1}
+            isUpcoming={isUpcoming}
           />
         ))}
       </div>
@@ -536,13 +570,14 @@ function OlympicsMedalTable({
                 key={entry.name}
                 className={cn(
                   "group border-border/80 hover:bg-muted/25",
+                  isUpcoming && "hover:bg-violet-50/40 dark:hover:bg-violet-950/10",
                   entry.pts > 0 &&
                     index === 0 &&
                     "bg-amber-50/60 hover:bg-amber-50/80 dark:bg-amber-950/15 dark:hover:bg-amber-950/25",
                 )}
               >
                 <TableCell className="px-4 py-5 text-center text-sm font-semibold text-muted-foreground">
-                  {index + 1}
+                  {isUpcoming ? "—" : index + 1}
                 </TableCell>
                 <TableCell className="px-4 py-5">
                   <CountryProfileButton
@@ -551,19 +586,19 @@ function OlympicsMedalTable({
                   />
                 </TableCell>
                 <TableCell className="px-4 py-5 text-right">
-                  <MedalCount value={entry.gold} tone="gold" />
+                  <MedalCount value={entry.gold} tone="gold" isUpcoming={isUpcoming} />
                 </TableCell>
                 <TableCell className="px-4 py-5 text-right">
-                  <MedalCount value={entry.silver} tone="silver" />
+                  <MedalCount value={entry.silver} tone="silver" isUpcoming={isUpcoming} />
                 </TableCell>
                 <TableCell className="px-4 py-5 text-right">
-                  <MedalCount value={entry.bronze} tone="bronze" />
+                  <MedalCount value={entry.bronze} tone="bronze" isUpcoming={isUpcoming} />
                 </TableCell>
                 <TableCell className="px-4 py-5 text-right text-base font-semibold">
-                  {getMedalTotal(entry)}
+                  {isUpcoming ? "—" : getMedalTotal(entry)}
                 </TableCell>
                 <TableCell className="px-4 py-5 text-right text-sm font-semibold text-muted-foreground">
-                  {entry.pts}
+                  {isUpcoming ? "—" : entry.pts}
                 </TableCell>
               </TableRow>
             ))}
@@ -577,11 +612,13 @@ function OlympicsMedalTable({
 function MedalTableMobileCard({
   entry,
   rank,
+  isUpcoming,
 }: {
   entry: OlympicMedalTableEntry
   rank: number
+  isUpcoming: boolean
 }) {
-  const isLeader = rank === 1 && entry.pts > 0
+  const isLeader = !isUpcoming && rank === 1 && entry.pts > 0
 
   return (
     <div
@@ -599,7 +636,7 @@ function MedalTableMobileCard({
               : "bg-muted/35 text-muted-foreground",
           )}
         >
-          {rank}
+          {isUpcoming ? "—" : rank}
         </span>
 
         <div className="min-w-0 flex-1">
@@ -613,14 +650,16 @@ function MedalTableMobileCard({
           <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
             PTS
           </p>
-          <p className="text-2xl font-bold tabular-nums">{entry.pts}</p>
+          <p className="text-2xl font-bold tabular-nums">
+            {isUpcoming ? "—" : entry.pts}
+          </p>
         </div>
       </div>
 
       <div className="mt-4 grid grid-cols-3 gap-2 text-center">
-        <MobileMedalStat label="Gold" value={entry.gold} tone="gold" />
-        <MobileMedalStat label="Silver" value={entry.silver} tone="silver" />
-        <MobileMedalStat label="Bronze" value={entry.bronze} tone="bronze" />
+        <MobileMedalStat label="Gold" value={entry.gold} tone="gold" isUpcoming={isUpcoming} />
+        <MobileMedalStat label="Silver" value={entry.silver} tone="silver" isUpcoming={isUpcoming} />
+        <MobileMedalStat label="Bronze" value={entry.bronze} tone="bronze" isUpcoming={isUpcoming} />
       </div>
     </div>
   )
@@ -647,9 +686,11 @@ function MedalHead({ label }: { label: string }) {
 function MedalCount({
   value,
   tone,
+  isUpcoming = false,
 }: {
   value: number
   tone: "gold" | "silver" | "bronze"
+  isUpcoming?: boolean
 }) {
   return (
     <span
@@ -660,7 +701,7 @@ function MedalCount({
         tone === "bronze" && "bg-[#dfb582] ring-[#8a4f18]/30",
       )}
     >
-      {value}
+      {isUpcoming ? "—" : value}
     </span>
   )
 }
@@ -669,10 +710,12 @@ function MobileMedalStat({
   label,
   value,
   tone,
+  isUpcoming,
 }: {
   label: string
   value: number
   tone: "gold" | "silver" | "bronze"
+  isUpcoming: boolean
 }) {
   return (
     <div className="rounded-xl border bg-background p-3">
@@ -687,7 +730,7 @@ function MobileMedalStat({
         {label}
       </p>
       <div className="mt-2 flex justify-center">
-        <MedalCount value={value} tone={tone} />
+        <MedalCount value={value} tone={tone} isUpcoming={isUpcoming} />
       </div>
     </div>
   )

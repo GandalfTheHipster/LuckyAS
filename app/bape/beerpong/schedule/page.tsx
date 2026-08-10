@@ -3,27 +3,15 @@ import {
   BapePageShell,
   BapeSectionHeader,
 } from "@/components/bape/BapePageChrome"
-import { BeerPongFixtureCard } from "@/components/bape/BeerPongFixtureCard"
+import { BeerPongSeasonResults } from "@/components/bape/BeerPongSeasonResults"
 import { BeerPongSectionNav } from "@/components/bape/BeerPongSectionNav"
 import {
   BEERPONG_COMPLETED_FIXTURES,
-  BEERPONG_UPCOMING_FIXTURES,
 } from "@/lib/data/beerpong/BeerPongFixture"
 import Image from "next/image"
 
 const BEERPONG_LEAGUE_LOGO =
   "https://i.postimg.cc/ZR6kb86T/beerponglogo.png"
-
-const completedFixtures = [...BEERPONG_COMPLETED_FIXTURES].sort((a, b) => {
-  if (b.round !== a.round) return b.round - a.round
-  return b.game - a.game
-})
-
-const upcomingFixtures = [...BEERPONG_UPCOMING_FIXTURES]
-  .sort((a, b) => {
-    if (a.round !== b.round) return a.round - b.round
-    return a.game - b.game
-  })
 
 export default function BeerPongSchedulePage() {
   return (
@@ -49,34 +37,13 @@ export default function BeerPongSchedulePage() {
 
         <section className="flex flex-col gap-6">
           <BapeSectionHeader
-            title="Results"
-            description="Winners are highlighted in green."
+            eyebrow="2025–26 season archive"
+            title="Regular-season results"
+            description="All 30 results, grouped by round."
           />
 
-          <div className="grid gap-3 lg:grid-cols-3">
-            {completedFixtures.map((fixture) => (
-              <BeerPongFixtureCard
-                key={`${fixture.round}-${fixture.game}-${fixture.teamA}-${fixture.teamB}`}
-                fixture={fixture}
-              />
-            ))}
-          </div>
+          <BeerPongSeasonResults fixtures={BEERPONG_COMPLETED_FIXTURES} />
         </section>
-
-        {upcomingFixtures.length > 0 ? (
-          <section className="flex flex-col gap-6">
-            <BapeSectionHeader title="Upcoming" />
-
-            <div className="grid gap-3 lg:grid-cols-3">
-              {upcomingFixtures.map((fixture) => (
-                <BeerPongFixtureCard
-                  key={`${fixture.round}-${fixture.game}-${fixture.teamA}-${fixture.teamB}`}
-                  fixture={fixture}
-                />
-              ))}
-            </div>
-          </section>
-        ) : null}
       </div>
     </BapePageShell>
   )

@@ -226,8 +226,8 @@ export const BAPE_PROFILES: BapeProfile[] = [
   },
   {
     bapeID: 19,
-    firstName: "William",
-    lastName: "Booth",
+    firstName: "Luke",
+    lastName: "Price",
     gold: 0,
     silver: 0,
     bronze: 0,

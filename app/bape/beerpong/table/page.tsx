@@ -5,6 +5,7 @@ import {
 } from "@/components/bape/BapePageChrome"
 import { BeerPongLeagueTable } from "@/components/bape/BeerPongLeagueTable"
 import { BeerPongSectionNav } from "@/components/bape/BeerPongSectionNav"
+import { BapePanel } from "@/components/bape/BapePageChrome"
 import Image from "next/image"
 
 const BEERPONG_LEAGUE_LOGO =
@@ -33,8 +34,19 @@ export default function BeerPongLeagueTablePage() {
         <BeerPongSectionNav />
 
         <section className="flex flex-col gap-5">
-          <BapeSectionHeader title="League Table" description="Ranking order is points, wins, then net cups. If still undecided, head-to-head matchups." />
-          <BeerPongLeagueTable />
+          <BapeSectionHeader
+            eyebrow="2025–26 season archive"
+            title="Final standings"
+            description="The regular season, preserved in one view."
+          />
+          <BapePanel className="overflow-hidden p-3 sm:p-4">
+            <div className="border-b px-2 pb-4 pt-1 text-xs text-muted-foreground sm:px-3">
+              Ranked by points, wins, then net cups.
+            </div>
+            <div className="pt-3">
+              <BeerPongLeagueTable />
+            </div>
+          </BapePanel>
         </section>
       </div>
     </BapePageShell>
