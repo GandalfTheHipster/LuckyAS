@@ -36,6 +36,7 @@ export type OlympicHighlight = {
 export type OlympicPageData = {
   title: string
   date: string
+  startDate?: string
   location: string
   imageOfTheDay: string
   images?: Array<string | OlympicImage>

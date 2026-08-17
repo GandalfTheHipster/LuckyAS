@@ -84,8 +84,8 @@ export function OlympicsEditionHeader({
             )}
           >
             {isUpcoming ? (
-              <HeaderStat label="Host" className="bg-background/55 dark:bg-zinc-950/25">
-                <HeaderStatValue value={data.host ?? "TBA"} />
+              <HeaderStat label="Starts" className="bg-background/55 dark:bg-zinc-950/25">
+                <HeaderStatValue value={data.startDate ?? "TBA"} />
               </HeaderStat>
             ) : (
               <>

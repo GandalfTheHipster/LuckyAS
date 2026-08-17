@@ -122,32 +122,41 @@ export function OlympicsEditionCard({
           </>
         ) : (
           <>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div className="grid min-h-16 content-start rounded-xl border bg-background p-3">
-                <p className="text-xs text-muted-foreground">Winner</p>
-                {data.winner ? (
-                  <CountryProfileButton
-                    country={data.winner}
-                    compact
-                    className="mt-1 w-full border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
-                  />
-                ) : (
-                  <p className="truncate font-semibold">TBA</p>
-                )}
+            {status === "Upcoming" ? (
+              <div className="grid min-h-16 content-start rounded-xl border bg-background p-3 text-sm">
+                <p className="text-xs text-muted-foreground">Starts</p>
+                <p className="mt-1 truncate font-semibold">
+                  {data.startDate ?? "TBA"}
+                </p>
               </div>
-              <div className="grid min-h-16 content-start rounded-xl border bg-background p-3">
-                <p className="text-xs text-muted-foreground">MVP</p>
-                {data.mvp ? (
-                  <PersonProfileButtonByName
-                    name={data.mvp}
-                    compact
-                    className="mt-1 w-full border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
-                  />
-                ) : (
-                  <p className="truncate font-semibold">TBA</p>
-                )}
+            ) : (
+              <div className="grid grid-cols-2 gap-2 text-sm">
+                <div className="grid min-h-16 content-start rounded-xl border bg-background p-3">
+                  <p className="text-xs text-muted-foreground">Winner</p>
+                  {data.winner ? (
+                    <CountryProfileButton
+                      country={data.winner}
+                      compact
+                      className="mt-1 w-full border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                    />
+                  ) : (
+                    <p className="truncate font-semibold">TBA</p>
+                  )}
+                </div>
+                <div className="grid min-h-16 content-start rounded-xl border bg-background p-3">
+                  <p className="text-xs text-muted-foreground">MVP</p>
+                  {data.mvp ? (
+                    <PersonProfileButtonByName
+                      name={data.mvp}
+                      compact
+                      className="mt-1 w-full border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                    />
+                  ) : (
+                    <p className="truncate font-semibold">TBA</p>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
             <Link href={href} className={cn(actionClassName, "mt-auto")}>
               {actionLabel}
               <ArrowUpRight />

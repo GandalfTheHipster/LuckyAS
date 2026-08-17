@@ -3,6 +3,7 @@ import type { OlympicPageData } from "@/lib/data/olympics/olympics-template"
 export const OLYMPICS_2026_DATA: OlympicPageData = {
   title: "Bape Olympics 2026",
   date: "2026",
+  startDate: "November 20th 2026",
   location: "Mundaring",
   imageOfTheDay: "https://i.postimg.cc/DySHpqn9/IMG-3906.jpg",
   // Add image links for the Images page here.

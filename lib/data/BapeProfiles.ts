@@ -232,7 +232,7 @@ export const BAPE_PROFILES: BapeProfile[] = [
     silver: 0,
     bronze: 0,
     pointsAllTime: 0,
-    avatarUrl: "https://i.postimg.cc/xC1vf2RV/Chat-GPT-Image-Aug-17-2026-at-08-30-28-AM.png",
+    avatarUrl: "https://i.postimg.cc/T2W9pRxD/Chat-GPT-Image-Aug-17-2026-at-08-30-28-AM.png",
     country: ["🇧🇷"],
   },
   {
