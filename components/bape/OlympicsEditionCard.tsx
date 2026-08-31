@@ -123,10 +123,13 @@ export function OlympicsEditionCard({
         ) : (
           <>
             {status === "Upcoming" ? (
-              <div className="flex items-center gap-3 py-3 text-sm">
-                <CalendarDays className="size-5 text-muted-foreground" />
-                <div>
-                  <p className="font-semibold">{data.startDate ?? "TBA"}</p>
+              <div className="grid grid-cols-2 gap-5 border-y py-3 text-sm">
+                <div className="col-span-2 flex items-start gap-3">
+                  <CalendarDays className="mt-1 size-5 text-muted-foreground" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Starts</p>
+                    <p className="font-semibold">{data.startDate ?? "TBA"}</p>
+                  </div>
                 </div>
               </div>
             ) : (
