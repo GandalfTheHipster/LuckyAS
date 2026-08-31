@@ -41,8 +41,8 @@ export const OLYMPIC_COUNTRIES: OlympicCountry[] = [
     flag: "🇲🇳",
   },
   {
-    name: "Brazil",
-    flag: "🇧🇷",
+    name: "San Marino",
+    flag: "🇸🇲",
   },
   {
     name: "Scotland",

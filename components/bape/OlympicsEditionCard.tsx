@@ -1,7 +1,7 @@
 import type { ReactNode } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, CalendarDays } from "lucide-react"
 
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 import { PersonProfileButtonByName } from "@/components/entity/PersonProfileButton"
@@ -123,15 +123,15 @@ export function OlympicsEditionCard({
         ) : (
           <>
             {status === "Upcoming" ? (
-              <div className="grid min-h-16 content-start rounded-xl border bg-background p-3 text-sm">
-                <p className="text-xs text-muted-foreground">Starts</p>
-                <p className="mt-1 truncate font-semibold">
-                  {data.startDate ?? "TBA"}
-                </p>
+              <div className="flex items-center gap-3 py-3 text-sm">
+                <CalendarDays className="size-5 text-muted-foreground" />
+                <div>
+                  <p className="font-semibold">{data.startDate ?? "TBA"}</p>
+                </div>
               </div>
             ) : (
-              <div className="grid grid-cols-2 gap-2 text-sm">
-                <div className="grid min-h-16 content-start rounded-xl border bg-background p-3">
+              <div className="grid grid-cols-2 gap-5 border-y py-3 text-sm">
+                <div className="grid content-start">
                   <p className="text-xs text-muted-foreground">Winner</p>
                   {data.winner ? (
                     <CountryProfileButton
@@ -143,7 +143,7 @@ export function OlympicsEditionCard({
                     <p className="truncate font-semibold">TBA</p>
                   )}
                 </div>
-                <div className="grid min-h-16 content-start rounded-xl border bg-background p-3">
+                <div className="grid content-start">
                   <p className="text-xs text-muted-foreground">MVP</p>
                   {data.mvp ? (
                     <PersonProfileButtonByName

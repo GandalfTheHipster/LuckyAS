@@ -7,20 +7,26 @@ import { cn } from "@/lib/utils"
 
 type OlympicsSectionNavProps = {
   year: string
+  isUpcoming?: boolean
 }
 
-export function OlympicsSectionNav({ year }: OlympicsSectionNavProps) {
+export function OlympicsSectionNav({
+  year,
+  isUpcoming = false,
+}: OlympicsSectionNavProps) {
   const pathname = usePathname()
   const baseHref = `/bape/olympics/${year}`
   const items = [
     { href: baseHref, label: "Overview" },
-    { href: `${baseHref}/medaltable`, label: "Medal Table" },
+    ...(!isUpcoming
+      ? [{ href: `${baseHref}/medaltable`, label: "Medal Table" }]
+      : []),
     { href: `${baseHref}/events`, label: "Events" },
-    { href: `${baseHref}/images`, label: "Images" },
+    ...(!isUpcoming ? [{ href: `${baseHref}/images`, label: "Images" }] : []),
   ]
 
   return (
-    <nav className="mx-auto flex w-fit max-w-full flex-wrap justify-center gap-2 rounded-[1.5rem] border bg-card p-2 shadow-sm sm:mx-0 sm:w-full sm:justify-start">
+    <nav className="sticky top-2 z-20 mx-auto flex w-fit max-w-full flex-wrap justify-center gap-2 rounded-[1.5rem] border bg-card p-2 sm:mx-0 sm:w-full sm:justify-start">
       {items.map((item) => {
         const isActive = pathname === item.href
 

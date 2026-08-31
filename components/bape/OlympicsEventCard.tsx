@@ -13,14 +13,16 @@ import { cn } from "@/lib/utils"
 export function OlympicsEventCard({
   event,
   year,
+  isUpcoming = false,
 }: {
   event: OlympicEvent
   year: string
+  isUpcoming?: boolean
 }) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <BapePanel className="flex h-full flex-col overflow-hidden p-0 transition duration-300 hover:-translate-y-0.5 hover:shadow-lg">
+    <BapePanel className="flex h-full flex-col overflow-hidden p-0 shadow-none">
       <button
         type="button"
         className="flex w-full items-center gap-3 p-5 text-left"
@@ -32,17 +34,19 @@ export function OlympicsEventCard({
         </div>
         <div className="min-w-0 flex-1">
           <h3 className="truncate font-semibold">{event.name}</h3>
-          <PodiumPreview event={event} year={year} />
+          {!isUpcoming ? <PodiumPreview event={event} year={year} /> : null}
         </div>
-        <ChevronDown
-          className={cn(
-            "size-5 shrink-0 text-muted-foreground transition",
-            isOpen && "rotate-180",
-          )}
-        />
+        {!isUpcoming ? (
+          <ChevronDown
+            className={cn(
+              "size-5 shrink-0 text-muted-foreground transition",
+              isOpen && "rotate-180",
+            )}
+          />
+        ) : null}
       </button>
 
-      {isOpen ? (
+      {isOpen && !isUpcoming ? (
         <div className="grid gap-2 px-5 pb-5 text-sm">
           <MedalLine medal="🥇" value={event.gold} year={year} />
           <MedalLine medal="🥈" value={event.silver} year={year} />

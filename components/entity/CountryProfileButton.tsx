@@ -9,6 +9,7 @@ type CountryProfileButtonProps = {
   className?: string
   compact?: boolean
   meta?: string
+  large?: boolean
 }
 
 export function CountryProfileButton({
@@ -16,6 +17,7 @@ export function CountryProfileButton({
   className,
   compact = false,
   meta,
+  large = false,
 }: CountryProfileButtonProps) {
   const olympicCountry = getOlympicCountry(country)
   const label = olympicCountry?.name ?? country
@@ -31,9 +33,14 @@ export function CountryProfileButton({
         className,
       )}
     >
-      {flag ? <span className="shrink-0 text-lg">{flag}</span> : null}
+      {flag ? (
+        <span className={cn("shrink-0 text-lg", large && "text-2xl")}>{flag}</span>
+      ) : null}
       <span className="min-w-0 flex-1 overflow-hidden">
-        <span className="block truncate text-sm font-semibold text-foreground group-hover:underline">
+        <span className={cn(
+          "block truncate text-sm font-semibold text-foreground group-hover:underline",
+          large && "text-xl leading-tight",
+        )}>
           {label}
         </span>
         {meta ? (

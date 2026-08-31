@@ -1,5 +1,7 @@
 import type { ReactNode } from "react"
 import Image from "next/image"
+import Link from "next/link"
+import { ArrowUpRight, CalendarDays, MapPin, Medal, Users } from "lucide-react"
 
 import {
   BapePageShell,
@@ -12,7 +14,6 @@ import { OlympicsImageGallery } from "@/components/bape/OlympicsImageGallery"
 import { OlympicsSectionNav } from "@/components/bape/OlympicsSectionNav"
 import { CountryProfileButton } from "@/components/entity/CountryProfileButton"
 import { EntityTrigger } from "@/components/entity/EntityTrigger"
-import { PersonProfileCardByName } from "@/components/entity/PersonProfileButton"
 import { BAPE_PROFILES, getBapeProfileAvatar } from "@/lib/data/BapeProfiles"
 import {
   Table,
@@ -25,7 +26,6 @@ import {
 import { getOlympicCountry } from "@/lib/data/olympics/countries"
 import type {
   OlympicEvent,
-  OlympicHighlight,
   OlympicImage,
   OlympicMedalTableEntry,
   OlympicPageData,
@@ -48,19 +48,21 @@ export function OlympicsOverviewPage({ data }: OlympicsEditionPageProps) {
         {hasResults ? (
           <BapeSectionHeader
             title="Overview"
-            description="The full edition snapshot: nations, squads, and medal position."
           />
         ) : null}
 
-        {data.highlights && data.highlights.length > 0 ? (
-          <OlympicsHighlightsPanel highlights={data.highlights} />
-        ) : null}
+        <OlympicsAtAGlance
+          data={data}
+          rosters={teamRosters}
+          hasResults={hasResults}
+        />
 
         <TeamRosterPanel
           rosters={teamRosters}
           mvp={data.mvp}
           hasResults={hasResults}
         />
+
       </section>
     </OlympicsPageFrame>
   )
@@ -77,7 +79,7 @@ export function OlympicsImagesPage({ data }: OlympicsEditionPageProps) {
           title="Images"
           description={
             hasImages
-              ? "A scrollable collage of photos from the edition. Tap any image to preview it."
+              ? "Photos from the edition."
               : undefined
           }
         />
@@ -134,11 +136,9 @@ export function OlympicsStandingsPage({ data }: OlympicsEditionPageProps) {
 }
 
 export function OlympicsEventsPage({ data }: OlympicsEditionPageProps) {
+  const hasResults = hasOlympicsResults(data)
   const completedEvents = data.events.filter(
     (event) => event.status === "completed",
-  )
-  const upcomingEvents = data.events.filter(
-    (event) => event.status !== "completed",
   )
 
   return (
@@ -149,13 +149,15 @@ export function OlympicsEventsPage({ data }: OlympicsEditionPageProps) {
         <BapeSectionHeader
           title="Events"
           description={
-            data.events.length > 0
-              ? "Every completed event from the edition, grouped by category with podium results."
+            data.events.length > 0 && hasResults
+              ? "Completed events and podiums."
               : undefined
           }
         />
 
-        {data.events.length > 0 ? (
+        {data.events.length > 0 && !hasResults ? (
+          <UpcomingEventCategoryList events={data.events} />
+        ) : data.events.length > 0 ? (
           <EventCategoryList events={completedEvents} year={data.date} />
         ) : (
           <BapePanel className="p-6">
@@ -166,19 +168,6 @@ export function OlympicsEventsPage({ data }: OlympicsEditionPageProps) {
         )}
       </section>
 
-      {upcomingEvents.length > 0 ? (
-        <section className="flex flex-col gap-5">
-          <BapeSectionHeader
-            title="Upcoming"
-            description="Events still waiting for a result."
-          />
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {upcomingEvents.map((event) => (
-              <OlympicsEventCard key={event.id} event={event} year={data.date} />
-            ))}
-          </div>
-        </section>
-      ) : null}
     </OlympicsPageFrame>
   )
 }
@@ -197,7 +186,10 @@ function OlympicsPageFrame({
           logo={getOlympicsEditionLogo(data.date)}
           isUpcoming={!hasOlympicsResults(data)}
         />
-        <OlympicsSectionNav year={data.date} />
+        <OlympicsSectionNav
+          year={data.date}
+          isUpcoming={!hasOlympicsResults(data)}
+        />
         {children}
       </div>
     </BapePageShell>
@@ -259,6 +251,33 @@ function EventCategoryList({
   )
 }
 
+function UpcomingEventCategoryList({ events }: { events: OlympicEvent[] }) {
+  const categories = groupEventsByCategory(events)
+
+  return (
+    <div className="grid gap-7">
+      {categories.map((category) => (
+        <section key={category.name} className="grid gap-3">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            {category.name}
+          </h2>
+          <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+            {category.events.map((event) => (
+              <div
+                key={event.id}
+                className="flex min-h-16 items-center gap-3 rounded-2xl border bg-card px-4 py-3"
+              >
+                <span className="shrink-0 text-2xl leading-none">{event.emoji}</span>
+                <span className="text-sm font-semibold">{event.name}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )
+}
+
 type TeamRoster = {
   team: string
   members: string[]
@@ -281,10 +300,10 @@ function TeamRosterPanel({
     <div
       className={cn(
         "grid gap-4",
-        hasResults ? "mt-5" : "sm:grid-cols-2",
+        hasResults ? "mt-5" : "md:grid-cols-2",
       )}
     >
-      {rosters.map((roster, index) => {
+      {rosters.map((roster) => {
         const isPointsLeader =
           shouldTintLeader && roster.entry.pts === pointsLeader
 
@@ -292,44 +311,25 @@ function TeamRosterPanel({
           <div
             key={roster.team}
             className={cn(
-              "relative overflow-hidden rounded-2xl border bg-background p-4 shadow-sm",
+              "relative overflow-hidden rounded-2xl border bg-background p-4 shadow-none",
               !hasResults &&
-                "border-violet-200/80 bg-[linear-gradient(135deg,rgba(245,243,255,0.86),rgba(255,255,255,0.94)_42%,rgba(237,233,254,0.56))] shadow-violet-950/[0.03] dark:border-violet-400/20 dark:bg-[linear-gradient(135deg,rgba(76,29,149,0.18),rgba(24,24,27,0.96)_42%,rgba(91,33,182,0.1))]",
-              isPointsLeader &&
-                "border-yellow-400/45 bg-yellow-400/[0.08] shadow-md shadow-yellow-900/5 dark:border-yellow-300/30 dark:bg-yellow-300/[0.07]",
+                "border-border/80",
+              isPointsLeader && "border-foreground/40",
             )}
           >
-            {!hasResults ? (
-              <div
-                aria-hidden="true"
-                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-violet-500/70 to-transparent"
-              />
-            ) : null}
-            <div className="flex items-start gap-3">
-              {shouldTintLeader ? (
-                <span
-                  className={cn(
-                    "grid size-9 shrink-0 place-items-center rounded-full border text-sm font-bold tabular-nums",
-                    isPointsLeader
-                      ? "border-yellow-400/70 bg-yellow-400/20 text-yellow-950 dark:border-yellow-300/40 dark:bg-yellow-300/20 dark:text-yellow-100"
-                      : "bg-muted/35 text-muted-foreground",
-                  )}
-                >
-                  {index + 1}
-                </span>
-              ) : null}
-
+            <div className="flex items-start justify-between gap-3">
               <div className="min-w-0 flex-1">
                 <CountryProfileButton
                   country={roster.team}
-                  className="border-0 bg-transparent px-0 py-0 shadow-none hover:translate-y-0 hover:bg-transparent hover:shadow-none"
+                  large
+                  className="border-0 bg-transparent px-0 py-0 !shadow-none hover:translate-y-0 hover:bg-transparent hover:!shadow-none"
                 />
               </div>
 
               {shouldTintLeader ? (
                 <div className="flex shrink-0 items-start gap-3 text-right">
                   {isPointsLeader ? (
-                    <span className="mt-1 inline-flex rounded-full bg-yellow-400/20 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-yellow-950 ring-1 ring-yellow-400/45 dark:text-yellow-100 dark:ring-yellow-300/35">
+                    <span className="mt-1 inline-flex rounded-full border bg-muted px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-foreground">
                       Winner
                     </span>
                   ) : null}
@@ -345,41 +345,16 @@ function TeamRosterPanel({
               ) : null}
             </div>
 
-            {hasResults ? (
-              <>
-                <div className="mt-4 grid gap-2 sm:hidden">
-                  {roster.members.map((member) => (
-                    <RosterMemberRow
-                      key={member}
-                      name={member}
-                      subtitles={getRosterSubtitles(member, roster.captain, mvp)}
-                    />
-                  ))}
-                </div>
-
-                <div className="mt-4 hidden gap-3 sm:grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-                  {roster.members.map((member) => (
-                    <PersonProfileCardByName
-                      key={member}
-                      name={member}
-                      size="sm"
-                      className="w-full"
-                      subtitles={getRosterSubtitles(member, roster.captain, mvp)}
-                    />
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className="mt-4 grid gap-2 sm:grid-cols-2">
-                {roster.members.map((member) => (
-                  <RosterMemberRow
-                    key={member}
-                    name={member}
-                    subtitles={getRosterSubtitles(member, roster.captain, mvp)}
-                  />
-                ))}
-              </div>
-            )}
+            <div className="mt-4 grid gap-2 md:grid-cols-2">
+              {roster.members.map((member) => (
+                <RosterMemberRow
+                  key={member}
+                  name={member}
+                  subtitles={getRosterSubtitles(member, roster.captain, mvp)}
+                  isUpcoming={!hasResults}
+                />
+              ))}
+            </div>
           </div>
         )
       })}
@@ -389,71 +364,103 @@ function TeamRosterPanel({
   if (!hasResults) {
     return (
       <div className="grid gap-5">
-        <BapeSectionHeader title="Nations & Squads" />
+      <BapeSectionHeader title="Athletes & Teams" />
         {rosterList}
       </div>
     )
   }
 
   return (
-    <BapePanel className="p-4 sm:p-6">
+    <div className="grid gap-5">
       <BapeSectionHeader
-        title="Nations & Squads"
-        description="Each country roster, ordered by the current medal table."
+        title="Athletes & Teams"
       />
 
       {rosterList}
+    </div>
+  )
+}
+
+function OlympicsAtAGlance({
+  data,
+  rosters,
+  hasResults,
+}: {
+  data: OlympicPageData
+  rosters: TeamRoster[]
+  hasResults: boolean
+}) {
+  const competitorCount = rosters.reduce(
+    (total, roster) => total + roster.members.length,
+    0,
+  )
+  const medalCount = data.medalTable.reduce(
+    (total, entry) => total + entry.gold + entry.silver + entry.bronze,
+    0,
+  )
+
+  return (
+    <BapePanel className="overflow-hidden shadow-none">
+      <div className="grid divide-y sm:grid-cols-4 sm:divide-x sm:divide-y-0">
+        <EditionMetric
+          icon={<Medal className="size-4" />}
+          label="Teams"
+          value={rosters.length}
+        />
+        <EditionMetric
+          icon={<Users className="size-4" />}
+          label="Competitors"
+          value={competitorCount}
+        />
+        <EditionMetric
+          icon={<CalendarDays className="size-4" />}
+          label="Events"
+          value={data.events.length}
+          href={`/bape/olympics/${data.date}/events`}
+        />
+        <EditionMetric
+          icon={hasResults ? <Medal className="size-4" /> : <MapPin className="size-4" />}
+          label={hasResults ? "Medals" : "Host"}
+          value={hasResults ? medalCount : data.host ?? data.location}
+          href={hasResults ? `/bape/olympics/${data.date}/medaltable` : undefined}
+        />
+      </div>
     </BapePanel>
   )
 }
 
-function OlympicsHighlightsPanel({
-  highlights,
+function EditionMetric({
+  icon,
+  label,
+  value,
+  href,
 }: {
-  highlights: OlympicHighlight[]
+  icon: ReactNode
+  label: string
+  value: ReactNode
+  href?: string
 }) {
-  return (
-    <BapePanel className="p-4 sm:p-6">
-      <BapeSectionHeader
-        title="Highlights"
-        description="The moments people still bring up after the medals are counted."
-      />
-
-      <div className="mt-5 grid gap-3 md:grid-cols-3">
-        {highlights.map((highlight) => (
-          <article
-            key={highlight.title}
-            className="overflow-hidden rounded-2xl border bg-background shadow-sm"
-          >
-            {highlight.imageSrc ? (
-              <div className="relative aspect-[4/3] overflow-hidden border-b bg-muted">
-                <Image
-                  src={highlight.imageSrc}
-                  alt={highlight.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover"
-                />
-              </div>
-            ) : (
-              <div className="grid aspect-[4/3] place-items-center border-b bg-muted/30 px-5 text-center">
-                <span className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-                  Image space
-                </span>
-              </div>
-            )}
-            <div className="p-4">
-              <h3 className="text-base font-semibold tracking-tight">
-                {highlight.title}
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                {highlight.description}
-              </p>
-            </div>
-          </article>
-        ))}
+  const content = (
+    <div className="flex items-center gap-3 px-4 py-4 sm:block sm:px-6">
+      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-muted text-muted-foreground">
+        {icon}
+      </span>
+      <div className="sm:mt-3">
+        <p className="text-2xl font-bold tracking-tight">{value}</p>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          {label}
+        </p>
       </div>
-    </BapePanel>
+      {href ? <ArrowUpRight className="absolute right-4 top-4 size-4 text-muted-foreground" /> : null}
+    </div>
+  )
+
+  if (!href) return <div>{content}</div>
+
+  return (
+    <Link href={href} className="relative block hover:bg-muted/30">
+      {content}
+    </Link>
   )
 }
 
@@ -467,16 +474,20 @@ function getRosterSubtitles(member: string, captain?: string, mvp?: string) {
 function RosterMemberRow({
   name,
   subtitles,
+  isUpcoming,
 }: {
   name: string
   subtitles: Array<{
     label: string
     tone?: "default" | "gold"
   }>
+  isUpcoming: boolean
 }) {
   const profile = BAPE_PROFILES.find(
     (profile) => `${profile.firstName} ${profile.lastName}` === name,
   )
+  const isCaptain = subtitles.some((subtitle) => subtitle.label === "Captain")
+  const isMvp = subtitles.some((subtitle) => subtitle.label === "MVP")
 
   if (!profile) {
     return <p className="text-sm font-medium text-foreground">{name}</p>
@@ -486,7 +497,11 @@ function RosterMemberRow({
     <EntityTrigger
       type="person"
       id={String(profile.bapeID)}
-      className="group flex min-w-0 items-center gap-3 rounded-2xl border bg-background p-2.5 text-left shadow-sm transition hover:-translate-y-0.5 hover:border-foreground/30 hover:no-underline hover:shadow-md"
+      className={cn(
+        "group flex min-w-0 items-center gap-3 rounded-2xl border bg-background p-2.5 text-left transition hover:border-foreground/30 hover:no-underline",
+        isUpcoming && isCaptain && "md:border-white/35 md:bg-white/[0.025]",
+        isUpcoming && isMvp && "md:border-yellow-300/60 md:bg-yellow-300/[0.08]",
+      )}
     >
       <span className="relative size-14 shrink-0 overflow-hidden rounded-xl bg-muted">
         <Image
@@ -501,24 +516,27 @@ function RosterMemberRow({
         <span className="block whitespace-normal text-base font-semibold leading-tight text-foreground group-hover:underline">
           {name}
         </span>
-        {subtitles.length ? (
-          <span className="mt-1 flex flex-wrap gap-1.5">
-            {subtitles.map((subtitle) => (
-              <span
-                key={`${subtitle.label}-${subtitle.tone ?? "default"}`}
-                className={cn(
-                  "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
-                  subtitle.tone === "gold"
-                    ? "border-yellow-400/45 bg-yellow-400/15 text-[#f5c451]"
-                    : "bg-muted/45 text-muted-foreground",
-                )}
-              >
-                {subtitle.label}
-              </span>
-            ))}
-          </span>
-        ) : null}
       </span>
+      {subtitles.length ? (
+        <span className="ml-auto flex shrink-0 flex-wrap justify-end gap-1.5">
+          {subtitles.map((subtitle) => (
+            <span
+              key={`${subtitle.label}-${subtitle.tone ?? "default"}`}
+              className={cn(
+                "rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+                isUpcoming &&
+                  (subtitle.label === "Captain" || subtitle.label === "MVP") &&
+                  "md:hidden",
+                subtitle.tone === "gold"
+                  ? "border-yellow-400/45 bg-yellow-400/15 text-[#f5c451]"
+                  : "bg-muted/45 text-muted-foreground",
+              )}
+            >
+              {subtitle.label}
+            </span>
+          ))}
+        </span>
+      ) : null}
     </EntityTrigger>
   )
 }
@@ -570,7 +588,7 @@ function OlympicsMedalTable({
                 key={entry.name}
                 className={cn(
                   "group border-border/80 hover:bg-muted/25",
-                  isUpcoming && "hover:bg-violet-50/40 dark:hover:bg-violet-950/10",
+                  isUpcoming && "hover:bg-muted/40",
                   entry.pts > 0 &&
                     index === 0 &&
                     "bg-amber-50/60 hover:bg-amber-50/80 dark:bg-amber-950/15 dark:hover:bg-amber-950/25",
@@ -623,7 +641,7 @@ function MedalTableMobileCard({
   return (
     <div
       className={cn(
-        "rounded-2xl border bg-card p-4 shadow-sm",
+        "rounded-2xl border bg-card p-4 shadow-none",
         isLeader && "bg-amber-50/60 dark:bg-amber-950/15",
       )}
     >
@@ -632,7 +650,7 @@ function MedalTableMobileCard({
           className={cn(
             "grid size-9 shrink-0 place-items-center rounded-full border text-sm font-bold tabular-nums",
             isLeader
-              ? "border-foreground bg-foreground text-background shadow-sm"
+              ? "border-foreground bg-foreground text-background"
               : "bg-muted/35 text-muted-foreground",
           )}
         >
@@ -695,7 +713,7 @@ function MedalCount({
   return (
     <span
       className={cn(
-        "inline-flex size-11 items-center justify-center rounded-full text-base font-bold text-neutral-950 shadow-sm ring-1 ring-inset",
+        "inline-flex size-11 items-center justify-center rounded-full text-base font-bold text-neutral-950 ring-1 ring-inset",
         tone === "gold" && "bg-[#f8c75c] ring-[#b47a00]/35",
         tone === "silver" && "bg-[#e5e7e9] ring-black/10 dark:bg-[#d8dde3]",
         tone === "bronze" && "bg-[#dfb582] ring-[#8a4f18]/30",
@@ -795,11 +813,11 @@ function getRosterSortRank(name: string, captain?: string, mvp?: string) {
 
 function groupEventsByCategory(events: OlympicEvent[]) {
   const categories = [
-    "Video Games",
     "Team Sports",
-    "Table Games",
-    "Drinking",
     "Food & Skill",
+    "Athletics",
+    "Table Games",
+    "Video Games",
     "Other Events",
   ]
   const grouped = new Map<string, OlympicEvent[]>(
@@ -818,13 +836,16 @@ function groupEventsByCategory(events: OlympicEvent[]) {
 function getEventCategory(event: OlympicEvent) {
   const key = `${event.id} ${event.name}`.toLowerCase()
 
-  if (key.includes("fifa")) return "Video Games"
+  if (key.includes("fifa") || key.includes("wii") || key.includes("mario")) {
+    return "Video Games"
+  }
   if (
     key.includes("basketball") ||
     key.includes("futsal") ||
     key.includes("soccer") ||
     key.includes("cricket") ||
-    key.includes("handball")
+    key.includes("handball") ||
+    key.includes("pickleball")
   ) {
     return "Team Sports"
   }
@@ -832,18 +853,23 @@ function getEventCategory(event: OlympicEvent) {
     key.includes("pool") ||
     key.includes("darts") ||
     key.includes("table") ||
-    key.includes("chess") ||
-    key.includes("beer-pong")
+    key.includes("chess")
   ) {
     return "Table Games"
   }
-  if (key.includes("drink")) return "Drinking"
+  if (
+    key.includes("beer-pong") ||
+    key.includes("two-square") ||
+    key.includes("sprint")
+  ) {
+    return "Athletics"
+  }
+
   if (
     key.includes("cooking") ||
     key.includes("trivia") ||
-    key.includes("sprint") ||
-    key.includes("two-square") ||
-    key.includes("eggs")
+    key.includes("eggs") ||
+    key.includes("drink")
   ) {
     return "Food & Skill"
   }

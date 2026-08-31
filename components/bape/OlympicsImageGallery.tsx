@@ -53,7 +53,7 @@ export function OlympicsImageGallery({
             key={`${image.src}-${index}`}
             type="button"
             onClick={() => setActiveIndex(index)}
-            className="group block w-full break-inside-avoid overflow-hidden rounded-2xl border bg-card text-left shadow-sm transition duration-300 hover:-translate-y-0.5 hover:border-foreground/20 hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
+            className="group block w-full break-inside-avoid overflow-hidden rounded-2xl border bg-card text-left transition hover:border-foreground/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/40"
           >
             <div
               className={cn(
@@ -66,10 +66,10 @@ export function OlympicsImageGallery({
                 alt={image.caption ?? `${title} image ${index + 1}`}
                 fill
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                className="object-cover transition duration-500 group-hover:scale-105"
+                className="object-cover"
                 priority={index === 0}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent opacity-85" />
+                <div className="absolute inset-0 bg-black/40" />
               <div className="absolute inset-x-3 bottom-3">
                 <p className="line-clamp-2 text-sm font-semibold leading-snug text-white">
                   {image.caption ?? `Image ${index + 1}`}
@@ -82,14 +82,14 @@ export function OlympicsImageGallery({
 
       {activeImage && activeIndex !== null ? (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-3 backdrop-blur-sm sm:p-6"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-3 sm:p-6"
           role="dialog"
           aria-modal="true"
           aria-label={`${title} image preview`}
         >
           <button
             type="button"
-            className="absolute right-3 top-3 z-10 grid size-11 place-items-center rounded-full border border-white/15 bg-white/10 text-white shadow-lg backdrop-blur transition hover:bg-white/20 sm:right-5 sm:top-5"
+            className="absolute right-3 top-3 z-10 grid size-11 place-items-center rounded-full border border-white/15 bg-black/40 text-white transition hover:bg-black/60 sm:right-5 sm:top-5"
             onClick={() => setActiveIndex(null)}
             aria-label="Close image preview"
           >
@@ -99,7 +99,7 @@ export function OlympicsImageGallery({
           {hasMultipleImages ? (
             <button
               type="button"
-              className="absolute left-3 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white shadow-lg backdrop-blur transition hover:bg-white/20 sm:left-5"
+            className="absolute left-3 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-black/40 text-white transition hover:bg-black/60 sm:left-5"
               onClick={showPrevious}
               aria-label="Previous image"
             >
@@ -134,7 +134,7 @@ export function OlympicsImageGallery({
           {hasMultipleImages ? (
             <button
               type="button"
-              className="absolute right-3 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-white/10 text-white shadow-lg backdrop-blur transition hover:bg-white/20 sm:right-5"
+            className="absolute right-3 top-1/2 z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/15 bg-black/40 text-white transition hover:bg-black/60 sm:right-5"
               onClick={showNext}
               aria-label="Next image"
             >

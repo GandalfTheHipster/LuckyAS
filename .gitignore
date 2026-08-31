@@ -44,3 +44,7 @@ next-env.d.ts
 # OS-specific / platform artifacts (important for cross-platform dev)
 node_modules/
 package-lock.json
+
+# Supabase local runtime artifacts (may contain generated secrets)
+/supabase/.branches/
+/supabase/.temp/
